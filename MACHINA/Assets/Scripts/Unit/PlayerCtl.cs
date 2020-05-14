@@ -2,21 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCtl : MonoBehaviour
+// プレイヤーの入力系をまとめる場所
+public class PlayerCtl : UnitControl
 {
-    private UnitControl _unit;
     [SerializeField, Tooltip("ショットオブジェクト")]
-    private GameObject _shotObj;
-    [SerializeField]
-    private GameObject _weapon;
+    private GameObject _shotObj = null;
+    [SerializeField, Tooltip("武器")]
+    private GameObject _weapon = null;
     private Vector2 _Axis;
-
+	private Vector2 _Axis2;
+	private float _stick;
+	private float _nowTime;
+	[SerializeField, Tooltip("発射感覚")]
+	private float _waitTime = 0.1f;
 	private bool _isJamp;
 
-    void Start()
+    protected override void Start()
     {
-        _unit = GetComponent<UnitControl>();
-        _Axis = Vector2.zero;
+		base.Start();
+		_Axis = Vector2.zero;
+		_Axis2 = Vector2.zero;
+		_stick = 0;
+		_nowTime = 0;
 		_isJamp = true;
     }
 
@@ -25,8 +32,12 @@ public class PlayerCtl : MonoBehaviour
         // コントローラーの入力を受け取る
         _Axis.x = Input.GetAxis("Horizontal");
         _Axis.y = Input.GetAxis("Vertical");
+		_Axis2.x = Input.GetAxis("Horizontal2");
+		_Axis2.y = Input.GetAxis("Vertical2");
+		_stick = Input.GetAxis("RBボタン");
         // キー入力を受け取る
-        if(Input.GetKey(KeyCode.RightArrow))
+
+		if(Input.GetKey(KeyCode.RightArrow))
         {
             _Axis.x = 1;
         }
@@ -42,25 +53,26 @@ public class PlayerCtl : MonoBehaviour
         {
             _Axis.y = -1;
         }
-        if(Input.GetButton("Jump") || Input.GetKey(KeyCode.Space))
-        {
-            if(_unit != null)
-            {
-				if (_isJamp)
-				{
-					_unit.Jump();
-					_isJamp = false;
-				}
-            }
-        }
-		if (Input.GetButtonDown("Fire2"))
+		if (Input.GetButton("Jump") || Input.GetKey(KeyCode.Space))
+		{
+			if (_isJamp)
+			{
+				Jump();
+				_isJamp = false;
+			}
+		}
+		_nowTime += Time.deltaTime;
+		if (Input.GetButton("Fire2") && _nowTime >= _waitTime)
 		{
 			Shot();
+			_nowTime = 0;
 		}
-		if(Input.GetButtonDown(""))
+		if (_stick > 0 && _nowTime >= _waitTime)
 		{
 			Shot();
+			_nowTime = 0;
 		}
+
 	}
 
 	public void Shot()
@@ -68,10 +80,12 @@ public class PlayerCtl : MonoBehaviour
         Instantiate(_shotObj, _weapon.transform.position, _weapon.transform.rotation);
     }
 
-    // 入力系はUpdateでまわしてください
+    // 入力系はUpdateで処理してください
     void Update()
     {
         InputSet();
+		Vector3 rot = transform.eulerAngles;
+		transform.eulerAngles = new Vector3(rot.x, Camera.main.transform.eulerAngles.y, rot.z);
 	}
 
     private void LateUpdate()
@@ -80,12 +94,9 @@ public class PlayerCtl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-        if(_unit == null)
-        {
-            return;
-        }
-        _unit.Walk(_Axis);
+		MoveForce();
+		Walk(_Axis);
+		Boost(_stick, _Axis);
     }
 
 	private void OnCollisionStay(Collision collision)

@@ -17,17 +17,17 @@ public class CheckRender : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        _isRendFlag = false;
-    }
+	private void LateUpdate()
+	{
+		_isRendFlag = false;
+	}
 
-    // 各カメラの描画範囲内に入っていたら呼ばれる
-    private void OnWillRenderObject()
+	// 各カメラの描画範囲内に入っていたら呼ばれる
+	private void OnWillRenderObject()
     {
         if (Camera.current.name == "Main Camera")
         {
+			Debug.Log("カメラに写っている。");
             _isRendFlag = true;
         }
     }

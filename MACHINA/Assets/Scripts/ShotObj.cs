@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ShotObj : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("弾速")]
     private float _shotSpeed = 1f;
-	[SerializeField]
+	[SerializeField, Tooltip("攻撃有効なタグ")]
 	private string _tagName = "";
 
     void Start()
@@ -25,9 +25,7 @@ public class ShotObj : MonoBehaviour
 		if (other.tag == _tagName)
 		{
 			var hp = other.transform.GetComponent<HitPoint>();
-			Debug.Log(hp.gameObject);
 			hp.HP = hp.HP - 10;
-			Debug.Log("衝突した");
 			Destroy(gameObject);
 		}
 	}

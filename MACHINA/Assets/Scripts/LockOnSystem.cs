@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class LockOnSystem : MonoBehaviour
 {
@@ -6,12 +8,14 @@ public class LockOnSystem : MonoBehaviour
     private bool systemActive = false;
     [SerializeField]
     private LayerMask _layer = 0;
-    [SerializeField]
+    [SerializeField, Tooltip("敵")]
     private GameObject _enemy = null;
+	[SerializeField]
+	private GameObject _enemyCR = null;
     // 現在のターゲット名
     private GameObject _target = null;
     [SerializeField, Tooltip("")]
-    private int LOCK_ON_TIME = 1;
+    private float LOCK_ON_TIME = 1.0f;
     // 現在の時間
     private float nowTime;
     // ロックオン検知変数
@@ -20,8 +24,11 @@ public class LockOnSystem : MonoBehaviour
     private float _circleScale = 400;
     [SerializeField, Tooltip("ロックオン可能距離")]
     private float _distance = 100f;
+	Vector2 screenPoint;
+	
+	public static List<GameObject> _targetList = new List<GameObject>();
 
-    private CheckRender _enemyTarget;
+	private CheckRender _enemyTarget;
 
     public float GetNowTime
     {
@@ -38,28 +45,36 @@ public class LockOnSystem : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        _enemyTarget = _enemy.GetComponent<CheckRender>();
+        _enemyTarget = _enemyCR.GetComponent<CheckRender>();
     }
 
     private void LockCheck()
     {
-        RaycastHit hit;
-        if (Physics.Linecast(transform.position, _enemy.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
+		RaycastHit hit;
+
+		if(!_enemyTarget.IsRendFlag)
+		{
+			Debug.Log("敵が画面内にいない");
+			return;
+		}
+		
+		if (Physics.Linecast(transform.position, _enemy.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
         {
-            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _enemy.transform.position);
+			Debug.Log("敵発見");
+			screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _enemy.transform.position);
 
-            screenPoint.x = screenPoint.x - (Screen.width / 2);
-            screenPoint.y = screenPoint.y - (Screen.height / 2);
+			screenPoint.x = screenPoint.x - (Screen.width / 2);
+			screenPoint.y = screenPoint.y - (Screen.height / 2);
 
 
-            // ロックオンサークル内の場合
-            if (screenPoint.magnitude <= _circleScale)
-            {
-                nowTime += Time.deltaTime;
-                _target = _enemy;
-                return;
-            }
-        }
+			// ロックオンサークル内の場合
+			if (screenPoint.magnitude <= _circleScale)
+			{
+				nowTime += Time.deltaTime;
+				_target = _enemy;
+				return;
+			}
+		}
         nowTime = 0;
         _target = null;
     }

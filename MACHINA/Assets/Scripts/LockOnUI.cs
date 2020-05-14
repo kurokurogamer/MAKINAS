@@ -6,7 +6,7 @@ public class LockOnUI : MonoBehaviour
 {
 
     [SerializeField]
-    private LockOnSystem _lockOnSystem;
+    private LockOnSystem _lockOnSystem = null;
     // カーソルのリスト
     [SerializeField]
     private List<GameObject> _AimSet = new List<GameObject>();
@@ -51,7 +51,6 @@ public class LockOnUI : MonoBehaviour
         else
         {
             // ロックオンサークル外
-            Debug.Log("ロックオン対象がいない");
             _AimSet[0].SetActive(false);
             _AimSet[1].SetActive(false);
             _AimSet[2].SetActive(false);

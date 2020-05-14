@@ -4,9 +4,9 @@ public class Aim : MonoBehaviour
 {
 
     [SerializeField, Tooltip("メイン標準オブジェクト")]
-    private GameObject _mainAim;
+    private GameObject _mainAim = null;
     [SerializeField, Tooltip("サブ標準オブジェクト")]
-    private GameObject _subAim;
+    private GameObject _subAim = null;
     [SerializeField]
     private float _followSpeed = 1f;
     [SerializeField]
@@ -29,7 +29,14 @@ public class Aim : MonoBehaviour
         GameObject target = _lockOnSystem.GetTarget;
         foreach(var wapon in _waepon)
         {
-            wapon.transform.LookAt(_subAim.transform);
+			if (target != null)
+			{
+				wapon.transform.LookAt(target.transform);
+			}
+			else
+			{
+				wapon.transform.localEulerAngles = Vector3.zero;
+			}
         }
     }
     // Update is called once per frame

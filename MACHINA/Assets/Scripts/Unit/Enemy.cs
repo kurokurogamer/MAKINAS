@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     [SerializeField, Tooltip("移動幅")]
     private float _distance = 3;
 	[SerializeField, Tooltip("敵の使用する弾")]
-	private GameObject _bullet;
+	private GameObject _bullet = null;
 	[SerializeField, Tooltip("発射感覚")]
 	private float _whileTime = 1;
 	// 現在のカウント

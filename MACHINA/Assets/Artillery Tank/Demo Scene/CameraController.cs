@@ -5,9 +5,12 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
-	[SerializeField]private float speed;
-	[SerializeField]private float xSensitivity;
-	[SerializeField]private float ySensitivity;
+	[SerializeField]
+	private float speed;
+	[SerializeField]
+	private float xSensitivity;
+	[SerializeField]
+	private float ySensitivity;
 
 	void Update ()
 	{

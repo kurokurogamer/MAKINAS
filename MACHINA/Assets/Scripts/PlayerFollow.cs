@@ -7,7 +7,7 @@ public class PlayerFollow : MonoBehaviour
     [SerializeField]
     public float moveSpeed = 2;
     [SerializeField]
-    private GameObject playerObj;
+    private GameObject playerObj = null;
     private Vector3 offset;
 
     void Awake()
@@ -24,6 +24,8 @@ public class PlayerFollow : MonoBehaviour
     {
         var nowPosition = this.transform.position;
         var newPos = Vector3.Lerp(transform.position, playerObj.transform.position + offset, moveSpeed * Time.deltaTime);
-        this.transform.position = newPos;
+		newPos = playerObj.transform.position + offset;
+		transform.position = newPos;
+
     }
 }

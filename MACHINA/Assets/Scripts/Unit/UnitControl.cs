@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitControl : MonoBehaviour
 {
@@ -13,10 +14,13 @@ public class UnitControl : MonoBehaviour
     [SerializeField]
     private float _power = 1f;
     [SerializeField]
-    private GameObject[] _boost;
-
+    private GameObject[] _boost = null;
+	[SerializeField]
+	private ParticleSystem _effect = null;
+	[SerializeField, Tooltip("ブーストゲージ")]
+	private Slider _slider;
     // Use this for initialization
-    void Start()
+    protected virtual void Start()
     {
         _rigid = GetComponent<Rigidbody>();
 		_lastForce = Vector3.zero;
@@ -55,44 +59,76 @@ public class UnitControl : MonoBehaviour
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
-	public void Boost(Vector2 Axis)
-    {
-        foreach (var boost in _boost)
-        {
-            boost.transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
+	public void Boost(float stickR, Vector2 Axis)
+	{
+		Debug.Log(stickR);
+		if (stickR >= 0)
+		{
+			_slider.value += 1 * Time.deltaTime;
+			_effect.Stop();
+			return;
+		}
+		if(_slider.value <= 0)
+		{
+			_slider.value = 0;
+			return;
+		}
+		foreach (var boost in _boost)
+		{
+			boost.transform.rotation = Quaternion.Euler(0, 0, 0);
+		}
 
-        if (Axis.x > 0.1f)
-        {
-            _lastForce += transform.right / 2;
-        }
-        else if (Axis.x < -0.1f)
-        {
-            _lastForce -= transform.right / 2;
-        }
-        if (Axis.y > 0.1f)
-        {
-            _lastForce += transform.forward / 2;
-            foreach(var boost in _boost)
-            {
-                boost.transform.rotation = Quaternion.Euler(90, 0, 0);
-            }
-        }
-        else if (Axis.y < -0.1f)
-        {
-            _lastForce -= transform.forward / 2;
-        }
-        if (Axis.x > -0.1f && Axis.x < 0.1f)
-        {
-            _lastForce.x = Vector3.Lerp(_lastForce, Vector3.zero, Time.deltaTime).x;
-        }
-        if (Axis.y > -0.1f && Axis.y < 0.1f)
-        {
-            _lastForce.z = Vector3.Lerp(_lastForce, Vector3.zero, Time.deltaTime).z;
-        }
-    }
+		_slider.value -= 1 * Time.deltaTime;
 
-    public void Jump()
+		_effect.Emit(1);
+
+		if (Axis.x > 0)
+		{
+			_forceX = transform.right * _power * 3;
+		}
+		else if(Axis.x < 0)
+		{
+			_forceX = transform.right * _power * -3;
+		}
+		if (Axis.y > 0)
+		{
+			_forceY = transform.forward * _power * 3;
+		}
+		else if (Axis.y < 0)
+		{
+			_forceY = transform.forward * _power * -3;
+		}
+
+		_lastForce = _forceY + _forceX;
+
+		//if (stickR > 0.1f)
+		//{
+		//	_lastForce += transform.forward / 2;
+		//	foreach (var boost in _boost)
+		//	{
+		//		boost.transform.rotation = Quaternion.Euler(90, 0, 0);
+		//	}
+		//}
+		//else if (stickR < -0.1f)
+		//{
+		//	_lastForce -= transform.forward / 2;
+		//}
+		////NewMethod(stickR);
+		//if (stickR > -0.1f && stickR < 0.1f)
+		//{
+		//	_lastForce.z = Vector3.Lerp(_lastForce, Vector3.zero, Time.deltaTime).z;
+		//}
+	}
+
+	private void NewMethod(float stickR)
+	{
+		//if (stickR > -0.1f && stickR < 0.1f)
+		//{
+		//	_lastForce.x = Vector3.Lerp(_lastForce, Vector3.zero, Time.deltaTime).x;
+		//}
+	}
+
+	public void Jump()
     {
         _lastForce.y += _power;
     }
@@ -104,16 +140,5 @@ public class UnitControl : MonoBehaviour
             _lastForce.y -= 0.5f;
         }
         _rigid.velocity = new Vector3(_lastForce.x, _lastForce.y + _rigid.velocity.y, _lastForce.z);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    private void FixedUpdate()
-    {
-        MoveForce();
     }
 }
