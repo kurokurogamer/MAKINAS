@@ -16,6 +16,7 @@ public class PlayerCtl : UnitControl
 	[SerializeField, Tooltip("発射感覚")]
 	private float _waitTime = 0.1f;
 	private bool _isJamp;
+	private Weapon _waepon;
 
     protected override void Start()
     {
@@ -34,7 +35,7 @@ public class PlayerCtl : UnitControl
         _Axis.y = Input.GetAxis("Vertical");
 		_Axis2.x = Input.GetAxis("Horizontal2");
 		_Axis2.y = Input.GetAxis("Vertical2");
-		_stick = Input.GetAxis("RBボタン");
+		_stick = Input.GetAxis("TriggerLR");
         // キー入力を受け取る
 
 		if(Input.GetKey(KeyCode.RightArrow))
@@ -62,17 +63,21 @@ public class PlayerCtl : UnitControl
 			}
 		}
 		_nowTime += Time.deltaTime;
-		if (Input.GetButton("Fire2") && _nowTime >= _waitTime)
+		if ((Input.GetButton("Fire2")) && _nowTime >= _waitTime)
 		{
 			Shot();
 			_nowTime = 0;
 		}
-		if (_stick > 0 && _nowTime >= _waitTime)
+		if (Input.GetButton("RT") && _nowTime >= _waitTime)
 		{
 			Shot();
 			_nowTime = 0;
 		}
 
+		if (Input.GetButtonDown("LT"))
+		{
+			Debug.Log("センサーシステム起動");
+		}
 	}
 
 	public void Shot()

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LockOnSystem : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class LockOnSystem : MonoBehaviour
     private float _circleScale = 400;
     [SerializeField, Tooltip("ロックオン可能距離")]
     private float _distance = 100f;
+	[SerializeField, Tooltip("距離のテキスト")]
+	private Text _text;
 	Vector2 screenPoint;
 	
 	public static List<GameObject> _targetList = new List<GameObject>();
@@ -66,12 +69,13 @@ public class LockOnSystem : MonoBehaviour
 			screenPoint.x = screenPoint.x - (Screen.width / 2);
 			screenPoint.y = screenPoint.y - (Screen.height / 2);
 
-
 			// ロックオンサークル内の場合
 			if (screenPoint.magnitude <= _circleScale)
 			{
+				Vector3 vector = transform.position - _enemy.transform.position;
 				nowTime += Time.deltaTime;
 				_target = _enemy;
+				_text.text = vector.magnitude.ToString("000.00");
 				return;
 			}
 		}

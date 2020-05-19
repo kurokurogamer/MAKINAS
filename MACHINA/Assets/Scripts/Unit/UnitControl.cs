@@ -15,12 +15,16 @@ public class UnitControl : MonoBehaviour
     private float _power = 1f;
     [SerializeField]
     private GameObject[] _boost = null;
-	[SerializeField]
-	private ParticleSystem _effect = null;
 	[SerializeField, Tooltip("ブーストゲージ")]
 	private Slider _slider;
-    // Use this for initialization
-    protected virtual void Start()
+	[SerializeField, Tooltip("移動エフェクト")]
+	private ParticleSystem _walkEffect = null;
+	[SerializeField]
+	private ParticleSystem _boostEffect = null;
+	[SerializeField, Tooltip("")]
+	private ParticleSystem _hobaEffect = null;
+	// Use this for initialization
+	protected virtual void Start()
     {
         _rigid = GetComponent<Rigidbody>();
 		_lastForce = Vector3.zero;
@@ -53,9 +57,13 @@ public class UnitControl : MonoBehaviour
 		{
 			_forceY = Vector3.zero;
 		}
-
+		
 		_lastForce = _forceX + _forceY;
 
+		if (_lastForce != Vector3.zero)
+		{
+			_walkEffect.Emit(1);
+		}
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
@@ -65,7 +73,7 @@ public class UnitControl : MonoBehaviour
 		if (stickR >= 0)
 		{
 			_slider.value += 1 * Time.deltaTime;
-			_effect.Stop();
+			_boostEffect.Stop();
 			return;
 		}
 		if(_slider.value <= 0)
@@ -80,7 +88,7 @@ public class UnitControl : MonoBehaviour
 
 		_slider.value -= 1 * Time.deltaTime;
 
-		_effect.Emit(1);
+		_boostEffect.Emit(1);
 
 		if (Axis.x > 0)
 		{

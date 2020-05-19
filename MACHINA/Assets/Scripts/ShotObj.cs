@@ -25,7 +25,7 @@ public class ShotObj : MonoBehaviour
 		if (other.tag == _tagName)
 		{
 			var hp = other.transform.GetComponent<HitPoint>();
-			hp.HP = hp.HP - 10;
+			hp.Damage(10);
 			Destroy(gameObject);
 		}
 	}

@@ -50,7 +50,6 @@ public class Enemy : MonoBehaviour
                 transform.position = new Vector3(_firstPos.x, _firstPos.y, _firstPos.z + Mathf.Sin(Time.frameCount));
                 break;
             case MOVE_TYPE.MAX:
-				transform.position = _firstPos;
 				break;
 			default:
                 break;

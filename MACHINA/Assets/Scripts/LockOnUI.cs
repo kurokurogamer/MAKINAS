@@ -1,21 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LockOnUI : MonoBehaviour
 {
-
-    [SerializeField]
+	// カメラのロックオンシステム
     private LockOnSystem _lockOnSystem = null;
-    // カーソルのリスト
-    [SerializeField]
-    private List<GameObject> _AimSet = new List<GameObject>();
-    [SerializeField]
-    
+	[SerializeField]
+	private Color _color1 = Color.red;
+	[SerializeField, Tooltip("target時の色")]
+	private Color _color2 = Color.green;
+	[SerializeField, Tooltip("cursor本体")]
+	private Image _cursor;
     // Use this for initialization
     void Start()
     {
-        
+		_lockOnSystem = Camera.main.GetComponent<LockOnSystem>();
     }
 
     // Update is called once per frame
@@ -24,36 +25,29 @@ public class LockOnUI : MonoBehaviour
         if (_lockOnSystem.GetTarget != null)
         {
             Vector2 postion = RectTransformUtility.WorldToScreenPoint(Camera.main, _lockOnSystem.GetTarget.transform.position);
-            // ロックオンカーソルの移動
-            _AimSet[0].transform.position = new Vector3(postion.x, postion.y, 0f);
-            _AimSet[1].transform.position = new Vector3(postion.x, postion.y, 0f);
+			// ロックオンカーソルの移動
+			_cursor.transform.position = new Vector3(postion.x, postion.y, 0f);
         }
 
         if (0 < _lockOnSystem.GetNowTime)
         {
-            _AimSet[2].SetActive(true);
+			_cursor.gameObject.SetActive(true);
             if (_lockOnSystem.GetIsLockOn)
             {
                 Debug.Log("ロックオン完了");
-                // ロックオン完了
-                _AimSet[0].SetActive(true);
-                _AimSet[1].SetActive(false);
-
+				// ロックオン完了
+				_cursor.color = _color1;
             }
             else
             {
                 // ロックオン中
                 Debug.Log("ロックオン中");
-                _AimSet[0].SetActive(false);
-                _AimSet[1].SetActive(true);
-            }
-        }
+				_cursor.color = _color2;
+			}
+		}
         else
         {
-            // ロックオンサークル外
-            _AimSet[0].SetActive(false);
-            _AimSet[1].SetActive(false);
-            _AimSet[2].SetActive(false);
+			_cursor.gameObject.SetActive(false);
         }
 
     }
@@ -64,7 +58,7 @@ public class LockOnUI : MonoBehaviour
         {
             Vector2 postion = RectTransformUtility.WorldToScreenPoint(Camera.main, _lockOnSystem.GetTarget.transform.position);
             // ロックオンカーソルの移動
-            _AimSet[2].transform.position = new Vector3(postion.x, postion.y, 0f);
+            //_AimSet[2].transform.position = new Vector3(postion.x, postion.y, 0f);
         }
     }
 }
