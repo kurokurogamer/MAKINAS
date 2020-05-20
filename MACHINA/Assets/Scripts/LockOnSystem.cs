@@ -15,6 +15,8 @@ public class LockOnSystem : MonoBehaviour
 	private GameObject _enemyCR = null;
     // 現在のターゲット名
     private GameObject _target = null;
+	[SerializeField, Tooltip("プレイヤー")]
+	private GameObject _player = null;
     [SerializeField, Tooltip("")]
     private float LOCK_ON_TIME = 1.0f;
     // 現在の時間
@@ -22,7 +24,7 @@ public class LockOnSystem : MonoBehaviour
     // ロックオン検知変数
     private bool _isLockOn = false;
     [SerializeField, Tooltip("サークルの大きさ")]
-    private float _circleScale = 300;
+    private float _circleScale = 250;
     [SerializeField, Tooltip("ロックオン可能距離")]
     private float _distance = 100f;
 	[SerializeField, Tooltip("距離のテキスト")]
@@ -34,8 +36,6 @@ public class LockOnSystem : MonoBehaviour
 	{
 		get { return _targetList; }
 	}
-
-	private CheckRender _enemyTarget;
 
     public float GetNowTime
     {
@@ -52,42 +52,45 @@ public class LockOnSystem : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        _enemyTarget = _enemyCR.GetComponent<CheckRender>();
     }
 
-    private void LockCheck()
-    {
-		if (!_enemyTarget.IsRendFlag)
-		{
-			Debug.Log("敵が画面内にいない");
-			return;
-		}
+	private void LockCheck()
+	{
+
+		nowTime += Time.deltaTime;
+
+		bool targetFlag = false;
 
 		RaycastHit hit;
-
-
-		if (Physics.Linecast(transform.position, _enemy.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
+		float distance = 0;
+		float centerPoint = _circleScale;
+		foreach (GameObject target in _targetList)
 		{
-			Debug.Log("敵発見");
-			screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _enemy.transform.position);
-
-			screenPoint.x = screenPoint.x - (Screen.width / 2);
-			screenPoint.y = screenPoint.y - (Screen.height / 2);
-
-			Vector3 vector = transform.position - _enemy.transform.position;
-			// ロックオンサークル内の場合
-			if (screenPoint.magnitude <= _circleScale && vector.magnitude < _distance)
+			if (Physics.Linecast(_player.transform.position, target.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
 			{
-				nowTime += Time.deltaTime;
-				_target = _enemy;
-				// 少数第3位まで表示
-				_text.text = vector.magnitude.ToString("000.00");
-				return;
+
+				screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
+				screenPoint.x = screenPoint.x - (Screen.width / 2);
+				screenPoint.y = screenPoint.y - (Screen.height / 2);
+
+				if (screenPoint.magnitude <= centerPoint)
+				{
+					centerPoint = screenPoint.magnitude;
+					targetFlag = true;
+					_target = target;
+					distance = target.transform.position.magnitude - _player.transform.position.magnitude;
+					_text.text = distance.ToString("000.00");
+
+				}
 			}
 		}
-		nowTime = 0;
-		_target = null;
-    }
+
+		if (!targetFlag)
+		{
+			nowTime = 0;
+			_target = null;
+		}
+	}
 
     // Update is called once per frame
     void Update()
@@ -102,10 +105,5 @@ public class LockOnSystem : MonoBehaviour
         {
             _isLockOn = false;
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        
     }
 }

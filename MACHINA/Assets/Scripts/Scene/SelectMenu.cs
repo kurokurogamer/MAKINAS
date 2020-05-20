@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class SelectMenu : MonoBehaviour
 {
+	[SerializeField, Tooltip("SE")]
+	private AudioClip _clip = null;
 	[SerializeField, Tooltip("カーソル")]
 	private RectTransform _cursor;
 	[SerializeField, Tooltip("UIリスト")]
 	private List<RectTransform> _uiList = new List<RectTransform>();
 	private int _ID;
 	[SerializeField, Tooltip("UI1")]
-	private GameObject _ui;
+	private GameObject _ui = null;
 	[SerializeField, Tooltip("UI2")]
-	private GameObject _ui2;
+	private GameObject _ui2 = null;
 	// 入力情報""
 	private Vector2 _axis;
 	// 前回の入力情報
@@ -36,6 +38,7 @@ public class SelectMenu : MonoBehaviour
 		{
 			if (_ID < _uiList.Count - 1)
 			{
+				AudioManager.instance.PlaySE(_clip);
 				_ID++;
 			}
 		}
@@ -43,6 +46,7 @@ public class SelectMenu : MonoBehaviour
 		{
 			if (_ID > 0)
 			{
+				AudioManager.instance.PlaySE(_clip);
 				_ID--;
 			}
 		}
@@ -55,8 +59,13 @@ public class SelectMenu : MonoBehaviour
 		{
 			return;
 		}
+		if(!_ui)
+		{
+			return;
+		}
 		if(Input.GetButtonDown("Fire2"))
 		{
+			AudioManager.instance.PlaySE(_clip);
 			_ui.SetActive(false);
 			_ui2.SetActive(true);
 		}

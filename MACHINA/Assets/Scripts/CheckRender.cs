@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CheckRender : MonoBehaviour
 {
-
-    [SerializeField, Tooltip("描画フラグ")]
+	private LockOnSystem _lockOnSystem;
+	private bool _onCamera = false;
     private bool _isRendFlag = false;
     public bool IsRendFlag
     {
@@ -14,11 +14,51 @@ public class CheckRender : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		_lockOnSystem = Camera.main.GetComponent<LockOnSystem>();
+	}
 
-    }
+	private void AddTarget()
+	{
+		if(_lockOnSystem.TargetList.Count > 0 && _isRendFlag)
+		{
+			GameObject obj = null;
+			foreach(GameObject target in _lockOnSystem.TargetList)
+			{
+				if(target == gameObject)
+				{
+					Debug.Log("同一ターゲット発見");
+					obj = target;
+				}
+			}
+			if(obj == null)
+			{
+				Debug.Log("同一のターゲットがいないのでリストに追加");
+				_lockOnSystem.TargetList.Add(gameObject);
+			}
+		}
+		else if(_isRendFlag)
+		{
+			Debug.Log("ターゲットリストが空");
+			_lockOnSystem.TargetList.Add(gameObject);
+		}
+		else
+		{
+			Debug.Log("カメラに写っていない");
+			Debug.Log(_lockOnSystem.TargetList.Count);
+			for(int i = _lockOnSystem.TargetList.Count; i > 0; i--)
+			{
+				Debug.Log("同じオブジェクトは削除");
+				if(_lockOnSystem.TargetList[i - 1] == gameObject)
+				{
+					_lockOnSystem.TargetList.Remove(gameObject);
+				}
+			}
+		}
+	}
 
 	private void LateUpdate()
 	{
+		AddTarget();
 		_isRendFlag = false;
 	}
 
@@ -27,7 +67,6 @@ public class CheckRender : MonoBehaviour
     {
         if (Camera.current.name == "Main Camera")
         {
-			Debug.Log("カメラに写っている。");
             _isRendFlag = true;
         }
     }

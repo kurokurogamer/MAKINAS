@@ -13,7 +13,7 @@ public class ShotObj : MonoBehaviour
 
     void Start()
     {
-
+		Destroy(gameObject, 5.0f);
     }
 
     void Update()
@@ -33,7 +33,10 @@ public class ShotObj : MonoBehaviour
 		{
 			var hp = other.transform.GetComponent<HitPoint>();
 			hp.Damage(10);
-			Instantiate(_particle, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();
+			if (_particle)
+			{
+				Instantiate(_particle, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();
+			}
 			Destroy(gameObject);
 		}
 	}

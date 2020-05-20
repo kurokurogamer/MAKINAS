@@ -5,7 +5,6 @@ using UnityEngine;
 // 全武器共通の親クラス
 public class Weapon : MonoBehaviour
 {
-	private int _maxAmmo = 100;
 	[SerializeField, Tooltip("リロード速度")]
 	protected float _reloadTime = 1.0f;
 	[SerializeField, Tooltip("発射感覚時間")]
@@ -15,7 +14,7 @@ public class Weapon : MonoBehaviour
 	[SerializeField, Tooltip("使用する弾")]
 	protected GameObject _bullet = null;
 	[SerializeField, Tooltip("最大弾数")]
-
+	private int _maxAmmo = 100;
 	// 現在弾数
 	protected int _ammo = 0;
 	// 現在のリロード時間
@@ -27,16 +26,11 @@ public class Weapon : MonoBehaviour
 	{
 		_ammo = _maxAmmo;
 		_nowReloadTime = 0.0f;
-		_nowWaitTime = 0.0f;
+		_nowWaitTime = _waitTime;
 	}
 
 	private void OnDisable()
 	{
-	}
-
-	protected void Shot()
-	{
-		_nowWaitTime += Time.deltaTime;
 	}
 
 	protected void ReLoad()
@@ -52,9 +46,40 @@ public class Weapon : MonoBehaviour
 		}
 	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public void Attack()
+	{
+		if (_ammo > 0)
+		{
+			if (_nowWaitTime > _waitTime)
+			{
+				_ammo--;
+				_nowWaitTime = 0;
+				Instantiate(_bullet, transform.position, transform.rotation);
+			}
+		}
+	}
+	public void Attack(int count)
+	{
+		if (_ammo > 0)
+		{
+			_ammo -= count;
+			StartCoroutine(RapidFire(count));
+		}
+	}
+
+	public IEnumerator RapidFire(int count)
+	{
+		int i = 0;
+		while(i < count)
+		{
+			_nowWaitTime += Time.deltaTime;
+			if (_nowWaitTime > _waitTime)
+			{
+				Instantiate(_bullet, transform.position, transform.rotation);
+				i++;
+				_nowWaitTime = 0;
+			}
+			yield return null;
+		}
+	}
 }

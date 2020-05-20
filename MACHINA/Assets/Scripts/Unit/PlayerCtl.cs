@@ -5,20 +5,14 @@ using UnityEngine;
 // プレイヤーの入力系をまとめる場所
 public class PlayerCtl : UnitControl
 {
-    [SerializeField, Tooltip("ショットオブジェクト")]
-    private GameObject _bullet = null;
-	// エフェクト弾
-	//private ParticleSystem _particle;
-    [SerializeField, Tooltip("武器")]
-    private GameObject _weapon = null;
     private Vector2 _Axis;
 	private Vector2 _Axis2;
 	private float _stick;
 	private float _nowTime;
-	[SerializeField, Tooltip("発射感覚")]
-	private float _waitTime = 0.1f;
 	private bool _isJamp;
-	private Weapon _waepon;
+	private List<Weapon> _weaponList = new List<Weapon>();
+	[SerializeField]
+	private AudioClip _clip = null;
 
     protected override void Start()
     {
@@ -28,6 +22,14 @@ public class PlayerCtl : UnitControl
 		_stick = 0;
 		_nowTime = 0;
 		_isJamp = true;
+		foreach(Transform child in transform)
+		{
+			if (child.TryGetComponent(out Weapon weapon))
+			{
+				Debug.Log("処理中");
+				_weaponList.Add(weapon);
+			}
+		}
 	}
 
 	private void InputSet()
@@ -65,26 +67,28 @@ public class PlayerCtl : UnitControl
 			}
 		}
 		_nowTime += Time.deltaTime;
-		if ((Input.GetButton("Fire2")) && _nowTime >= _waitTime)
+		if (Input.GetButton("Fire2"))
 		{
-			Shot();
-			_nowTime = 0;
+			_weaponList[0].Attack();
+			AudioManager.instance.PlayOneSE(_clip);
 		}
-		if (Input.GetButton("RT") && _nowTime >= _waitTime)
+		else
 		{
-			Shot();
-			_nowTime = 0;
+			AudioManager.instance.StopSE();
+		}
+		if (Input.GetButton("RT"))
+		{
+			_weaponList[1].Attack(3);
+		}
+		if (Input.GetButton("LT"))
+		{
+			_weaponList[2].Attack();
 		}
 
 		if (Input.GetButtonDown("LT"))
 		{
 			Debug.Log("センサーシステム起動");
 		}
-	}
-
-	public void Shot()
-    {
-		Instantiate(_bullet, _weapon.transform.position, _weapon.transform.rotation);
 	}
 
     // 入力系はUpdateで処理してください
