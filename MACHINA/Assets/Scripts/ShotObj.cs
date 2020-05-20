@@ -8,16 +8,23 @@ public class ShotObj : MonoBehaviour
     private float _shotSpeed = 1f;
 	[SerializeField, Tooltip("攻撃有効なタグ")]
 	private string _tagName = "";
+	[SerializeField, Tooltip("Effect")]
+	private GameObject _particle = null;
 
     void Start()
     {
-        Destroy(gameObject, 3);
+
     }
 
     void Update()
     {
         transform.position += transform.forward * _shotSpeed;
     }
+
+	private void SetEmit()
+	{
+
+	}
 
 	private void OnTriggerEnter(Collider other)
 	{
@@ -26,6 +33,7 @@ public class ShotObj : MonoBehaviour
 		{
 			var hp = other.transform.GetComponent<HitPoint>();
 			hp.Damage(10);
+			Instantiate(_particle, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();
 			Destroy(gameObject);
 		}
 	}

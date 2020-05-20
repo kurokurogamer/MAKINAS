@@ -17,7 +17,15 @@ public class CameraMove : MonoBehaviour
 	private GameObject _rotTarget = null;
 	[SerializeField]
 	private GameObject _posTarget = null;
-	private
+	[SerializeField]
+	private RectTransform _cursor = null;
+	[SerializeField]
+	private Vector3 _firstPos = Vector3.zero;
+
+	private void Awake()
+	{
+		_firstPos = _cursor.position;
+	}
 	// Use this for initialization
 	void Start()
 	{
@@ -29,22 +37,33 @@ public class CameraMove : MonoBehaviour
 		Axis.x = Input.GetAxis("Horizontal2");
 		Axis.y = Input.GetAxis("Vertical2");
 		transform.RotateAround(_posTarget.transform.position, Vector3.up, Axis.x * _speed);
-		//transform.RotateAround(_posTarget.transform.position, Vector3.forward, Axis.y * _speed);
-		if (Axis.y > 0.1f)
+		transform.RotateAround(_posTarget.transform.position, -transform.right, Axis.y * _speed);
+		Vector3 pos = Vector3.zero;
+		if(Axis.x > 0.1f)
 		{
-			transform.rotation = Quaternion.Euler(transform.eulerAngles.x - _speed, transform.eulerAngles.y, transform.eulerAngles.z);
+			pos += new Vector3(50, 0, 0);
 		}
-		else if (Axis.y < -0.1f)
+		else if (Axis.x < -0.1f)
 		{
-			transform.rotation = Quaternion.Euler(transform.eulerAngles.x + _speed, transform.eulerAngles.y, transform.eulerAngles.z);
+			pos += new Vector3(-50, 0, 0);
 		}
+		if (Axis.y > 0.5f)
+		{
+			pos += new Vector3(0, 50, 0);
+		}
+		else if (Axis.y < -0.5f)
+		{
+			pos += new Vector3(0, -50, 0);
+		}
+
+		_cursor.position = Vector3.Lerp(_cursor.position, _firstPos + pos, Time.deltaTime * 10);
 	}
 
     private void Move()
     {
-		transform.position = _posTarget.transform.position;
-        //transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
-    }
+		transform.position = _posTarget.transform.position + new Vector3(2, 2, -10);
+		//transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
+	}
 
     private void LockOn()
     {

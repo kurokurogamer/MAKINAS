@@ -73,7 +73,6 @@ public class UnitControl : MonoBehaviour
 		if (stickR >= 0)
 		{
 			_slider.value += 1 * Time.deltaTime;
-			_boostEffect.Stop();
 			return;
 		}
 		if(_slider.value <= 0)
@@ -86,9 +85,9 @@ public class UnitControl : MonoBehaviour
 			boost.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
-		_slider.value -= 1 * Time.deltaTime;
+		_slider.value -= 1 * Time.deltaTime * 0.2f;
 
-		_boostEffect.Emit(1);
+		_hobaEffect.Emit(1);
 
 		if (Axis.x > 0)
 		{
@@ -108,24 +107,6 @@ public class UnitControl : MonoBehaviour
 		}
 
 		_lastForce = _forceY + _forceX;
-
-		//if (stickR > 0.1f)
-		//{
-		//	_lastForce += transform.forward / 2;
-		//	foreach (var boost in _boost)
-		//	{
-		//		boost.transform.rotation = Quaternion.Euler(90, 0, 0);
-		//	}
-		//}
-		//else if (stickR < -0.1f)
-		//{
-		//	_lastForce -= transform.forward / 2;
-		//}
-		////NewMethod(stickR);
-		//if (stickR > -0.1f && stickR < 0.1f)
-		//{
-		//	_lastForce.z = Vector3.Lerp(_lastForce, Vector3.zero, Time.deltaTime).z;
-		//}
 	}
 
 	private void NewMethod(float stickR)

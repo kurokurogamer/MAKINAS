@@ -6,7 +6,9 @@ using UnityEngine;
 public class PlayerCtl : UnitControl
 {
     [SerializeField, Tooltip("ショットオブジェクト")]
-    private GameObject _shotObj = null;
+    private GameObject _bullet = null;
+	// エフェクト弾
+	//private ParticleSystem _particle;
     [SerializeField, Tooltip("武器")]
     private GameObject _weapon = null;
     private Vector2 _Axis;
@@ -26,9 +28,9 @@ public class PlayerCtl : UnitControl
 		_stick = 0;
 		_nowTime = 0;
 		_isJamp = true;
-    }
+	}
 
-    private void InputSet()
+	private void InputSet()
     {
         // コントローラーの入力を受け取る
         _Axis.x = Input.GetAxis("Horizontal");
@@ -82,8 +84,8 @@ public class PlayerCtl : UnitControl
 
 	public void Shot()
     {
-        Instantiate(_shotObj, _weapon.transform.position, _weapon.transform.rotation);
-    }
+		Instantiate(_bullet, _weapon.transform.position, _weapon.transform.rotation);
+	}
 
     // 入力系はUpdateで処理してください
     void Update()

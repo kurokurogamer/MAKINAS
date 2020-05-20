@@ -22,14 +22,18 @@ public class LockOnSystem : MonoBehaviour
     // ロックオン検知変数
     private bool _isLockOn = false;
     [SerializeField, Tooltip("サークルの大きさ")]
-    private float _circleScale = 400;
+    private float _circleScale = 300;
     [SerializeField, Tooltip("ロックオン可能距離")]
     private float _distance = 100f;
 	[SerializeField, Tooltip("距離のテキスト")]
-	private Text _text;
+	private Text _text = null;
 	Vector2 screenPoint;
 	
-	public static List<GameObject> _targetList = new List<GameObject>();
+	private List<GameObject> _targetList = new List<GameObject>();
+	public List<GameObject> TargetList
+	{
+		get { return _targetList; }
+	}
 
 	private CheckRender _enemyTarget;
 
@@ -53,34 +57,36 @@ public class LockOnSystem : MonoBehaviour
 
     private void LockCheck()
     {
-		RaycastHit hit;
-
-		if(!_enemyTarget.IsRendFlag)
+		if (!_enemyTarget.IsRendFlag)
 		{
 			Debug.Log("敵が画面内にいない");
 			return;
 		}
-		
+
+		RaycastHit hit;
+
+
 		if (Physics.Linecast(transform.position, _enemy.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
-        {
+		{
 			Debug.Log("敵発見");
 			screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, _enemy.transform.position);
 
 			screenPoint.x = screenPoint.x - (Screen.width / 2);
 			screenPoint.y = screenPoint.y - (Screen.height / 2);
 
+			Vector3 vector = transform.position - _enemy.transform.position;
 			// ロックオンサークル内の場合
-			if (screenPoint.magnitude <= _circleScale)
+			if (screenPoint.magnitude <= _circleScale && vector.magnitude < _distance)
 			{
-				Vector3 vector = transform.position - _enemy.transform.position;
 				nowTime += Time.deltaTime;
 				_target = _enemy;
+				// 少数第3位まで表示
 				_text.text = vector.magnitude.ToString("000.00");
 				return;
 			}
 		}
-        nowTime = 0;
-        _target = null;
+		nowTime = 0;
+		_target = null;
     }
 
     // Update is called once per frame
