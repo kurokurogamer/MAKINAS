@@ -9,10 +9,6 @@ public class LockOnSystem : MonoBehaviour
     private bool systemActive = false;
     [SerializeField]
     private LayerMask _layer = 0;
-    [SerializeField, Tooltip("敵")]
-    private GameObject _enemy = null;
-	[SerializeField]
-	private GameObject _enemyCR = null;
     // 現在のターゲット名
     private GameObject _target = null;
 	[SerializeField, Tooltip("プレイヤー")]
@@ -20,7 +16,7 @@ public class LockOnSystem : MonoBehaviour
     [SerializeField, Tooltip("")]
     private float LOCK_ON_TIME = 1.0f;
     // 現在の時間
-    private float nowTime;
+    private float _nowTime;
     // ロックオン検知変数
     private bool _isLockOn = false;
     [SerializeField, Tooltip("サークルの大きさ")]
@@ -39,7 +35,7 @@ public class LockOnSystem : MonoBehaviour
 
     public float GetNowTime
     {
-        get { return nowTime; }
+        get { return _nowTime; }
     }
     public GameObject GetTarget
     {
@@ -57,7 +53,7 @@ public class LockOnSystem : MonoBehaviour
 	private void LockCheck()
 	{
 
-		nowTime += Time.deltaTime;
+		_nowTime += Time.deltaTime;
 
 		bool targetFlag = false;
 
@@ -77,17 +73,16 @@ public class LockOnSystem : MonoBehaviour
 				{
 					centerPoint = screenPoint.magnitude;
 					targetFlag = true;
-					_target = target;
 					distance = target.transform.position.magnitude - _player.transform.position.magnitude;
 					_text.text = distance.ToString("000.00");
-
+					_target = target;
 				}
 			}
 		}
 
 		if (!targetFlag)
 		{
-			nowTime = 0;
+			_nowTime = 0;
 			_target = null;
 		}
 	}
@@ -97,7 +92,7 @@ public class LockOnSystem : MonoBehaviour
     {
         LockCheck();
         // ロックオン時間を越えているなら
-        if (nowTime >= LOCK_ON_TIME)
+        if (_nowTime >= LOCK_ON_TIME)
         {
             _isLockOn = true;
         }

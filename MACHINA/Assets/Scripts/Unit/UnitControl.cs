@@ -19,9 +19,9 @@ public class UnitControl : MonoBehaviour
 	private Slider _slider;
 	[SerializeField, Tooltip("移動エフェクト")]
 	private ParticleSystem _walkEffect = null;
-	[SerializeField]
+	[SerializeField, Tooltip("ホバーエフェクト")]
 	private ParticleSystem _boostEffect = null;
-	[SerializeField, Tooltip("")]
+	[SerializeField, Tooltip("移動エフェクト")]
 	private ParticleSystem _hobaEffect = null;
 	// Use this for initialization
 	protected virtual void Start()
@@ -69,7 +69,6 @@ public class UnitControl : MonoBehaviour
 	// プレイヤー、AIでも対応可能なように値をもらって判断
 	public void Boost(float stickR, Vector2 Axis)
 	{
-		Debug.Log(stickR);
 		if (stickR >= 0)
 		{
 			_slider.value += 1 * Time.deltaTime;
@@ -111,10 +110,6 @@ public class UnitControl : MonoBehaviour
 
 	private void NewMethod(float stickR)
 	{
-		//if (stickR > -0.1f && stickR < 0.1f)
-		//{
-		//	_lastForce.x = Vector3.Lerp(_lastForce, Vector3.zero, Time.deltaTime).x;
-		//}
 	}
 
 	public void Jump()
@@ -124,10 +119,29 @@ public class UnitControl : MonoBehaviour
 
     public void MoveForce()
     {
-        if (_lastForce.y > 0)
-        {
-            _lastForce.y -= 0.5f;
-        }
         _rigid.velocity = new Vector3(_lastForce.x, _lastForce.y + _rigid.velocity.y, _lastForce.z);
     }
+
+
+	Vector3 normalVector = Vector3.zero;
+
+	private void OnCollisionStay(Collision collision)
+	{
+		// 衝突した面の、接触した点における法線を取得
+		normalVector = collision.contacts[0].normal;
+	}
+
+	private void FixedUpdate()
+	{
+		// 平面に投影したいベクトルを作成
+		Vector3 inputVector = Vector3.zero;
+		inputVector.x = Input.GetAxis("Horizontal");
+		inputVector.z = Input.GetAxis("Vertical");
+
+		// 平面に沿ったベクトルを計算
+		Vector3 onPlane = Vector3.ProjectOnPlane(inputVector, normalVector);
+		Debug.Log(onPlane);
+		_rigid.velocity = onPlane * 100;
+	}
+
 }

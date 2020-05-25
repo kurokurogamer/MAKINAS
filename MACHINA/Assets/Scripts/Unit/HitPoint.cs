@@ -25,9 +25,9 @@ public class HitPoint : MonoBehaviour
 		set { _barrierPoint = value; }
 	}
 
-	public void Damage(int value)
+	public void Damage(int value, ShotObj.BULLET_TYPE type)
 	{
-		if(_barrier != null)
+		if(_barrier != null && type == ShotObj.BULLET_TYPE.BEAM)
 		{
 			if (_barrierPoint > 0)
 			{

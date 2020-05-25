@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleButton : MonoBehaviour
+public class SceneChangeButton : MonoBehaviour
 {
 	[SerializeField]
 	private SceneCtl.SceneList _nextScene = SceneCtl.SceneList.TITLE;
@@ -11,12 +11,10 @@ public class TitleButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
 	private void Change()
 	{
-		Debug.Log("処理中");
 		if(Input.GetButtonDown("Fire2"))
 		{
 			AudioManager.instance.PlaySE(_clip);

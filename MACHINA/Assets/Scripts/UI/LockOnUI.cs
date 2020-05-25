@@ -30,14 +30,12 @@ public class LockOnUI : MonoBehaviour
 			_cursor.gameObject.SetActive(true);
             if (_lockOnSystem.GetIsLockOn)
             {
-                Debug.Log("ロックオン完了");
 				// ロックオン完了
 				_cursor.color = _color1;
             }
             else
             {
                 // ロックオン中
-                Debug.Log("ロックオン中");
 				_cursor.color = _color2;
 			}
 		}

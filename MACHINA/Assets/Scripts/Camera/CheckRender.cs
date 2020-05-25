@@ -5,7 +5,6 @@ using UnityEngine;
 public class CheckRender : MonoBehaviour
 {
 	private LockOnSystem _lockOnSystem;
-	private bool _onCamera = false;
     private bool _isRendFlag = false;
     public bool IsRendFlag
     {
@@ -26,7 +25,6 @@ public class CheckRender : MonoBehaviour
 			{
 				if(target == gameObject)
 				{
-					Debug.Log("同一ターゲット発見");
 					obj = target;
 				}
 			}
@@ -43,11 +41,8 @@ public class CheckRender : MonoBehaviour
 		}
 		else
 		{
-			Debug.Log("カメラに写っていない");
-			Debug.Log(_lockOnSystem.TargetList.Count);
 			for(int i = _lockOnSystem.TargetList.Count; i > 0; i--)
 			{
-				Debug.Log("同じオブジェクトは削除");
 				if(_lockOnSystem.TargetList[i - 1] == gameObject)
 				{
 					_lockOnSystem.TargetList.Remove(gameObject);

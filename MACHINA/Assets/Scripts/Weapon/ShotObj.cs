@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class ShotObj : MonoBehaviour
 {
+	public enum BULLET_TYPE
+	{
+		METAL,
+		BEAM,
+		MAX
+	}
     [SerializeField, Tooltip("弾速")]
     private float _shotSpeed = 1f;
 	[SerializeField, Tooltip("攻撃有効なタグ")]
 	private string _tagName = "";
 	[SerializeField, Tooltip("Effect")]
 	private GameObject _particle = null;
+	[SerializeField, Tooltip("タイプ")]
+	private BULLET_TYPE _type = BULLET_TYPE.METAL;
 
     void Start()
     {
@@ -32,7 +40,7 @@ public class ShotObj : MonoBehaviour
 		if (other.tag == _tagName)
 		{
 			var hp = other.transform.GetComponent<HitPoint>();
-			hp.Damage(10);
+			hp.Damage(10, _type);
 			if (_particle)
 			{
 				Instantiate(_particle, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();

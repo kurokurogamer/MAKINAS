@@ -32,6 +32,11 @@ public class PlayerCtl : UnitControl
 		}
 	}
 
+	// ファイルからボタン情報を取得
+	private void SetButton()
+	{
+	}
+
 	private void InputSet()
     {
         // コントローラーの入力を受け取る
@@ -62,7 +67,7 @@ public class PlayerCtl : UnitControl
 		{
 			if (_isJamp)
 			{
-				Jump();
+				//Jump();
 				_isJamp = false;
 			}
 		}
@@ -103,16 +108,16 @@ public class PlayerCtl : UnitControl
     {
     }
 
-    private void FixedUpdate()
-    {
-		MoveForce();
-		Walk(_Axis);
-		Boost(_stick, _Axis);
-    }
+	//  private void FixedUpdate()
+	//  {
+	////MoveForce();
+	////Walk(_Axis);
+	////Boost(_stick, _Axis);
+	//  }
 
-	private void OnCollisionStay(Collision collision)
-	{
-		_isJamp = true;
-	}
+	//private void OnCollisionStay(Collision collision)
+	//{
+	//	_isJamp = true;
+	//}
 
 }
