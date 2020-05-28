@@ -9,8 +9,8 @@ public class DebugGizmos : MonoBehaviour
         CUBE,
         SPHERE,
         MAX
-        
     }
+
     [SerializeField, Tooltip("デバックフラグ")]
     private bool _debugFlag = true;
     [SerializeField, Tooltip("Debug用の表示Gizmos")]

@@ -18,6 +18,8 @@ public class ShotObj : MonoBehaviour
 	private GameObject _particle = null;
 	[SerializeField, Tooltip("タイプ")]
 	private BULLET_TYPE _type = BULLET_TYPE.METAL;
+	[SerializeField, Tooltip("衝突音")]
+	private AudioClip _clip = null;
 
     void Start()
     {
@@ -45,6 +47,7 @@ public class ShotObj : MonoBehaviour
 			{
 				Instantiate(_particle, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();
 			}
+			AudioManager.instance.PlayOneSE(_clip);
 			Destroy(gameObject);
 		}
 	}

@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
 	public static AudioManager instance = null;
 
 	private AudioSource _source;
+	private Coroutine _coroutine;
 
 	private void Awake()
 	{
@@ -25,6 +26,7 @@ public class AudioManager : MonoBehaviour
 	void Start()
     {
 		_source = GetComponent<AudioSource>();
+		_coroutine = null;
     }
 
 	public void PlaySE(AudioClip clip)
@@ -52,6 +54,7 @@ public class AudioManager : MonoBehaviour
 
 	public void StopBGM()
 	{
+
 		_source.Stop();
 	}
 
@@ -61,7 +64,7 @@ public class AudioManager : MonoBehaviour
 		{
 			if(!_source.isPlaying)
 			{
-
+				_source.PlayOneShot(clip);
 			}
 			yield return null;
 		}

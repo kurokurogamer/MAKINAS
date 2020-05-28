@@ -19,9 +19,9 @@ public class CameraMove : MonoBehaviour
 	private GameObject _posTarget = null;
 	[SerializeField]
 	private RectTransform _cursor = null;
-	[SerializeField]
 	private Vector3 _firstPos = Vector3.zero;
-
+	[SerializeField]
+	private Vector3 _point = Vector3.zero;
 	private void Awake()
 	{
 		_firstPos = _cursor.position;
@@ -61,7 +61,7 @@ public class CameraMove : MonoBehaviour
 
     private void Move()
     {
-		transform.position = _posTarget.transform.position + new Vector3(2, 2, -10);
+		transform.position = _posTarget.transform.position + _point;
 		//transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
 	}
 

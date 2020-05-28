@@ -128,6 +128,7 @@ MonoBehaviour:
   _tagName: Player
   _particle: {fileID: 8141892654974033038}
   _type: 0
+  _clip: {fileID: 8300000, guid: 08b23343b5441d947b2bf049470676f3, type: 3}
 --- !u!1 &8141892654974033038
 GameObject:
   m_ObjectHideFlags: 0

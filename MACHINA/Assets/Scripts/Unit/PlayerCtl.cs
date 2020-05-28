@@ -5,21 +5,25 @@ using UnityEngine;
 // プレイヤーの入力系をまとめる場所
 public class PlayerCtl : UnitControl
 {
-    private Vector2 _Axis;
-	private Vector2 _Axis2;
-	private float _stick;
-	private float _nowTime;
-	private bool _isJamp;
-	private List<Weapon> _weaponList = new List<Weapon>();
 	[SerializeField]
 	private AudioClip _clip = null;
+
+	private List<Weapon> _weaponList = new List<Weapon>();
+
+    private Vector2 _stickLeft;
+	private Vector2 _stickRight;
+	private float _triggerLR;
+	private float _nowTime;
+	private bool _isJamp;
+	private bool _boost;
+	private Vector3 _rot;
 
     protected override void Start()
     {
 		base.Start();
-		_Axis = Vector2.zero;
-		_Axis2 = Vector2.zero;
-		_stick = 0;
+		_stickLeft = Vector2.zero;
+		_stickRight = Vector2.zero;
+		_triggerLR = 0;
 		_nowTime = 0;
 		_isJamp = true;
 		foreach(Transform child in transform)
@@ -30,6 +34,8 @@ public class PlayerCtl : UnitControl
 				_weaponList.Add(weapon);
 			}
 		}
+		_rot = transform.eulerAngles;
+
 	}
 
 	// ファイルからボタン情報を取得
@@ -40,59 +46,61 @@ public class PlayerCtl : UnitControl
 	private void InputSet()
     {
         // コントローラーの入力を受け取る
-        _Axis.x = Input.GetAxis("Horizontal");
-        _Axis.y = Input.GetAxis("Vertical");
-		_Axis2.x = Input.GetAxis("Horizontal2");
-		_Axis2.y = Input.GetAxis("Vertical2");
-		_stick = Input.GetAxis("TriggerLR");
+        _stickLeft.x = Input.GetAxis("Horizontal");
+        _stickLeft.y = Input.GetAxis("Vertical");
+		_stickRight.x = Input.GetAxis("Horizontal2");
+		_stickRight.y = Input.GetAxis("Vertical2");
+		_triggerLR = Input.GetAxis("TriggerLR");
         // キー入力を受け取る
 
 		if(Input.GetKey(KeyCode.RightArrow))
         {
-            _Axis.x = 1;
+            _stickLeft.x = 1;
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
-            _Axis.x = -1;
+            _stickLeft.x = -1;
         }
         if(Input.GetKey(KeyCode.UpArrow))
         {
-            _Axis.y = 1;
+            _stickLeft.y = 1;
         }
         else if(Input.GetKey(KeyCode.DownArrow))
         {
-            _Axis.y = -1;
+            _stickLeft.y = -1;
         }
-		if (Input.GetButton("Jump") || Input.GetKey(KeyCode.Space))
+
+		if (Input.GetButtonDown("Jump") || Input.GetKey(KeyCode.Space))
 		{
-			if (_isJamp)
-			{
-				//Jump();
-				_isJamp = false;
-			}
+			Jump();
+		}
+
+		if(Input.GetButtonDown("LB"))
+		{
+			ChangeMode();
 		}
 		_nowTime += Time.deltaTime;
 		if (Input.GetButton("Fire2"))
 		{
 			_weaponList[0].Attack();
-			AudioManager.instance.PlayOneSE(_clip);
 		}
-		else
-		{
-			AudioManager.instance.StopSE();
-		}
-		if (Input.GetButton("RT"))
+		if (Input.GetButton("RB"))
 		{
 			_weaponList[1].Attack(3);
 		}
-		if (Input.GetButton("LT"))
+		if (_triggerLR <= -0.1f)
 		{
 			_weaponList[2].Attack();
 		}
 
-		if (Input.GetButtonDown("LT"))
+		if (_triggerLR >= 0.1f)
 		{
-			Debug.Log("センサーシステム起動");
+			_weaponList[2].Attack();
+		}
+
+		if (Input.GetButtonDown("RStickPush"))
+		{
+			Sensor();
 		}
 	}
 
@@ -100,24 +108,19 @@ public class PlayerCtl : UnitControl
     void Update()
     {
         InputSet();
-		Vector3 rot = transform.eulerAngles;
-		transform.eulerAngles = new Vector3(rot.x, Camera.main.transform.eulerAngles.y, rot.z);
+		transform.eulerAngles = new Vector3(_rot.x, Camera.main.transform.eulerAngles.y, _rot.z);
 	}
 
     private void LateUpdate()
     {
     }
 
-	//  private void FixedUpdate()
-	//  {
-	////MoveForce();
-	////Walk(_Axis);
-	////Boost(_stick, _Axis);
-	//  }
-
-	//private void OnCollisionStay(Collision collision)
-	//{
-	//	_isJamp = true;
-	//}
-
+	protected void FixedUpdate()
+	{
+		System(_stickLeft);
+		if (_stickLeft.x == 0 && _stickLeft.y == 0)
+		{
+			Brake();
+		}
+	}
 }
