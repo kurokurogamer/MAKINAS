@@ -9,7 +9,6 @@ public class MachineGun : Weapon
     // Start is called before the first frame update
     void Start()
     {
-		//_effect = _bullet.GetComponent<ParticleSystem>();
     }
 
 	// Update is called once per frame

@@ -32,8 +32,10 @@ public class UnitControl : MonoBehaviour
 	[SerializeField, Tooltip("移動エフェクト")]
 	private ParticleSystem _hobaEffect = null;
 	protected UNIT_MODE _mode = UNIT_MODE.WAIK;
+	protected List<Weapon> _weaponList = new List<Weapon>();
 	[SerializeField]
-	private GameObject _testUIImage = null;
+	private LayerMask _layerMask = 0;
+
 
 
 	// Use this for initialization
@@ -42,44 +44,61 @@ public class UnitControl : MonoBehaviour
         _rigid = GetComponent<Rigidbody>();
 		_animator = GetComponent<Animator>();
 		_lastForce = Vector3.zero;
+		foreach (Transform child in transform)
+		{
+			if (child.TryGetComponent(out Weapon weapon))
+			{
+				_weaponList.Add(weapon);
+			}
+		}
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
 	// Animationで移動
 	protected void Walk(Vector2 Axis)
 	{
-		_animator.SetBool("Hover", false);
-		_animator.SetBool("Walk", true);
-		transform.position = _animator.rootPosition;
 		// 入力がない場合は処理をスキップする
 		if (Axis.x == 0 && Axis.y == 0)
 		{
 			return;
 		}
+		_animator.SetBool("Hover", false);
+		_animator.SetBool("Walk", true);
+		Vector3 forceX = Vector3.zero;
+		Vector3 forceY = Vector3.zero;
+
+		GroundCheck();
 		if (Axis.x > 0.1f)
 		{
-			_forceX = transform.right * _power;
+			forceX = transform.right * _power;
 		}
 		else if (Axis.x < -0.1f)
 		{
-			_forceX = -transform.right * _power;
+			forceX = -transform.right * _power;
 		}
 		if (Axis.y > 0.1f)
 		{
 			_animator.speed = 1;
-			_forceY = transform.forward * _power;
+			forceY = transform.forward * _power;
 		}
 		else if (Axis.y < -0.1f)
 		{
-			if (_animator.GetCurrentAnimatorStateInfo(0).speed <= 0.0f)
-			{
-				Debug.Log("再生位置を取得");
-				_animator.Play(Animator.StringToHash("Walk"), 0, 0.5f);
-			}
-			_forceY = -transform.forward * _power;
+			forceY = -transform.forward * _power;
 		}
+		_lastForce = forceY + forceX;
+	}
 
-		_lastForce = _forceY + _forceX;
+	private void GroundCheck()
+	{
+		RaycastHit hit;
+		//if(Physics.Raycast(transform.position,Vector3.down,hit,10,_layerMask,QueryTriggerInteraction.Ignore))
+		//{
+		//	transform.position = new Vector3(transform.position.x, hit.point.y + 4.5f, transform.position.z);
+		//}
+		if (Physics.BoxCast(transform.position, new Vector3(1, 1, 1), Vector3.down, out hit, transform.rotation, 10, _layerMask, QueryTriggerInteraction.Ignore))
+		{
+			transform.position = new Vector3(transform.position.x, hit.point.y + 4.5f, transform.position.z);
+		}
 	}
 
 	protected void Boost(Vector2 Axis)
@@ -90,42 +109,47 @@ public class UnitControl : MonoBehaviour
 	// プレイヤー、AIでも対応可能なように値をもらって判断
 	protected void Hover(Vector2 Axis)
 	{
+		if (Axis.x == 0 && Axis.y == 0)
+		{
+			return;
+		}
+		GroundCheck();
+
 		_animator.SetBool("Hover", true);
+		_animator.SetBool("Walk", false);
+		Vector3 forceX = Vector3.zero;
+		Vector3 forceY = Vector3.zero;
+
 
 		if (Axis.x > 0)
 		{
-			_forceX = transform.right * _power * 3;
+			forceX = transform.right * _power * 2;
 		}
 		else if(Axis.x < 0)
 		{
-			_forceX = transform.right * _power * -3;
+			forceX = transform.right * _power * -2;
 		}
 		if (Axis.y > 0)
 		{
-			_forceY = transform.forward * _power * 3;
+			forceY = transform.forward * _power * 2;
 		}
 		else if (Axis.y < 0)
 		{
-			_forceY = transform.forward * _power * -3;
+			forceY = transform.forward * _power * -2;
 		}
 
-		_lastForce = _forceY + _forceX;
+		_lastForce = forceY + forceX;
+		_lastForce.y = 0;
 	}
 
 	protected void Jump()
     {
-        _lastForce.y += _power;
+        _lastForce.y += _power * 5;
     }
-
-	protected void Sensor()
-	{
-		Debug.Log("センサー起動");
-		bool active = _testUIImage.activeInHierarchy ? false : true;
-		_testUIImage.SetActive(active);
-	}
 
 	protected void ChangeMode()
 	{
+		Debug.Log("ログ");
 		if (_mode == UNIT_MODE.WAIK)
 		{
 			Debug.Log("ホバーモード");
@@ -144,7 +168,7 @@ public class UnitControl : MonoBehaviour
 		_forceY = Vector3.zero;
 		_animator.SetBool("Walk", false);
 		_animator.SetBool("Hover", false);
-		//_lastForce = new Vector3(_rigid.velocity.x / 2, 0, _rigid.velocity.z / 2);
+		_lastForce = new Vector3(0, 0, 0);
 		_slider.value += 1 * Time.deltaTime;
 	}
 
@@ -168,7 +192,23 @@ public class UnitControl : MonoBehaviour
 			default:
 				break;
 		}
-		_lastForce.y -= _lastForce.y / 2;
-		//_rigid.velocity = new Vector3(_lastForce.x, _lastForce.y + _rigid.velocity.y, _lastForce.z);
+		_rigid.velocity = new Vector3(_lastForce.x, _lastForce.y, _lastForce.z);
+	}
+
+	private void OnDrawGizmos()
+	{
+		RaycastHit rayCast;
+		bool hit = Physics.BoxCast(transform.position, new Vector3(1, 1, 1), Vector3.down, out rayCast, transform.rotation, 10, _layerMask, QueryTriggerInteraction.Ignore);
+		if(hit)
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawWireCube(rayCast.point, Vector3.one * 2);
+		}
+		else
+		{
+			Gizmos.color = Color.blue;
+			Gizmos.DrawWireCube(transform.position + Vector3.down * 10, Vector3.one * 2);
+		}
+
 	}
 }

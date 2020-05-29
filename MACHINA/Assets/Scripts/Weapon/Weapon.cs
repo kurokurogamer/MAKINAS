@@ -9,18 +9,25 @@ public class Weapon : MonoBehaviour
 	protected float _reloadTime = 1.0f;
 	[SerializeField, Tooltip("発射感覚時間")]
 	protected float _waitTime = 1.0f;
+	[SerializeField, Tooltip("連射速度")]
+	protected float _rapidSpeed = 0.1f;
 	[SerializeField, Tooltip("弾速")]
 	protected float _shotSpeed = 1.0f;
 	[SerializeField, Tooltip("使用する弾")]
 	protected GameObject _bullet = null;
 	[SerializeField, Tooltip("最大弾数")]
-	private int _maxAmmo = 100;
+	protected int _maxAmmo = 100;
+	[SerializeField, Tooltip("同時に発射される弾数")]
+	protected int _multiple = 1;
+
 	// 現在弾数
 	protected int _ammo = 0;
 	// 現在のリロード時間
 	protected float _nowReloadTime = 0.0f;
 	// 現在の発射感覚時間
 	protected float _nowWaitTime = 0.0f;
+	// 現在の再連射間隔
+	protected float _rapidTime = 0.0f;
 
 	protected virtual void Start()
 	{
@@ -62,8 +69,8 @@ public class Weapon : MonoBehaviour
 	{
 		if (_ammo > 0)
 		{
-			_ammo -= count;
-			StartCoroutine(RapidFire(count));
+			_ammo--;
+			StartCoroutine(RapidFire(_multiple));
 		}
 	}
 

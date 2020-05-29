@@ -20,8 +20,6 @@ public class Enemy : MonoBehaviour
     private float _speed = 0.1f;
     [SerializeField, Tooltip("移動幅")]
     private float _distance = 3;
-	[SerializeField, Tooltip("敵の使用する弾")]
-	private GameObject _bullet = null;
 	[SerializeField, Tooltip("発射感覚")]
 	private float _whileTime = 1;
 	// 現在のカウント
@@ -61,9 +59,6 @@ public class Enemy : MonoBehaviour
 		var forward = transform.TransformDirection(Vector3.forward);
 		var targetDirection = player - transform.position;
 		var angle = Vector3.Angle(forward, targetDirection);
-
-
-		Instantiate(_bullet, transform.position, transform.rotation);
 	}
 
     // Update is called once per frame
@@ -80,7 +75,7 @@ public class Enemy : MonoBehaviour
 			_nowTime += Time.deltaTime;
 			if (_nowTime > _whileTime)
 			{
-				Attack(other.transform.position);
+
 				_nowTime = 0;
 			}
 		}

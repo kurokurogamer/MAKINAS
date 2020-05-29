@@ -37,15 +37,15 @@ public class SelectMenu : MonoBehaviour
 	// 前回の入力情報
 	private Vector2 _oldAxis;
 
-	private int _menuType;
+	protected int _menuType;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
 		_uiList = new List<RectTransform>();
 		foreach(RectTransform child in transform)
 		{
-			if(child.TryGetComponent(out RectTransform rect))
+			if(child.tag == "Button" && child.TryGetComponent(out RectTransform rect))
 			{
 				_uiList.Add(rect);
 			}
@@ -57,8 +57,9 @@ public class SelectMenu : MonoBehaviour
 		_oldAxis = Vector2.zero;
     }
 
-	private void Seletct()
+	protected void Seletct()
 	{
+		_cursor.gameObject.SetActive(true);
 		_oldAxis = _axis;
 		_axis.x = Input.GetAxis("Horizontal");
 		_axis.y = Input.GetAxis("Vertical");
@@ -69,7 +70,7 @@ public class SelectMenu : MonoBehaviour
 			{
 				_nowTime = _interval;
 			}
-			_nowTimeDelay += Time.deltaTime;
+			_nowTimeDelay += Time.unscaledDeltaTime;
 		}
 		else
 		{
@@ -78,12 +79,13 @@ public class SelectMenu : MonoBehaviour
 
 		if(_nowTimeDelay > _delay)
 		{
-			_nowTime += Time.deltaTime;
+			_nowTime += Time.unscaledDeltaTime;
 		}
 
+		// インターバル時間を超えていたら処理を行う
 		if (_nowTime >= _interval)
 		{
-			Debug.Log("処理");
+			Debug.Log(_nowTime);
 			AudioManager.instance.PlaySE(_clip);
 			if (_axis.y < 0)
 			{
