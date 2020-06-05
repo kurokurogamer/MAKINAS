@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -8,6 +9,15 @@ public class AudioManager : MonoBehaviour
 
 	private AudioSource _source;
 	private Coroutine _coroutine;
+	[Header("MixerGroup")]
+	[SerializeField, Tooltip("mixer")]
+	private AudioMixer _mixer = null;
+	[SerializeField, Tooltip("SEグループ")]
+	private AudioMixerGroup _mixerSEGroup = null;
+	[SerializeField, Tooltip("BGM")]
+	private AudioMixerGroup _mixerBGMGroup = null;
+	[SerializeField, Tooltip("Voiceグループ")]
+	private AudioMixerGroup _mixerVoiceGroup = null;
 
 	private void Awake()
 	{
@@ -31,6 +41,7 @@ public class AudioManager : MonoBehaviour
 
 	public void PlaySE(AudioClip clip)
 	{
+		_source.outputAudioMixerGroup = _mixerSEGroup;
 		_source.PlayOneShot(clip);
 	}
 
@@ -44,6 +55,7 @@ public class AudioManager : MonoBehaviour
 
 	public void PlayBGM(AudioClip clip)
 	{
+		_source.loop = true;
 		StartCoroutine(BGMLoop(clip));
 	}
 

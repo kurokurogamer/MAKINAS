@@ -30,13 +30,13 @@ public class CheckRender : MonoBehaviour
 			}
 			if(obj == null)
 			{
-				Debug.Log("同一のターゲットがいないのでリストに追加");
+				// 同一のターゲットがいないのでリストに追加
 				_lockOnSystem.TargetList.Add(gameObject);
 			}
 		}
 		else if(_isRendFlag)
 		{
-			Debug.Log("ターゲットリストが空");
+			// ターゲットリストが空の場合の初期追加
 			_lockOnSystem.TargetList.Add(gameObject);
 		}
 		else

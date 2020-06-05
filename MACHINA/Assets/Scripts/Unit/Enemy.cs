@@ -26,6 +26,8 @@ public class Enemy : MonoBehaviour
 	private float _nowTime;
     // 初期座標
     private Vector3 _firstPos;
+	[SerializeField, Tooltip("武器")]
+	private Weapon _weapon = null;
 
     // Use this for initialization
     void Start()
@@ -54,12 +56,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-	private void Attack(Vector3 player)
-	{
-		var forward = transform.TransformDirection(Vector3.forward);
-		var targetDirection = player - transform.position;
-		var angle = Vector3.Angle(forward, targetDirection);
-	}
 
     // Update is called once per frame
     void Update()
@@ -75,7 +71,7 @@ public class Enemy : MonoBehaviour
 			_nowTime += Time.deltaTime;
 			if (_nowTime > _whileTime)
 			{
-
+				_weapon.Attack();
 				_nowTime = 0;
 			}
 		}

@@ -35,6 +35,7 @@ public class UnitControl : MonoBehaviour
 	protected List<Weapon> _weaponList = new List<Weapon>();
 	[SerializeField]
 	private LayerMask _layerMask = 0;
+	private bool isAir;
 
 
 
@@ -51,12 +52,17 @@ public class UnitControl : MonoBehaviour
 				_weaponList.Add(weapon);
 			}
 		}
+		isAir = false;
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
 	// Animationで移動
 	protected void Walk(Vector2 Axis)
 	{
+		if(isAir)
+		{
+			return;
+		}
 		// 入力がない場合は処理をスキップする
 		if (Axis.x == 0 && Axis.y == 0)
 		{
@@ -86,18 +92,19 @@ public class UnitControl : MonoBehaviour
 			forceY = -transform.forward * _power;
 		}
 		_lastForce = forceY + forceX;
+		_rigid.velocity = _lastForce;
 	}
 
 	private void GroundCheck()
 	{
 		RaycastHit hit;
-		//if(Physics.Raycast(transform.position,Vector3.down,hit,10,_layerMask,QueryTriggerInteraction.Ignore))
-		//{
-		//	transform.position = new Vector3(transform.position.x, hit.point.y + 4.5f, transform.position.z);
-		//}
-		if (Physics.BoxCast(transform.position, new Vector3(1, 1, 1), Vector3.down, out hit, transform.rotation, 10, _layerMask, QueryTriggerInteraction.Ignore))
+		if (Physics.SphereCast(transform.position, 0.5f, Vector3.down, out hit, 10, _layerMask, QueryTriggerInteraction.Ignore))
 		{
-			transform.position = new Vector3(transform.position.x, hit.point.y + 4.5f, transform.position.z);
+			transform.position = new Vector3(transform.position.x, hit.point.y + 5, transform.position.z);
+		}
+		else
+		{
+			_lastForce.y = _rigid.velocity.y;
 		}
 	}
 
@@ -109,6 +116,11 @@ public class UnitControl : MonoBehaviour
 	// プレイヤー、AIでも対応可能なように値をもらって判断
 	protected void Hover(Vector2 Axis)
 	{
+		if (isAir)
+		{
+			return;
+		}
+
 		if (Axis.x == 0 && Axis.y == 0)
 		{
 			return;
@@ -119,37 +131,59 @@ public class UnitControl : MonoBehaviour
 		_animator.SetBool("Walk", false);
 		Vector3 forceX = Vector3.zero;
 		Vector3 forceY = Vector3.zero;
-
+		Debug.Log("アニメーション");
 
 		if (Axis.x > 0)
 		{
-			forceX = transform.right * _power * 2;
+			forceX = transform.right * _power * 5;
 		}
 		else if(Axis.x < 0)
 		{
-			forceX = transform.right * _power * -2;
+			forceX = transform.right * _power * -5;
 		}
 		if (Axis.y > 0)
 		{
-			forceY = transform.forward * _power * 2;
+			forceY = transform.forward * _power * 5;
 		}
 		else if (Axis.y < 0)
 		{
-			forceY = transform.forward * _power * -2;
+			forceY = transform.forward * _power * -5;
 		}
 
 		_lastForce = forceY + forceX;
-		_lastForce.y = 0;
+		_rigid.velocity = _lastForce;
+		//_rigid.AddForce(_lastForce * 10, ForceMode.VelocityChange);
+		//if (_rigid.velocity.x > 5)
+		//{
+		//	_rigid.velocity = new Vector3(5, _rigid.velocity.y, _rigid.velocity.z);
+		//}
+		//else if(_rigid.velocity.x < -5)
+		//{
+		//	_rigid.velocity = new Vector3(-5, _rigid.velocity.y, _rigid.velocity.z);
+		//}
+		//if (_rigid.velocity.z > 5)
+		//{
+		//	_rigid.velocity = new Vector3(_rigid.velocity.x, _rigid.velocity.y, 5);
+		//}
+		//else if (_rigid.velocity.z < -5)
+		//{
+		//	_rigid.velocity = new Vector3(_rigid.velocity.x, _rigid.velocity.y, -5);
+		//}
 	}
 
 	protected void Jump()
-    {
-        _lastForce.y += _power * 5;
-    }
+	{
+		Debug.Log("ジャンプが呼ばれている");
+		if (isAir)
+		{
+			return;
+		}
+		isAir = true;
+		_rigid.AddForce(Vector3.up * 20, ForceMode.VelocityChange);
+	}
 
 	protected void ChangeMode()
 	{
-		Debug.Log("ログ");
 		if (_mode == UNIT_MODE.WAIK)
 		{
 			Debug.Log("ホバーモード");
@@ -164,12 +198,12 @@ public class UnitControl : MonoBehaviour
 
 	protected void Brake()
 	{
-		_forceX = transform.forward;
-		_forceY = Vector3.zero;
 		_animator.SetBool("Walk", false);
 		_animator.SetBool("Hover", false);
-		_lastForce = new Vector3(0, 0, 0);
 		_slider.value += 1 * Time.deltaTime;
+		_lastForce = Vector3.zero;
+		//_lastForce.y = _rigid.velocity.y;
+		_rigid.velocity = new Vector3(_lastForce.x, _lastForce.y + _rigid.velocity.y, _lastForce.z);
 	}
 
 	protected void System(Vector2 Axis)
@@ -178,37 +212,53 @@ public class UnitControl : MonoBehaviour
 		{
 			case UNIT_MODE.WAIK:
 				Walk(Axis);
-				Debug.Log("Brake");
 				break;
 			case UNIT_MODE.BOOST:
 				Boost(Axis);
-				Debug.Log("Boost");
 				break;
 			case UNIT_MODE.HOVER:
 				Hover(Axis);
-				Debug.Log("Hover");
 				break;
 			case UNIT_MODE.MAX:
 			default:
 				break;
 		}
-		_rigid.velocity = new Vector3(_lastForce.x, _lastForce.y, _lastForce.z);
 	}
 
 	private void OnDrawGizmos()
 	{
-		RaycastHit rayCast;
-		bool hit = Physics.BoxCast(transform.position, new Vector3(1, 1, 1), Vector3.down, out rayCast, transform.rotation, 10, _layerMask, QueryTriggerInteraction.Ignore);
-		if(hit)
+		RaycastHit hit;
+
+		if (Physics.SphereCast(transform.position, 0.5f, Vector3.down, out hit, 100, _layerMask, QueryTriggerInteraction.Ignore))
 		{
 			Gizmos.color = Color.red;
-			Gizmos.DrawWireCube(rayCast.point, Vector3.one * 2);
+			Gizmos.DrawRay(transform.position, Vector3.down * hit.distance);
+			Gizmos.DrawWireSphere(transform.position + (-transform.up * hit.distance), 0.5f);
+
 		}
 		else
 		{
 			Gizmos.color = Color.blue;
-			Gizmos.DrawWireCube(transform.position + Vector3.down * 10, Vector3.one * 2);
+			Gizmos.DrawRay(transform.position, Vector3.down * 10);
+			Gizmos.DrawWireSphere(transform.position + (-transform.up * 10), 0.5f);
 		}
+	}
 
+	private void OnTriggerStay(Collider other)
+	{
+		Debug.Log("触れいている" + other.gameObject);
+		if (other.tag == "Ground")
+		{
+			Debug.Log("地面");
+			isAir = false;
+		}
+	}
+	private void OnCollisionStay(Collision collision)
+	{
+		Debug.Log("触れいている" + collision.gameObject + "Collision");
+		if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+		{
+			isAir = false;
+		}
 	}
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 public class ParticleManager : MonoBehaviour
 {
 	public static ParticleManager instance = null;
+	private List<GameObject> _effectList = new List<GameObject>();
+	private Dictionary<string, GameObject> _effectDictionary = new Dictionary<string, GameObject>();
 
 	private void Awake()
 	{
@@ -25,14 +27,22 @@ public class ParticleManager : MonoBehaviour
         
     }
 
-	private void CreateEffect()
-	{
-	}
-
 	private void CreateEffect(ParticleSystem particle)
 	{
 		Instantiate(particle);
+	}
 
+	public void CreateEffect(ParticleSystem particle, Vector3 point)
+	{
+		Instantiate(particle, point, transform.rotation);
+	}
+
+	private void CreateEffect(ParticleSystem particle,float lifetime ,float size)
+	{
+		Instantiate(particle);
+		var main = particle.main;
+		main.startLifetime = lifetime;
+		main.startSize = size;
 	}
 
 	private void Play(ParticleSystem particle)

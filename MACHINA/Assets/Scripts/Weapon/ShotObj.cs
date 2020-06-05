@@ -38,7 +38,6 @@ public class ShotObj : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-
 		if (other.tag == _tagName)
 		{
 			var hp = other.transform.GetComponent<HitPoint>();

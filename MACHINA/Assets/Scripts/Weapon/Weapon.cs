@@ -19,7 +19,8 @@ public class Weapon : MonoBehaviour
 	protected int _maxAmmo = 100;
 	[SerializeField, Tooltip("同時に発射される弾数")]
 	protected int _multiple = 1;
-
+	// 武器のアニメーション
+	protected Animator _animator;
 	// 現在弾数
 	protected int _ammo = 0;
 	// 現在のリロード時間
@@ -31,6 +32,7 @@ public class Weapon : MonoBehaviour
 
 	protected virtual void Start()
 	{
+		_animator = GetComponent<Animator>();
 		_ammo = _maxAmmo;
 		_nowReloadTime = 0.0f;
 		_nowWaitTime = _waitTime;
@@ -53,7 +55,7 @@ public class Weapon : MonoBehaviour
 		}
 	}
 
-	public void Attack()
+	public virtual void Attack()
 	{
 		if (_ammo > 0)
 		{

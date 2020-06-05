@@ -11,7 +11,6 @@ public class PlayerCtl : UnitControl
     private Vector2 _stickLeft;
 	private Vector2 _stickRight;
 	private float _triggerLR;
-	private bool _isJamp;
 	private bool _boost;
 	private Vector3 _rot;
 	[SerializeField, Tooltip("ロックオンUI")]
@@ -27,7 +26,6 @@ public class PlayerCtl : UnitControl
 		_stickLeft = Vector2.zero;
 		_stickRight = Vector2.zero;
 		_triggerLR = 0;
-		_isJamp = true;
 		_rot = transform.eulerAngles;
 	}
 
@@ -112,14 +110,14 @@ public class PlayerCtl : UnitControl
 				_weaponList[2].Attack();
 			}
 		}
-
 	}
 
     // 入力系はUpdateで処理してください
     void Update()
     {
-        InputSet();
 		transform.eulerAngles = new Vector3(_rot.x, Camera.main.transform.eulerAngles.y, _rot.z);
+        InputSet();
+
 	}
 
     private void LateUpdate()

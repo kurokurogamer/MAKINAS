@@ -37,7 +37,6 @@ public class CameraMove : MonoBehaviour
 		Axis.x = Input.GetAxis("Horizontal2");
 		Axis.y = Input.GetAxis("Vertical2");
 		transform.RotateAround(_posTarget.transform.position, Vector3.up, Axis.x * _speed);
-		transform.RotateAround(_posTarget.transform.position, -transform.right, Axis.y * _speed);
 		Vector3 pos = Vector3.zero;
 		if(Axis.x > 0.1f)
 		{

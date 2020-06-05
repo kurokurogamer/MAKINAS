@@ -37,7 +37,8 @@ namespace UnityStandardAssets.Effects
                     m_Cols[n].attachedRigidbody.AddForceAtPosition(delta.normalized*force*falloff,
                                                                  Vector3.Lerp(m_Cols[n].transform.position,
                                                                               transform.TransformPoint(0, 0, localPos.z),
-                                                                              0.1f));}
+                                                                              0.1f));
+                }
             }
         }
 
