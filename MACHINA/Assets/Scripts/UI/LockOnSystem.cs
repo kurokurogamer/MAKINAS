@@ -26,8 +26,6 @@ public class LockOnSystem : MonoBehaviour
 	[SerializeField, Tooltip("距離のテキスト")]
 	private Text _text = null;
 	Vector2 screenPoint;
-	[SerializeField, Tooltip("BGM")]
-	private AudioClip _sound = null;
 
 	private List<GameObject> _targetList = new List<GameObject>();
 	public List<GameObject> TargetList
@@ -50,7 +48,6 @@ public class LockOnSystem : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		AudioManager.instance.PlayBGM(_sound);
 	}
 
 	private void LockCheck()

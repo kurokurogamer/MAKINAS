@@ -246,7 +246,6 @@ public class UnitControl : MonoBehaviour
 
 	private void OnTriggerStay(Collider other)
 	{
-		Debug.Log("触れいている" + other.gameObject);
 		if (other.tag == "Ground")
 		{
 			Debug.Log("地面");
@@ -255,7 +254,6 @@ public class UnitControl : MonoBehaviour
 	}
 	private void OnCollisionStay(Collision collision)
 	{
-		Debug.Log("触れいている" + collision.gameObject + "Collision");
 		if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
 		{
 			isAir = false;

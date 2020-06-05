@@ -9,7 +9,9 @@ public class SceneCtl : MonoBehaviour
 	{
 		TITLE,
 		MENU,
-		GAME,
+		GAME1,
+		GAME2,
+		GAME3,
 		RESULT,
 		MAX
 	}
@@ -47,8 +49,14 @@ public class SceneCtl : MonoBehaviour
 			case SceneList.MENU:
 				_sceneName = "MenuScene";
 				break;
-			case SceneList.GAME:
-				_sceneName = "GameScene";
+			case SceneList.GAME1:
+				_sceneName = "GameScene1";
+				break;
+			case SceneList.GAME2:
+				_sceneName = "GameScene2";
+				break;
+			case SceneList.GAME3:
+				_sceneName = "GameScene3";
 				break;
 			case SceneList.RESULT:
 				_sceneName = "ResultScene";
