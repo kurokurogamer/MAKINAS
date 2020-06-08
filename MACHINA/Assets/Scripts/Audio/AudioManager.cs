@@ -30,12 +30,12 @@ public class AudioManager : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
+		_source = GetComponent<AudioSource>();
 	}
 
 	// Start is called before the first frame update
 	void Start()
     {
-		_source = GetComponent<AudioSource>();
 		_coroutine = null;
     }
 
@@ -47,7 +47,8 @@ public class AudioManager : MonoBehaviour
 
 	public void PlayOneSE(AudioClip clip)
 	{
-		if(!_source.isPlaying)
+		_source.outputAudioMixerGroup = _mixerSEGroup;
+		if (!_source.isPlaying)
 		{
 			_source.PlayOneShot(clip);
 		}
@@ -55,7 +56,7 @@ public class AudioManager : MonoBehaviour
 
 	public void PlayBGM(AudioClip clip)
 	{
-		_source.loop = true;
+		_source.outputAudioMixerGroup = _mixerBGMGroup;
 		StartCoroutine(BGMLoop(clip));
 	}
 
