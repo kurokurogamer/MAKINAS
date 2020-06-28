@@ -4893,9 +4893,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916616e4d64e9624cbbafad7ae6641d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shotSpeed: 1
+  _shotSpeed: 1.5
   _tagName: Player
-  _particle: {fileID: 1551226260904517788}
+  _particle: {fileID: 8879797279944612825, guid: 8e534d72bfa88644583b8dbc009bee06,
+    type: 3}
+  _type: 1
+  _clip: {fileID: 8300000, guid: f5607e1945b28b545abfba7a2360415f, type: 3}
 --- !u!54 &8184798435030078665
 Rigidbody:
   m_ObjectHideFlags: 0

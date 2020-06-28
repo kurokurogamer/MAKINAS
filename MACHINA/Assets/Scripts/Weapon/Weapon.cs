@@ -28,7 +28,9 @@ public class Weapon : MonoBehaviour
 	// 現在の発射感覚時間
 	protected float _nowWaitTime = 0.0f;
 	// 現在の再連射間隔
-	protected float _rapidTime = 0.0f;
+	protected float _rapidTime = 0.1f;
+	[SerializeField, Tooltip("発射音")]
+	protected AudioClip _clip = null;
 
 	protected virtual void Start()
 	{
@@ -63,7 +65,7 @@ public class Weapon : MonoBehaviour
 			{
 				_ammo--;
 				_nowWaitTime = 0;
-				Instantiate(_bullet, transform.position, transform.rotation);
+				StartCoroutine(RapidFire(_multiple));
 			}
 		}
 	}
@@ -81,12 +83,21 @@ public class Weapon : MonoBehaviour
 		int i = 0;
 		while(i < count)
 		{
-			_nowWaitTime += Time.deltaTime;
-			if (_nowWaitTime > _waitTime)
+			_rapidTime += Time.deltaTime;
+			if (_rapidTime > _rapidSpeed)
 			{
-				Instantiate(_bullet, transform.position, transform.rotation);
+				GameObject obj;
+				obj = Instantiate(_bullet, transform.position, transform.rotation);
+				if(transform.root.tag == "Player")
+				{
+					obj.GetComponent<ShotObj>()._tagName = "Enemy";
+				}
+				if(_clip != null)
+				{
+					AudioManager.instance.PlaySE(_clip);
+				}
 				i++;
-				_nowWaitTime = 0;
+				_rapidTime = 0;
 			}
 			yield return null;
 		}

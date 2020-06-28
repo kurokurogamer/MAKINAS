@@ -8,12 +8,6 @@ public class AudioSlider : MonoBehaviour
 {
 	[SerializeField, Tooltip("mixer")]
 	private AudioMixer _mixer = null;
-	[SerializeField, Tooltip("SEグループ")]
-	private AudioMixerGroup _mixerSEGroup = null;
-	[SerializeField, Tooltip("BGM")]
-	private AudioMixerGroup _mixerBGMGroup = null;
-	[SerializeField, Tooltip("Voiceグループ")]
-	private AudioMixerGroup _mixerVoiceGroup = null;
 	private List<Slider> _sliders;
 	// Start is called before the first frame update
 	void Start()

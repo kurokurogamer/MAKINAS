@@ -17,7 +17,8 @@ public class DebugGizmos : MonoBehaviour
     private GIZMOS_TYPE _type = GIZMOS_TYPE.CUBE;
     [SerializeField, Tooltip("適用色")]
     private Color _color = Color.white;
-
+	[SerializeField, Tooltip("当たり判定")]
+	private BoxCollider _collider = null;
     // Use this for initialization
     void Start()
     {
@@ -36,13 +37,25 @@ public class DebugGizmos : MonoBehaviour
         {
             return;
         }
+		Vector3 size = Vector3.zero;
+		Vector3 offset = Vector3.zero;
+
+		if(_collider != null)
+		{
+			size = _collider.size;
+			offset = _collider.center;
+		}
+		else
+		{
+			size = Vector3.one;
+		}
         Matrix4x4 rotationMatrix = transform.localToWorldMatrix;
         Gizmos.matrix = rotationMatrix;
         Gizmos.color = _color;
         switch (_type)
         {
             case GIZMOS_TYPE.CUBE:
-                Gizmos.DrawCube(Vector3.zero, Vector3.one);
+                Gizmos.DrawCube(Vector3.zero + offset, size);
                 break;
             case GIZMOS_TYPE.SPHERE:
                 Gizmos.DrawSphere(Vector3.zero, 0.5f);

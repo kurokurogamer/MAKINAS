@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class MissionUI : MonoBehaviour
+public class MissionUI : SelectMenu
 {
 	[System.Serializable]
-	private struct Explanation
+	public struct Explanation
 	{
 		public AudioClip voice;
 		public Sprite sprite;
@@ -19,93 +19,44 @@ public class MissionUI : MonoBehaviour
 	private Text _text = null;
 	[SerializeField, Tooltip("ミッション一覧")]
 	private List<Explanation> _explanationsList = new List<Explanation>();
-	[SerializeField, Tooltip("選択時SE")]
-	private AudioClip _clip = null;
-	[SerializeField, Tooltip("決定時SE")]
-	private AudioClip _clip2 = null;
 
-	// 長押し時のメニュー
-	[SerializeField, Tooltip("長押しの遅れ")]
-	private float _delay = 1.0f;
-	[SerializeField, Tooltip("間隔")]
-	private float _interval = 0.2f;
-	private float _nowTime;
-	private float _nowTimeDelay;
-	// 入力情報""
-	private Vector2 _axis;
-	private int _menuNum;
+	[SerializeField]
+	private GameObject _backUI;
+	private SceneChangeButton _scene = null;
 
 	// Start is called before the first frame update
-	void Start()
+	protected override void Start()
     {
-		_menuNum = 0;
-		_nowTime = 0;
-		_nowTimeDelay = 0;
-		_axis = Vector2.zero;
+		base.Start();
+		_scene = GetComponent<SceneChangeButton>();
 	}
-
-	protected void Seletct()
-	{
-		_axis.x = Input.GetAxis("Horizontal");
-		_axis.y = Input.GetAxis("Vertical");
-		// 入力があった場合時間を計測する
-		if (_axis.x > 0 || _axis.x < 0)
-		{
-			if (_nowTimeDelay <= 0)
-			{
-				_nowTime = _interval;
-			}
-			_nowTimeDelay += Time.unscaledDeltaTime;
-		}
-		else
-		{
-			_nowTimeDelay = 0;
-		}
-
-		if (_nowTimeDelay > _delay)
-		{
-			_nowTime += Time.unscaledDeltaTime;
-		}
-
-		// インターバル時間を超えていたら処理を行う
-		if (_nowTime >= _interval)
-		{
-			AudioManager.instance.StopSE();
-			Debug.Log(_nowTime);
-			AudioManager.instance.PlaySE(_clip);
-			if (_axis.x < 0)
-			{
-				_menuNum++;
-				if (_menuNum > _explanationsList.Count - 1)
-				{
-					_menuNum = 0;
-				}
-			}
-			else if (_axis.x > 0)
-			{
-				_menuNum--;
-				if (_menuNum < 0)
-				{
-					_menuNum = _explanationsList.Count - 1;
-				}
-			}
-			_nowTime = 0;
-			AudioManager.instance.PlaySE(_explanationsList[_menuNum].voice);
-		}
-	}
-
 
 	private void Change()
 	{
-		_image.sprite = _explanationsList[_menuNum].sprite;
-		_text.text = _explanationsList[_menuNum].text;
+		_image.sprite = _explanationsList[_menuType].sprite;
+		_text.text = _explanationsList[_menuType].text;
+		//AudioManager.instance.PlaySE(_explanationsList[_menuType].voice);
+	}
 
+	private void Check()
+	{
+		if (Input.GetButtonDown("Fire1"))
+		{
+			_startUI.SetActive(false);
+			_backUI.SetActive(true);
+		}
+		if (Input.GetButtonDown("Fire2"))
+		{
+			_scene.Change(3);
+		}
 	}
 
 	// Update is called once per frame
 	void Update()
     {
+		SetInput();
 		Seletct();
 		Change();
+		Check();
     }
 }

@@ -52,4 +52,13 @@ public class BasePoint : MonoBehaviour
 			_test = true;
 		}
 	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "Player")
+		{
+			_test = false;
+			_nowTime = 0;
+		}
+	}
 }

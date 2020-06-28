@@ -125,11 +125,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916616e4d64e9624cbbafad7ae6641d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shotSpeed: 1.5
+  _shotSpeed: 1
   _tagName: Player
   _particle: {fileID: 8879797279944612825}
   _type: 0
   _clip: {fileID: 8300000, guid: f5607e1945b28b545abfba7a2360415f, type: 3}
+  _damage: 170
 --- !u!96 &7910600716104578975
 TrailRenderer:
   serializedVersion: 2

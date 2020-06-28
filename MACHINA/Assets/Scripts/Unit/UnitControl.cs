@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UnitControl : MonoBehaviour
 {
@@ -23,8 +22,8 @@ public class UnitControl : MonoBehaviour
     protected float _power = 1f;
 	[SerializeField]
 	protected float _wait = 100.0f;
-	[SerializeField, Tooltip("ブーストゲージ")]
-	private Slider _slider;
+	//[SerializeField, Tooltip("ブーストゲージ")]
+	//private Slider _slider;
 	[SerializeField, Tooltip("移動エフェクト")]
 	private ParticleSystem _walkEffect = null;
 	[SerializeField, Tooltip("ホバーエフェクト")]
@@ -36,7 +35,14 @@ public class UnitControl : MonoBehaviour
 	[SerializeField]
 	private LayerMask _layerMask = 0;
 	private bool isAir;
+	[SerializeField]
+	private AudioClip _clip2;
+	[SerializeField]
+	UnityEngine.UI.Image _image = null;
+	[SerializeField]
+	UnityEngine.UI.Text _text = null;
 
+	float gage = 1;
 
 
 	// Use this for initialization
@@ -53,6 +59,7 @@ public class UnitControl : MonoBehaviour
 			}
 		}
 		isAir = false;
+		//AudioManager.instance.PlayBGM(_clip2);
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
@@ -110,7 +117,7 @@ public class UnitControl : MonoBehaviour
 
 	protected void Boost(Vector2 Axis)
 	{
-		_slider.value -= 1 * Time.deltaTime * 0.2f;
+		//_slider.value -= 1 * Time.deltaTime * 0.2f;
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
@@ -125,29 +132,43 @@ public class UnitControl : MonoBehaviour
 		{
 			return;
 		}
+		if (_image)
+		{
+			gage -= Time.deltaTime * 1.25f;
+			if (gage < 0.0f)
+			{
+				gage = 0;
+				_image.fillAmount = gage;
+			}
+			else
+			{
+				_image.fillAmount = gage / 4;
+			}
+		}
 		GroundCheck();
+		AudioManager.instance.PlayOneSE(_clip2);
 
 		_animator.SetBool("Hover", true);
 		_animator.SetBool("Walk", false);
 		Vector3 forceX = Vector3.zero;
 		Vector3 forceY = Vector3.zero;
-		Debug.Log("アニメーション");
+
 
 		if (Axis.x > 0)
 		{
-			forceX = transform.right * _power * 5;
+			forceX = transform.right * _power * 3;
 		}
 		else if(Axis.x < 0)
 		{
-			forceX = transform.right * _power * -5;
+			forceX = transform.right * _power * -3;
 		}
 		if (Axis.y > 0)
 		{
-			forceY = transform.forward * _power * 5;
+			forceY = transform.forward * _power * 3;
 		}
 		else if (Axis.y < 0)
 		{
-			forceY = transform.forward * _power * -5;
+			forceY = transform.forward * _power * -3;
 		}
 
 		_lastForce = forceY + forceX;
@@ -200,7 +221,7 @@ public class UnitControl : MonoBehaviour
 	{
 		_animator.SetBool("Walk", false);
 		_animator.SetBool("Hover", false);
-		_slider.value += 1 * Time.deltaTime;
+		//_slider.value += 1 * Time.deltaTime;
 		_lastForce = Vector3.zero;
 		//_lastForce.y = _rigid.velocity.y;
 		_rigid.velocity = new Vector3(_lastForce.x, _lastForce.y + _rigid.velocity.y, _lastForce.z);
@@ -208,20 +229,42 @@ public class UnitControl : MonoBehaviour
 
 	protected void System(Vector2 Axis)
 	{
+		gage += Time.deltaTime * 1;
 		switch (_mode)
 		{
 			case UNIT_MODE.WAIK:
 				Walk(Axis);
+				if (_image)
+				{
+					if (gage > 1.0f)
+					{
+						gage = 1;
+					}
+					_image.fillAmount = gage / 4;
+				}
 				break;
 			case UNIT_MODE.BOOST:
 				Boost(Axis);
 				break;
 			case UNIT_MODE.HOVER:
+				if (_image)
+				{
+					if (gage > 1.0f)
+					{
+						gage = 1;
+					}
+					_image.fillAmount = gage / 4;
+				}
 				Hover(Axis);
 				break;
 			case UNIT_MODE.MAX:
 			default:
 				break;
+		}
+		float TextName = gage * 100;
+		if (_text)
+		{
+			_text.text = TextName.ToString("000.00");
 		}
 	}
 

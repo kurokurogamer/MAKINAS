@@ -18,8 +18,7 @@ public class PlayerCtl : UnitControl
 	[SerializeField, Tooltip("スキャンUI")]
 	private GameObject _scanUi = null;
 	[SerializeField, Tooltip("Pauseメニュー")]
-	private GameObject _ui = null;
-
+	private GameObject _pauseUI = null;
     protected override void Start()
     {
 		base.Start();
@@ -27,6 +26,8 @@ public class PlayerCtl : UnitControl
 		_stickRight = Vector2.zero;
 		_triggerLR = 0;
 		_rot = transform.eulerAngles;
+		AudioManager.instance.StopBGM();
+		AudioManager.instance.PlayBGM(_clip);
 	}
 
 	// ファイルからボタン情報を取得
@@ -36,12 +37,12 @@ public class PlayerCtl : UnitControl
 
 	private void InputSet()
     {
-		if (_ui.activeInHierarchy == true)
+		if (_pauseUI.activeInHierarchy == true)
 		{
 			return;
 		}
 		// コントローラーの入力を受け取る
-        _stickLeft.x = Input.GetAxis("Horizontal");
+		_stickLeft.x = Input.GetAxis("Horizontal");
         _stickLeft.y = Input.GetAxis("Vertical");
 		_stickRight.x = Input.GetAxis("Horizontal2");
 		_stickRight.y = Input.GetAxis("Vertical2");
@@ -72,7 +73,7 @@ public class PlayerCtl : UnitControl
 
 		if(Input.GetButtonDown("Menu"))
 		{
-			_ui.SetActive(true);
+			_pauseUI.SetActive(true);
 			Time.timeScale = 0;
 			Debug.Log("メニュー");
 		}

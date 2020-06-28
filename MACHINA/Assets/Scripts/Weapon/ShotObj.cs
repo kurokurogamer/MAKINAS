@@ -13,13 +13,15 @@ public class ShotObj : MonoBehaviour
     [SerializeField, Tooltip("弾速")]
     private float _shotSpeed = 1f;
 	[SerializeField, Tooltip("攻撃有効なタグ")]
-	private string _tagName = "";
+	public string _tagName = "";
 	[SerializeField, Tooltip("Effect")]
 	private GameObject _particle = null;
 	[SerializeField, Tooltip("タイプ")]
 	private BULLET_TYPE _type = BULLET_TYPE.METAL;
 	[SerializeField, Tooltip("衝突音")]
 	private AudioClip _clip = null;
+	[SerializeField, Tooltip("Damage")]
+	private int _damage = 100;
 
     void Start()
     {
@@ -41,7 +43,7 @@ public class ShotObj : MonoBehaviour
 		if (other.tag == _tagName)
 		{
 			var hp = other.transform.GetComponent<HitPoint>();
-			hp.Damage(10, _type);
+			hp.Damage(_damage, _type);
 			if (_particle)
 			{
 				Instantiate(_particle, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();

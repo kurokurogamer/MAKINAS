@@ -13,6 +13,13 @@ public class HitPoint : MonoBehaviour
 	private GameObject _barrier;
 	private float _nowTime;
 	private Coroutine _coroutine = null;
+	[SerializeField]
+	private UnityEngine.UI.Image _image = null;
+	[SerializeField]
+	private UnityEngine.UI.Text _text = null;
+	private int _firstPoint;
+
+
 	public int HP
 	{
 		get { return _hitPoint; }
@@ -23,6 +30,11 @@ public class HitPoint : MonoBehaviour
 	{
 		get { return _barrierPoint; }
 		set { _barrierPoint = value; }
+	}
+
+	private void Start()
+	{
+		_firstPoint = _hitPoint;
 	}
 
 	public void Damage(int value, ShotObj.BULLET_TYPE type)
@@ -65,6 +77,12 @@ public class HitPoint : MonoBehaviour
         if(_hitPoint <= 0)
 		{
 			transform.gameObject.SetActive(false);
+		}
+		if (_image)
+		{
+			float gage = ((float)_hitPoint / (float)_firstPoint);
+			_image.fillAmount = (gage) / 4;
+			_text.text = _hitPoint.ToString();
 		}
     }
 }

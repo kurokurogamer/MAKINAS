@@ -20,8 +20,6 @@ public class Enemy : MonoBehaviour
     private float _speed = 0.1f;
     [SerializeField, Tooltip("移動幅")]
     private float _distance = 3;
-	[SerializeField, Tooltip("発射感覚")]
-	private float _whileTime = 1;
 	// 現在のカウント
 	private float _nowTime;
     // 初期座標
@@ -41,13 +39,13 @@ public class Enemy : MonoBehaviour
         switch (_moveType)
         {
             case MOVE_TYPE.X:
-                transform.position = new Vector3(_firstPos.x + Mathf.Sin(Time.frameCount * _speed) * _distance, _firstPos.y, _firstPos.z);
+                transform.position = new Vector3(_firstPos.x + Mathf.Sin(Time.deltaTime * _speed) * _distance, _firstPos.y, _firstPos.z);
                 break;
             case MOVE_TYPE.Y:
-                transform.position = new Vector3(_firstPos.x, _firstPos.y + Mathf.Sin(Time.frameCount), _firstPos.z);
+                transform.position = new Vector3(_firstPos.x, _firstPos.y + Mathf.Sin(Time.deltaTime * _speed) * _distance, _firstPos.z);
                 break;
             case MOVE_TYPE.Z:
-                transform.position = new Vector3(_firstPos.x, _firstPos.y, _firstPos.z + Mathf.Sin(Time.frameCount));
+                transform.position = new Vector3(_firstPos.x, _firstPos.y, _firstPos.z + Mathf.Sin(Time.deltaTime * _speed) * _distance);
                 break;
             case MOVE_TYPE.MAX:
 				break;
@@ -67,13 +65,8 @@ public class Enemy : MonoBehaviour
 	{
 		if (other.tag == "Player")
 		{
-			transform.LookAt(other.transform);
-			_nowTime += Time.deltaTime;
-			if (_nowTime > _whileTime)
-			{
-				_weapon.Attack();
-				_nowTime = 0;
-			}
+			//transform.LookAt(other.transform);
+			_weapon.Attack();
 		}
 	}
 }
