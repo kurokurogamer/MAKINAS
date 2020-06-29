@@ -42,6 +42,10 @@ public class UnitControl : MonoBehaviour
 	[SerializeField]
 	UnityEngine.UI.Text _text = null;
 
+	[SerializeField]
+	private BoostEffect _boost;
+
+
 	float gage = 1;
 
 
@@ -66,7 +70,9 @@ public class UnitControl : MonoBehaviour
 	// Animationで移動
 	protected void Walk(Vector2 Axis)
 	{
-		if(isAir)
+		_boost.StopEffect();
+
+		if (isAir)
 		{
 			return;
 		}
@@ -117,12 +123,16 @@ public class UnitControl : MonoBehaviour
 
 	protected void Boost(Vector2 Axis)
 	{
+		_animator.SetBool("Hover", true);
+		_animator.SetBool("Walk", false);
+
 		//_slider.value -= 1 * Time.deltaTime * 0.2f;
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
 	protected void Hover(Vector2 Axis)
 	{
+		_boost.PlayEffect();
 		if (isAir)
 		{
 			return;
@@ -173,23 +183,6 @@ public class UnitControl : MonoBehaviour
 
 		_lastForce = forceY + forceX;
 		_rigid.velocity = _lastForce;
-		//_rigid.AddForce(_lastForce * 10, ForceMode.VelocityChange);
-		//if (_rigid.velocity.x > 5)
-		//{
-		//	_rigid.velocity = new Vector3(5, _rigid.velocity.y, _rigid.velocity.z);
-		//}
-		//else if(_rigid.velocity.x < -5)
-		//{
-		//	_rigid.velocity = new Vector3(-5, _rigid.velocity.y, _rigid.velocity.z);
-		//}
-		//if (_rigid.velocity.z > 5)
-		//{
-		//	_rigid.velocity = new Vector3(_rigid.velocity.x, _rigid.velocity.y, 5);
-		//}
-		//else if (_rigid.velocity.z < -5)
-		//{
-		//	_rigid.velocity = new Vector3(_rigid.velocity.x, _rigid.velocity.y, -5);
-		//}
 	}
 
 	protected void Jump()
@@ -209,22 +202,48 @@ public class UnitControl : MonoBehaviour
 		{
 			Debug.Log("ホバーモード");
 			_mode = UNIT_MODE.HOVER;
+			_boost.SetAnimation(true);
+		}
+		else if(_mode == UNIT_MODE.HOVER)
+		{
+			Debug.Log("歩行モード");
+			_mode = UNIT_MODE.BOOST;
 		}
 		else
 		{
+			_animator.SetBool("Hover", true);
+			_animator.SetBool("Walk", false);
 			Debug.Log("歩行モード");
 			_mode = UNIT_MODE.WAIK;
+			_boost.SetAnimation(false);
 		}
+	}
+
+	private void HiBoost(Vector2 axis)
+	{
+		_rigid.useGravity = false;
+		float moveSpeed = axis.x;
+		if(axis.x == 0)
+		{
+			moveSpeed = 0;
+		}
+		_rigid.velocity = transform.forward * _power * 10 + (transform.right * moveSpeed * _power);
 	}
 
 	protected void Brake()
 	{
+		_rigid.useGravity = true;
+		_boost.StopEffect();
 		_animator.SetBool("Walk", false);
 		_animator.SetBool("Hover", false);
 		//_slider.value += 1 * Time.deltaTime;
 		_lastForce = Vector3.zero;
+		//if(_rigid.velocity.magnitude > 1)
+		//{
+		//	_rigid.velocity = Vector3.zero;
+		//}
 		//_lastForce.y = _rigid.velocity.y;
-		_rigid.velocity = new Vector3(_lastForce.x, _lastForce.y + _rigid.velocity.y, _lastForce.z);
+		//_rigid.velocity = new Vector3(_lastForce.x, _lastForce.y + _rigid.velocity.y, _lastForce.z);
 	}
 
 	protected void System(Vector2 Axis)
@@ -244,7 +263,7 @@ public class UnitControl : MonoBehaviour
 				}
 				break;
 			case UNIT_MODE.BOOST:
-				Boost(Axis);
+				HiBoost(Axis);
 				break;
 			case UNIT_MODE.HOVER:
 				if (_image)
@@ -267,6 +286,21 @@ public class UnitControl : MonoBehaviour
 			_text.text = TextName.ToString("000.00");
 		}
 	}
+	private void OnTriggerStay(Collider other)
+	{
+		if (other.tag == "Ground")
+		{
+			Debug.Log("地面");
+			isAir = false;
+		}
+	}
+	private void OnCollisionStay(Collision collision)
+	{
+		if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+		{
+			isAir = false;
+		}
+	}
 
 	private void OnDrawGizmos()
 	{
@@ -284,22 +318,6 @@ public class UnitControl : MonoBehaviour
 			Gizmos.color = Color.blue;
 			Gizmos.DrawRay(transform.position, Vector3.down * 10);
 			Gizmos.DrawWireSphere(transform.position + (-transform.up * 10), 0.5f);
-		}
-	}
-
-	private void OnTriggerStay(Collider other)
-	{
-		if (other.tag == "Ground")
-		{
-			Debug.Log("地面");
-			isAir = false;
-		}
-	}
-	private void OnCollisionStay(Collision collision)
-	{
-		if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-		{
-			isAir = false;
 		}
 	}
 }

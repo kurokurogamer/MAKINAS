@@ -54,10 +54,9 @@ public class TargetRotate : MonoBehaviour
 		RotateY();
 		RotateX();
 		_point.transform.localRotation = Quaternion.Euler(0, _degree - 90, 0);
-		_degree2 = Mathf.Abs(_degree2) + transform.eulerAngles.z / 2;
-		if(_degree2 > 70)
+		if(_degree2 > 90)
 		{
-			_degree2 = 70;
+			_degree2 -= 180;
 		}
 		_secondPoint.transform.localRotation = Quaternion.Euler(0, 0, _degree2);
 

@@ -20,15 +20,11 @@ public class MissionUI : SelectMenu
 	[SerializeField, Tooltip("ミッション一覧")]
 	private List<Explanation> _explanationsList = new List<Explanation>();
 
-	[SerializeField]
-	private GameObject _backUI;
-	private SceneChangeButton _scene = null;
-
 	// Start is called before the first frame update
 	protected override void Start()
     {
 		base.Start();
-		_scene = GetComponent<SceneChangeButton>();
+		//_scene = GetComponent<SceneChangeButton>();
 	}
 
 	private void Change()
@@ -38,7 +34,7 @@ public class MissionUI : SelectMenu
 		//AudioManager.instance.PlaySE(_explanationsList[_menuType].voice);
 	}
 
-	private void Check()
+	private  void Check()
 	{
 		if (Input.GetButtonDown("Fire1"))
 		{
@@ -47,7 +43,7 @@ public class MissionUI : SelectMenu
 		}
 		if (Input.GetButtonDown("Fire2"))
 		{
-			_scene.Change(3);
+			//_scene.Change(3);
 		}
 	}
 

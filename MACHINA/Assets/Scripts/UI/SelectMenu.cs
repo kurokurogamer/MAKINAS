@@ -14,7 +14,10 @@ public class SelectMenu : MonoBehaviour
 	private AudioClip _clip2 = null;
 	[SerializeField, Tooltip("カーソル")]
 	protected RectTransform _cursor = null;
+	[SerializeField]
+	protected GameObject _backUI;
 	protected GameObject _startUI = null;
+
 	[SerializeField, Tooltip("有効にするUIのリスト")]
 	private List<GameObject> _uiList = null;
 	private List<RectTransform> _menuList;
@@ -27,20 +30,18 @@ public class SelectMenu : MonoBehaviour
 	protected float _nowTimeDelay;
 	// 入力情報""
 	protected Vector2 _axis;
-	// 前回の入力情報
-	private Vector2 _oldAxis;
 
 	protected int _menuType;
 
-    // Start is called before the first frame update
-    protected virtual void Start()
-    {
-		_clip = transform.root.GetComponent<UIAudio>().Clip;
+
+	// Start is called before the first frame update
+	protected virtual void Start()
+	{
 		_startUI = this.gameObject;
 		_menuList = new List<RectTransform>();
-		foreach(RectTransform child in transform)
+		foreach (RectTransform child in transform)
 		{
-			if(child.tag == "Button" && child.TryGetComponent(out RectTransform rect))
+			if (child.tag == "Button" && child.TryGetComponent(out RectTransform rect))
 			{
 				_menuList.Add(rect);
 			}
@@ -49,12 +50,20 @@ public class SelectMenu : MonoBehaviour
 		_nowTime = 0;
 		_nowTimeDelay = 0;
 		_axis = Vector2.zero;
-    }
+	}
 
 	protected void SetInput()
 	{
 		_axis.x = Input.GetAxis("Horizontal");
 		_axis.y = Input.GetAxis("Vertical");
+	}
+
+	private void AxisX()
+	{
+		if (_axis.x > 0 || _axis.x < 0)
+		{
+
+		}
 	}
 
 	protected void Seletct()
@@ -105,11 +114,50 @@ public class SelectMenu : MonoBehaviour
 			}
 			_nowTime = 0;
 		}
-		//_cursor.position = _menuList[_menuType].position;
+		if (_cursor != null)
+		{
+			_cursor.position = _menuList[_menuType].position;
+		}
 	}
 
-	private void Check()
+	private void Move()
 	{
+		// インターバル時間を超えていたら処理を行う
+		if (_nowTime >= _interval)
+		{
+			AudioManager.instance.PlaySE(_clip);
+			_cursor.GetComponent<TextSlider>().SliderReset();
+			if (_axis.y < 0)
+			{
+				_menuType++;
+				if (_menuType > _menuList.Count - 1)
+				{
+					_menuType = 0;
+				}
+			}
+			else if (_axis.y > 0)
+			{
+				_menuType--;
+				if (_menuType < 0)
+				{
+					_menuType = _menuList.Count - 1;
+				}
+			}
+			if (_cursor != null)
+			{
+				_cursor.position = _menuList[_menuType].position;
+			}
+			_nowTime = 0;
+		}
+	}
+
+	public void Check()
+	{
+		if(Input.GetKeyDown("Fire1"))
+		{
+			_startUI.SetActive(false);
+			_backUI.SetActive(true);
+		}
 		if (Input.GetButtonDown("Fire2"))
 		{
 			AudioManager.instance.PlaySE(_clip2);

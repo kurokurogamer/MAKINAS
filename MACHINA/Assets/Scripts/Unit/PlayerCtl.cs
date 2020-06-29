@@ -19,6 +19,7 @@ public class PlayerCtl : UnitControl
 	private GameObject _scanUi = null;
 	[SerializeField, Tooltip("Pauseメニュー")]
 	private GameObject _pauseUI = null;
+
     protected override void Start()
     {
 		base.Start();
@@ -36,35 +37,52 @@ public class PlayerCtl : UnitControl
 	}
 
 	private void InputSet()
-    {
+	{
 		if (_pauseUI.activeInHierarchy == true)
 		{
 			return;
 		}
 		// コントローラーの入力を受け取る
 		_stickLeft.x = Input.GetAxis("Horizontal");
-        _stickLeft.y = Input.GetAxis("Vertical");
+		_stickLeft.y = Input.GetAxis("Vertical");
 		_stickRight.x = Input.GetAxis("Horizontal2");
 		_stickRight.y = Input.GetAxis("Vertical2");
 		_triggerLR = Input.GetAxis("TriggerLR");
-        // キー入力を受け取る
+		// キー入力を受け取る
 
-		if(Input.GetKey(KeyCode.RightArrow))
-        {
-            _stickLeft.x = 1;
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            _stickLeft.x = -1;
-        }
-        if(Input.GetKey(KeyCode.UpArrow))
-        {
-            _stickLeft.y = 1;
-        }
-        else if(Input.GetKey(KeyCode.DownArrow))
-        {
-            _stickLeft.y = -1;
-        }
+		if (Input.GetKey(KeyCode.RightArrow))
+		{
+			_stickLeft.x = 1;
+		}
+		else if (Input.GetKey(KeyCode.LeftArrow))
+		{
+			_stickLeft.x = -1;
+		}
+		if (Input.GetKey(KeyCode.UpArrow))
+		{
+			_stickLeft.y = 1;
+		}
+		else if (Input.GetKey(KeyCode.DownArrow))
+		{
+			_stickLeft.y = -1;
+		}
+
+		if (Input.GetKey(KeyCode.Alpha6))
+		{
+			_stickLeft.x = 1;
+		}
+		else if (Input.GetKey(KeyCode.Alpha4))
+		{
+			_stickLeft.x = -1;
+		}
+		if (Input.GetKey(KeyCode.Alpha8))
+		{
+			_stickLeft.y = 1;
+		}
+		else if (Input.GetKey(KeyCode.Alpha2))
+		{
+			_stickLeft.y = -1;
+		}
 
 		if (Input.GetButtonDown("Jump") || Input.GetKey(KeyCode.Space))
 		{
@@ -84,7 +102,12 @@ public class PlayerCtl : UnitControl
 			_scanUi.SetActive(!_scanUi.activeInHierarchy);
 		}
 
-		if (Input.GetButtonDown("LB"))
+		if(Input.GetButtonDown("LStickPush"))
+		{
+			ChangeMode();
+		}
+
+		if (Input.GetButtonDown("LB") || Input.GetKeyDown(KeyCode.B))
 		{
 			ChangeMode();
 		}
@@ -106,10 +129,7 @@ public class PlayerCtl : UnitControl
 
 		if (Input.GetButton("RB"))
 		{
-			if (_weaponList.Count >= 3)
-			{
-				_weaponList[2].Attack();
-			}
+			_weaponList[2].Attack();
 		}
 	}
 
