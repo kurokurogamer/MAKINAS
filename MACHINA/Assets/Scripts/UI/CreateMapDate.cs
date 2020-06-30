@@ -47,7 +47,7 @@ public class CreateMapDate : MonoBehaviour
 
 		for (int y = 0; y < _areaSize.y; y++)
 		{
-			if (y % 10 == 0)
+			if (y % 5 == 0)
 			{
 				_drawTexture.Apply();
 				mat.mainTexture = _drawTexture;

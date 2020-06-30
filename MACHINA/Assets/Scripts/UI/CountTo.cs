@@ -13,21 +13,18 @@ public class CountTo : MonoBehaviour
         _nowTime = 0;
     }
 
-    private void Count()
+    private void Count(int i)
     {
         _nowTime += Time.deltaTime;
         if (_nowTime > _secondTime)
         {
             _nowTime = 3.0f;
         }
-        float i;
-        i = _nowTime / _secondTime;
-        Debug.Log((int)(300 * i));
+        Debug.Log((int)(300 * _nowTime / _secondTime));
     }
 
     // Update is called once per frame
     void Update()
     {
-        Count();
     }
 }

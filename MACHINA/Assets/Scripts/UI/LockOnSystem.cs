@@ -60,25 +60,27 @@ public class LockOnSystem : MonoBehaviour
 		RaycastHit hit;
 		float distance = 0;
 		float centerPoint = _circleScale;
-		foreach (GameObject target in _targetList)
-		{
-			if (Physics.Linecast(_player.transform.position, target.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
-			{
+        foreach (GameObject target in _targetList)
+        {
+            if (Physics.Linecast(_player.transform.position, target.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
+            {
 
-				screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
-				screenPoint.x = screenPoint.x - (Screen.width / 2);
-				screenPoint.y = screenPoint.y - (Screen.height / 2);
-
-				if (screenPoint.magnitude <= centerPoint)
-				{
-					centerPoint = screenPoint.magnitude;
-					targetFlag = true;
-					distance = Vector3.Distance(target.transform.position,_player.transform.position);
-					_text.text = distance.ToString("000.00");
-					_target = target;
-				}
-			}
-		}
+                screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
+                screenPoint.x = screenPoint.x - (Screen.width / 2);
+                screenPoint.y = screenPoint.y - (Screen.height / 2);
+                if (screenPoint.magnitude <= centerPoint)
+                {
+                    centerPoint = screenPoint.magnitude;
+                    targetFlag = true;
+                    distance = Vector3.Distance(target.transform.position, _player.transform.position);
+                    _text.text = distance.ToString("000.00");
+                    if (_target == null)
+                    {
+                        _target = target;
+                    }
+                }
+            }
+        }
 
 		if (!targetFlag)
 		{

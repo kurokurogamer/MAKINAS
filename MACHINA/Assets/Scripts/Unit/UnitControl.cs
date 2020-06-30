@@ -144,7 +144,7 @@ public class UnitControl : MonoBehaviour
 		}
 		if (_image)
 		{
-			gage -= Time.deltaTime * 1.25f;
+			gage -= Time.deltaTime * 1.2f;
 			if (gage < 0.0f)
 			{
 				gage = 0;

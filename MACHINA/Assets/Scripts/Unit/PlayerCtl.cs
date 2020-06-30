@@ -11,7 +11,6 @@ public class PlayerCtl : UnitControl
     private Vector2 _stickLeft;
 	private Vector2 _stickRight;
 	private float _triggerLR;
-	private bool _boost;
 	private Vector3 _rot;
 	[SerializeField, Tooltip("ロックオンUI")]
 	private GameObject _lockOnUi = null;
@@ -19,9 +18,15 @@ public class PlayerCtl : UnitControl
 	private GameObject _scanUi = null;
 	[SerializeField, Tooltip("Pauseメニュー")]
 	private GameObject _pauseUI = null;
+	[SerializeField]
+	private RectTransform _circle;
+	[SerializeField]
+	private RectTransform _compas;
+	private Vector2 _circleForce;
 
     protected override void Start()
     {
+		_circleForce = _circle.sizeDelta;
 		base.Start();
 		_stickLeft = Vector2.zero;
 		_stickRight = Vector2.zero;
@@ -148,9 +153,15 @@ public class PlayerCtl : UnitControl
 	protected void FixedUpdate()
 	{
 		System(_stickLeft);
+		// カーソルの縮小
+		_circleForce = Vector2.MoveTowards(_circleForce, new Vector2(400, 400), 10);
 		if (_stickLeft.x == 0 && _stickLeft.y == 0)
 		{
+			// カーソルの拡大
+			_circleForce = Vector2.MoveTowards(_circleForce, new Vector2(500, 500), 20);
 			Brake();
 		}
+		// 最終的なカーソルの大きさを反映させる
+		_circle.sizeDelta = _circleForce;
 	}
 }

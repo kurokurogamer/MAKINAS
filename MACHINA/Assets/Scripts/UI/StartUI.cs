@@ -37,7 +37,7 @@ public class StartUI : MonoBehaviour
     {
 		_nowTime += Time.deltaTime;
 		transform.position = Vector3.MoveTowards(transform.position, _firstPos, 3);
-		if(_nowTime > 2)
+		if(_nowTime > 5)
 		{
 			_cameraMove.enabled = true;
 			_lockOnUI.enabled = true;
@@ -47,7 +47,7 @@ public class StartUI : MonoBehaviour
 
 	private IEnumerator Rotate()
 	{
-		while (_nowTime < 2)
+		while (_nowTime < 5)
 		{
 			_circle.transform.Rotate(new Vector3(0, 0, -_rotateSpeed * Time.deltaTime));
 			_conpas.transform.Rotate(new Vector3(0, 0, _rotateSpeed * Time.deltaTime));

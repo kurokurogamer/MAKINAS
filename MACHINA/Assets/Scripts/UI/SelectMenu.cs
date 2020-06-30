@@ -153,7 +153,7 @@ public class SelectMenu : MonoBehaviour
 
 	public void Check()
 	{
-		if(Input.GetKeyDown("Fire1"))
+		if(Input.GetButtonDown("Fire1"))
 		{
 			_startUI.SetActive(false);
 			_backUI.SetActive(true);

@@ -5,12 +5,6 @@ using UnityEngine.UI;
 
 public class UICollar : MonoBehaviour
 {
-	[System.Serializable]
-	private struct colorStruct
-	{
-		[SerializeField, Tooltip("カラー")]
-		private Color _color;
-	}
 	[SerializeField, Tooltip("Collar")]
 	private Color _color = Color.white;
 	[SerializeField, Tooltip("イメージリスト")]
