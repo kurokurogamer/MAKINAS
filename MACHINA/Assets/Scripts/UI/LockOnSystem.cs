@@ -15,6 +15,8 @@ public class LockOnSystem : MonoBehaviour
 	private GameObject _player = null;
     [SerializeField, Tooltip("")]
     private float LOCK_ON_TIME = 1.0f;
+    [SerializeField]
+    public GameObject _centerPoint;
     // 現在の時間
     private float _nowTime;
     // ロックオン検知変数

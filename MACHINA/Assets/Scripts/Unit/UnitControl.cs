@@ -45,9 +45,18 @@ public class UnitControl : MonoBehaviour
 	[SerializeField]
 	private BoostEffect _boost;
 
+	// エネルギー総量
+	private float _energy;
+	// 現在のエネルギー量
+	private float _nowEnergy;
+
+	private float Energy
+	{
+		set { _energy = value; }
+		get { return _energy; }
+	}
 
 	float gage = 1;
-
 
 	// Use this for initialization
 	protected virtual void Start()
@@ -221,13 +230,16 @@ public class UnitControl : MonoBehaviour
 
 	private void HiBoost(Vector2 axis)
 	{
-		_rigid.useGravity = false;
 		float moveSpeed = axis.x;
 		if(axis.x == 0)
 		{
 			moveSpeed = 0;
 		}
-		_rigid.velocity = transform.forward * _power * 10 + (transform.right * moveSpeed * _power);
+		if (axis.x > 0 || axis.x < 0)
+		{
+			_rigid.useGravity = false;
+			_rigid.velocity = transform.forward * _power * 7 + (transform.right * moveSpeed * _power);
+		}
 	}
 
 	protected void Brake()

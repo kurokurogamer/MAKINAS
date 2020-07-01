@@ -31,6 +31,8 @@ public class Weapon : MonoBehaviour
 	protected float _rapidTime = 0.1f;
 	[SerializeField, Tooltip("発射音")]
 	protected AudioClip _clip = null;
+	[SerializeField]
+	private List<GameObject> _shotPoint = new List<GameObject>();
 
 	protected virtual void Start()
 	{
@@ -38,10 +40,16 @@ public class Weapon : MonoBehaviour
 		_ammo = _maxAmmo;
 		_nowReloadTime = 0.0f;
 		_nowWaitTime = _waitTime;
-	}
-
-	private void OnDisable()
-	{
+		if (_shotPoint.Count == 0)
+		{
+			foreach (Transform child in transform)
+			{
+				if (child.tag == "ShotPoint")
+				{
+					_shotPoint.Add(child.gameObject);
+				}
+			}
+		}
 	}
 
 	protected void ReLoad()
@@ -87,10 +95,21 @@ public class Weapon : MonoBehaviour
 			if (_rapidTime > _rapidSpeed)
 			{
 				GameObject obj;
-				obj = Instantiate(_bullet, transform.position, transform.rotation);
-				if(transform.root.tag == "Player")
+				for(int j = 0; j < _shotPoint.Count; j++)
 				{
-					obj.GetComponent<ShotObj>()._tagName = "Enemy";
+					obj = Instantiate(_bullet, _shotPoint[j].transform.position, transform.rotation);
+					if (transform.root.tag == "Player")
+					{
+						obj.GetComponent<ShotObj>()._tagName = "Enemy";
+					}
+				}
+				if (_shotPoint.Count == 0)
+				{
+					obj = Instantiate(_bullet, transform.position, transform.rotation);
+					if (transform.root.tag == "Player")
+					{
+						obj.GetComponent<ShotObj>()._tagName = "Enemy";
+					}
 				}
 				if(_clip != null)
 				{
