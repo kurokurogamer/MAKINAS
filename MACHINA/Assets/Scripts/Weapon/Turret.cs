@@ -9,21 +9,28 @@ public class Turret : Weapon
     [SerializeField, Tooltip("最大角度")]
     private int _max = 35;
 
+    // ロックオンシステム
+    private LockOnSystem _lockOn;
+    // 標的となるターゲット
     private GameObject _target;
-    private GameObject[] _point;
+    // 回転させるポイント
+    private GameObject _rotPoint;
     private float _degree;
-    private Vector3 _firstRotate = Vector3.zero;
-
+    private Vector3 _firstRotate;
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        _point = new GameObject[1];
-        _point[0] = this.gameObject;
+        _lockOn = Camera.main.GetComponent<LockOnSystem>();
+
+        _target = null;
+        _rotPoint = this.gameObject;
         _degree = 0;
+        _firstRotate = Vector3.zero;
     }
     private void Atan2()
     {
+        _target = _lockOn.GetTarget;
         if (_target == null)
         {
             return;
@@ -33,18 +40,14 @@ public class Turret : Weapon
 
         float rad2 = Mathf.Atan2(dt.y, dt.z);
         _degree = rad2 * Mathf.Rad2Deg;
-
+        _rotPoint.transform.localRotation = Quaternion.Euler(-_degree, 0, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        ReLoad();
-
         _nowWaitTime += Time.deltaTime;
-        _target = Camera.main.GetComponent<LockOnSystem>().GetTarget;
+        ReLoad();
         Atan2();
-        _point[0].transform.localRotation = Quaternion.Euler(-_degree, 0, 0);
-        Attack();
     }
 }

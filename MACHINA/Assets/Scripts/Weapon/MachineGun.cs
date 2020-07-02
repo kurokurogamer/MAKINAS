@@ -12,12 +12,6 @@ public class MachineGun : Weapon
 		base.Start();
     }
 
-	public override void Attack()
-	{
-		base.Attack();
-		//_animator.SetBool("Attack", true);
-	}
-
 	// Update is called once per frame
 	void Update()
     {

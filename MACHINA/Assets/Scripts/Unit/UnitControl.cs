@@ -39,11 +39,11 @@ public class UnitControl : MonoBehaviour
 	private AudioClip _clip2;
 	[SerializeField]
 	UnityEngine.UI.Image _image = null;
-	[SerializeField]
-	UnityEngine.UI.Text _text = null;
 
 	[SerializeField]
 	private BoostEffect _boost;
+	[SerializeField]
+	private Vector3 _gravity;
 
 	// エネルギー総量
 	private float _energy;
@@ -62,6 +62,7 @@ public class UnitControl : MonoBehaviour
 	protected virtual void Start()
     {
         _rigid = GetComponent<Rigidbody>();
+		
 		_animator = GetComponent<Animator>();
 		_lastForce = Vector3.zero;
 		foreach (Transform child in transform)
@@ -72,7 +73,6 @@ public class UnitControl : MonoBehaviour
 			}
 		}
 		isAir = false;
-		//AudioManager.instance.PlayBGM(_clip2);
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
@@ -95,7 +95,6 @@ public class UnitControl : MonoBehaviour
 		Vector3 forceX = Vector3.zero;
 		Vector3 forceY = Vector3.zero;
 
-		GroundCheck();
 		if (Axis.x > 0.1f)
 		{
 			forceX = transform.right * _power;
@@ -114,7 +113,7 @@ public class UnitControl : MonoBehaviour
 			forceY = -transform.forward * _power;
 		}
 		_lastForce = forceY + forceX;
-		_rigid.velocity = _lastForce;
+		//_rigid.velocity = _lastForce;
 	}
 
 	private void GroundCheck()
@@ -126,7 +125,7 @@ public class UnitControl : MonoBehaviour
 		}
 		else
 		{
-			_lastForce.y = _rigid.velocity.y;
+			//_lastForce.y = _rigid.velocity.y;
 		}
 	}
 
@@ -134,8 +133,6 @@ public class UnitControl : MonoBehaviour
 	{
 		_animator.SetBool("Hover", true);
 		_animator.SetBool("Walk", false);
-
-		//_slider.value -= 1 * Time.deltaTime * 0.2f;
 	}
 
 	// プレイヤー、AIでも対応可能なように値をもらって判断
@@ -164,7 +161,6 @@ public class UnitControl : MonoBehaviour
 				_image.fillAmount = gage / 4;
 			}
 		}
-		GroundCheck();
 		AudioManager.instance.PlayOneSE(_clip2);
 
 		_animator.SetBool("Hover", true);
@@ -175,34 +171,30 @@ public class UnitControl : MonoBehaviour
 
 		if (Axis.x > 0)
 		{
-			forceX = transform.right * _power * 3;
+			forceX = transform.right * _power * 10;
 		}
 		else if(Axis.x < 0)
 		{
-			forceX = transform.right * _power * -3;
+			forceX = transform.right * _power * -10;
 		}
 		if (Axis.y > 0)
 		{
-			forceY = transform.forward * _power * 3;
+			forceY = transform.forward * _power * 10;
 		}
 		else if (Axis.y < 0)
 		{
-			forceY = transform.forward * _power * -3;
+			forceY = transform.forward * _power * -10;
 		}
 
 		_lastForce = forceY + forceX;
-		_rigid.velocity = _lastForce;
+		//_rigid.velocity = _lastForce;
 	}
 
 	protected void Jump()
 	{
 		Debug.Log("ジャンプが呼ばれている");
-		if (isAir)
-		{
-			return;
-		}
-		isAir = true;
-		_rigid.AddForce(Vector3.up * 20, ForceMode.VelocityChange);
+
+		_rigid.AddForce(Vector3.up * _power * 300, ForceMode.Acceleration);
 	}
 
 	protected void ChangeMode()
@@ -230,6 +222,8 @@ public class UnitControl : MonoBehaviour
 
 	private void HiBoost(Vector2 axis)
 	{
+		_boost.PlayEffect();
+
 		float moveSpeed = axis.x;
 		if(axis.x == 0)
 		{
@@ -237,25 +231,16 @@ public class UnitControl : MonoBehaviour
 		}
 		if (axis.x > 0 || axis.x < 0)
 		{
-			_rigid.useGravity = false;
-			_rigid.velocity = transform.forward * _power * 7 + (transform.right * moveSpeed * _power);
+			_rigid.velocity = transform.forward * _power * 10 + (transform.right * moveSpeed * _power);
 		}
 	}
 
 	protected void Brake()
 	{
-		_rigid.useGravity = true;
 		_boost.StopEffect();
 		_animator.SetBool("Walk", false);
 		_animator.SetBool("Hover", false);
-		//_slider.value += 1 * Time.deltaTime;
 		_lastForce = Vector3.zero;
-		//if(_rigid.velocity.magnitude > 1)
-		//{
-		//	_rigid.velocity = Vector3.zero;
-		//}
-		//_lastForce.y = _rigid.velocity.y;
-		//_rigid.velocity = new Vector3(_lastForce.x, _lastForce.y + _rigid.velocity.y, _lastForce.z);
 	}
 
 	protected void System(Vector2 Axis)
@@ -292,10 +277,28 @@ public class UnitControl : MonoBehaviour
 			default:
 				break;
 		}
-		float TextName = gage * 100;
-		if (_text)
+		_rigid.AddForce(_gravity + _lastForce * 10, ForceMode.Acceleration);
+
+		Vector3 velocitySpeed = _rigid.velocity;
+		if(_rigid.velocity.x > 20)
 		{
-			_text.text = TextName.ToString("000.00");
+			velocitySpeed.x = 20;
+		}
+		else if(_rigid.velocity.x < -20)
+		{
+			velocitySpeed.x = -20;
+		}
+		if (_rigid.velocity.z > 20)
+		{
+			velocitySpeed.z = 20;
+		}
+		else if(_rigid.velocity.z < -20)
+		{
+			velocitySpeed.z = -20;
+		}
+		if (_mode != UNIT_MODE.BOOST)
+		{
+			_rigid.velocity = velocitySpeed;
 		}
 	}
 	private void OnTriggerStay(Collider other)

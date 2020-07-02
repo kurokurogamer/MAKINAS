@@ -20,17 +20,16 @@ public class PlayerCtl : UnitControl
 	private GameObject _pauseUI = null;
 	[SerializeField]
 	private RectTransform _circle;
-	[SerializeField]
-	private RectTransform _compas;
 	private Vector2 _circleForce;
 
     protected override void Start()
     {
-		_circleForce = _circle.sizeDelta;
 		base.Start();
 		_stickLeft = Vector2.zero;
 		_stickRight = Vector2.zero;
 		_triggerLR = 0;
+		_circleForce = _circle.sizeDelta;
+
 		_rot = transform.eulerAngles;
 		AudioManager.instance.StopBGM();
 		AudioManager.instance.PlayBGM(_clip);
@@ -89,7 +88,7 @@ public class PlayerCtl : UnitControl
 			_stickLeft.y = -1;
 		}
 
-		if (Input.GetButtonDown("Jump") || Input.GetKey(KeyCode.Space))
+		if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.Space))
 		{
 			Jump();
 		}

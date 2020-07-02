@@ -13,25 +13,34 @@ public class Enemy : MonoBehaviour
         MAX
     }
 
-
     [SerializeField, Tooltip("移動タイプ")]
     private MOVE_TYPE _moveType = MOVE_TYPE.X;
+	[SerializeField, Tooltip("武器")]
+	private Weapon _weapon = null;
     [SerializeField, Tooltip("移動速度")]
     private float _speed = 0.1f;
     [SerializeField, Tooltip("移動幅")]
     private float _distance = 3;
-	// 現在のカウント
-	private float _nowTime;
     // 初期座標
     private Vector3 _firstPos;
-	[SerializeField, Tooltip("武器")]
-	private Weapon _weapon = null;
+    private GameObject _player;
+    [SerializeField, Tooltip("検知距離")]
+    private float _distancePoint = 100.0f;
 
     // Use this for initialization
     void Start()
     {
+        _player = Camera.main.GetComponent<LockOnSystem>()._centerPoint;
         _firstPos = transform.position;
-		_nowTime = 0;
+    }
+
+    private void Attack()
+    {
+        float distance = Vector3.Distance(transform.position, _player.transform.position);
+        if(distance < _distancePoint)
+        {
+            _weapon.Attack();
+        }
     }
 
     private void Move()
@@ -59,14 +68,6 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         Move();
+        Attack();
     }
-
-	private void OnTriggerStay(Collider other)
-	{
-		if (other.tag == "Player")
-		{
-			//transform.LookAt(other.transform);
-			_weapon.Attack();
-		}
-	}
 }
