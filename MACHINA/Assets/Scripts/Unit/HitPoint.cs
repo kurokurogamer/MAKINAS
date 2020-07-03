@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 自機、敵変わらずに使用するヒットポイントスクリプト
 public class HitPoint : MonoBehaviour
@@ -14,9 +15,9 @@ public class HitPoint : MonoBehaviour
 	private float _nowTime;
 	private Coroutine _coroutine = null;
 	[SerializeField]
-	private UnityEngine.UI.Image _image = null;
+	private Image _image = null;
 	[SerializeField]
-	private UnityEngine.UI.Text _text = null;
+	private Text _text = null;
 	private int _firstPoint;
 
 
@@ -59,9 +60,17 @@ public class HitPoint : MonoBehaviour
 			_hitPoint -= value;
 			if(_hitPoint < 0)
 			{
+				_hitPoint = 0;
 				gameObject.SetActive(false);
 			}
 		}
+		if (_image)
+		{
+			float gage = ((float)_hitPoint / (float)_firstPoint);
+			_image.fillAmount = (gage) / 4;
+			_text.text = _hitPoint.ToString();
+		}
+
 	}
 
 	private IEnumerator Active()
@@ -74,15 +83,5 @@ public class HitPoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_hitPoint <= 0)
-		{
-			transform.gameObject.SetActive(false);
-		}
-		if (_image)
-		{
-			float gage = ((float)_hitPoint / (float)_firstPoint);
-			_image.fillAmount = (gage) / 4;
-			_text.text = _hitPoint.ToString();
-		}
     }
 }

@@ -11,11 +11,10 @@ public class UnitControl : MonoBehaviour
 		HOVER,
 		MAX,
 	}
+
 	private Rigidbody _rigid;
 	private Animator _animator = null;
 
-	private Vector3 _forceX;
-	private Vector3 _forceY;
     // 加わる最終的な力
     private Vector3 _lastForce;
     [SerializeField]
@@ -36,7 +35,7 @@ public class UnitControl : MonoBehaviour
 	private LayerMask _layerMask = 0;
 	private bool isAir;
 	[SerializeField]
-	private AudioClip _clip2;
+	private AudioClip _clip2 = null;
 	[SerializeField]
 	UnityEngine.UI.Image _image = null;
 
@@ -56,15 +55,15 @@ public class UnitControl : MonoBehaviour
 		get { return _energy; }
 	}
 
-	float gage = 1;
 
 	// Use this for initialization
 	protected virtual void Start()
     {
         _rigid = GetComponent<Rigidbody>();
-		
 		_animator = GetComponent<Animator>();
 		_lastForce = Vector3.zero;
+		_energy = 50000;
+		_nowEnergy = _energy;
 		foreach (Transform child in transform)
 		{
 			if (child.TryGetComponent(out Weapon weapon))
@@ -148,17 +147,16 @@ public class UnitControl : MonoBehaviour
 		{
 			return;
 		}
+
+		Camera.main.GetComponent<Radial>().Strength = Mathf.Lerp(Camera.main.GetComponent<Radial>().Strength, 0.25f, Time.deltaTime * 5);
+
 		if (_image)
 		{
-			gage -= Time.deltaTime * 1.2f;
-			if (gage < 0.0f)
+			_nowEnergy -= 200;
+			if (_nowEnergy < 0)
 			{
-				gage = 0;
-				_image.fillAmount = gage;
-			}
-			else
-			{
-				_image.fillAmount = gage / 4;
+				_nowEnergy = 0;
+				_mode = UNIT_MODE.WAIK;
 			}
 		}
 		AudioManager.instance.PlayOneSE(_clip2);
@@ -237,6 +235,16 @@ public class UnitControl : MonoBehaviour
 
 	protected void Brake()
 	{
+
+		if (Camera.main.GetComponent<Radial>().Strength < 0.1f)
+		{
+			Camera.main.GetComponent<Radial>().Strength = 0;
+		}
+		else
+		{
+			Camera.main.GetComponent<Radial>().Strength = Mathf.Lerp(Camera.main.GetComponent<Radial>().Strength, 0, Time.deltaTime * 5);
+		}
+
 		_boost.StopEffect();
 		_animator.SetBool("Walk", false);
 		_animator.SetBool("Hover", false);
@@ -245,56 +253,53 @@ public class UnitControl : MonoBehaviour
 
 	protected void System(Vector2 Axis)
 	{
-		gage += Time.deltaTime * 1;
+		_nowEnergy += 100;
+		if(_nowEnergy > _energy)
+		{
+			_nowEnergy = _energy;
+		}
 		switch (_mode)
 		{
 			case UNIT_MODE.WAIK:
 				Walk(Axis);
-				if (_image)
-				{
-					if (gage > 1.0f)
-					{
-						gage = 1;
-					}
-					_image.fillAmount = gage / 4;
-				}
 				break;
 			case UNIT_MODE.BOOST:
 				HiBoost(Axis);
 				break;
 			case UNIT_MODE.HOVER:
-				if (_image)
-				{
-					if (gage > 1.0f)
-					{
-						gage = 1;
-					}
-					_image.fillAmount = gage / 4;
-				}
 				Hover(Axis);
 				break;
 			case UNIT_MODE.MAX:
 			default:
 				break;
 		}
+		if (_nowEnergy != 0)
+		{
+			_image.fillAmount = _nowEnergy / _energy / 4;
+		}
+		else
+		{
+			_image.fillAmount = 0;
+		}
+
 		_rigid.AddForce(_gravity + _lastForce * 10, ForceMode.Acceleration);
 
 		Vector3 velocitySpeed = _rigid.velocity;
-		if(_rigid.velocity.x > 20)
+		if(_rigid.velocity.x > 30)
 		{
-			velocitySpeed.x = 20;
+			velocitySpeed.x = 30;
 		}
-		else if(_rigid.velocity.x < -20)
+		else if(_rigid.velocity.x < -30)
 		{
-			velocitySpeed.x = -20;
+			velocitySpeed.x = -30;
 		}
-		if (_rigid.velocity.z > 20)
+		if (_rigid.velocity.z > 30)
 		{
-			velocitySpeed.z = 20;
+			velocitySpeed.z = 30;
 		}
-		else if(_rigid.velocity.z < -20)
+		else if(_rigid.velocity.z < -30)
 		{
-			velocitySpeed.z = -20;
+			velocitySpeed.z = -30;
 		}
 		if (_mode != UNIT_MODE.BOOST)
 		{

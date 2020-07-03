@@ -49,10 +49,10 @@ MonoBehaviour:
   _waitTime: 1
   _rapidSpeed: 0.1
   _shotSpeed: 1
-  _bullet: {fileID: 0}
+  _bullet: {fileID: 640881530485266583, guid: 937416dff45be0441b3aa6a5cf1c9393, type: 3}
   _maxAmmo: 100
   _multiple: 1
-  _clip: {fileID: 0}
+  _clip: {fileID: 8300000, guid: 14e949a230a796842815204aab352fc4, type: 3}
   _shotPoint:
   - {fileID: 2085847529575229748}
   - {fileID: 1497546753740066048}
