@@ -4,22 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 public class MissionUI : SelectMenu
 {
-	[System.Serializable]
-	public struct Explanation
-	{
-		public AudioClip voice;
-		public Sprite sprite;
-		[SerializeField, TextArea(5,10),Tooltip("ミッション内容")]
-		public string text;
-	}
-
 	[SerializeField, Tooltip("差し替えるイメージ")]
 	private Image _image = null;
 	[SerializeField, Tooltip("差し替えるテキスト")]
 	private Text _text = null;
 	[SerializeField, Tooltip("ミッション一覧")]
-	private List<Explanation> _explanationsList = new List<Explanation>();
-
+	private List<ExplanationText> _explantion = new List<ExplanationText>();
+	[SerializeField]
+	private Text _missionText = null;
 	// Start is called before the first frame update
 	protected override void Start()
     {
@@ -29,9 +21,13 @@ public class MissionUI : SelectMenu
 
 	private void Change()
 	{
-		_image.sprite = _explanationsList[_menuType].sprite;
-		_text.text = _explanationsList[_menuType].text;
-		//AudioManager.instance.PlaySE(_explanationsList[_menuType].voice);
+		_image.sprite = _explantion[_id].SpriteImage;
+		_text.text = _explantion[_id].Explantion;
+	}
+
+	private void MissionCode()
+	{
+		_missionText.text = "M i s s i o n C o d e " + (_id.ToString("0 0") + 1) + _explantion[_id].MissionName;
 	}
 
 	private  void Check()
@@ -54,5 +50,6 @@ public class MissionUI : SelectMenu
 		Seletct();
 		Change();
 		Check();
-    }
+		MissionCode();
+	}
 }

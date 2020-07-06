@@ -12,12 +12,12 @@ public class Pause : SelectMenu
 
 	private void Point()
 	{
-		if (_menuType == 0)
+		if (_id == 0)
 		{
 			Time.timeScale = 1.0f;
 			gameObject.SetActive(false);
 		}
-		else if (_menuType == 1)
+		else if (_id == 1)
 		{
 			Time.timeScale = 1.0f;
 			SceneCtl.instance.SceneChange(SceneCtl.SceneList.MENU);

@@ -20,7 +20,6 @@ public class FadeUI : MonoBehaviour
 	private bool _fadeSwitch;
 	[SerializeField]
 	private MinMax _gage = new MinMax();
-		public float i;
 
 	protected float Alpha
 	{

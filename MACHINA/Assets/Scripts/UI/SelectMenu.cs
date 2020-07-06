@@ -31,7 +31,7 @@ public class SelectMenu : MonoBehaviour
 	// 入力情報""
 	protected Vector2 _axis;
 
-	protected int _menuType;
+	protected int _id;
 
 
 	// Start is called before the first frame update
@@ -46,7 +46,7 @@ public class SelectMenu : MonoBehaviour
 				_menuList.Add(rect);
 			}
 		}
-		_menuType = 0;
+		_id = 0;
 		_nowTime = 0;
 		_nowTimeDelay = 0;
 		_axis = Vector2.zero;
@@ -58,24 +58,11 @@ public class SelectMenu : MonoBehaviour
 		_axis.y = Input.GetAxis("Vertical");
 	}
 
-	private void AxisX()
+	protected void AxisX()
 	{
 		if (_axis.x > 0 || _axis.x < 0)
 		{
-
-		}
-	}
-
-	protected void Seletct()
-	{
-		if(_menuList.Count < 0)
-		{
-			return;
-		}
-		// 入力があった場合時間を計測する
-		if(_axis.y > 0 || _axis.y < 0)
-		{
-			if(_nowTimeDelay <= 0)
+			if (_nowTimeDelay <= 0)
 			{
 				_nowTime = _interval;
 			}
@@ -85,6 +72,33 @@ public class SelectMenu : MonoBehaviour
 		{
 			_nowTimeDelay = 0;
 		}
+	}
+
+	protected void AxisY()
+	{
+		// 入力があった場合時間を計測する
+		if (_axis.y > 0 || _axis.y < 0)
+		{
+			if (_nowTimeDelay <= 0)
+			{
+				_nowTime = _interval;
+			}
+			_nowTimeDelay += Time.unscaledDeltaTime;
+		}
+		else
+		{
+			_nowTimeDelay = 0;
+		}
+	}
+
+	protected void Seletct()
+	{
+		if(_menuList.Count < 0)
+		{
+			return;
+		}
+		AxisX();
+		AxisY();
 
 		if(_nowTimeDelay > _delay)
 		{
@@ -98,25 +112,25 @@ public class SelectMenu : MonoBehaviour
 			_cursor.GetComponent<TextSlider>().SliderReset();
 			if (_axis.y < 0)
 			{
-				_menuType++;
-				if(_menuType > _menuList.Count - 1)
+				_id++;
+				if(_id > _menuList.Count - 1)
 				{
-					_menuType = 0;
+					_id = 0;
 				}
 			}
 			else if (_axis.y > 0)
 			{
-				_menuType--;
-				if (_menuType < 0)
+				_id--;
+				if (_id < 0)
 				{
-					_menuType = _menuList.Count - 1;
+					_id = _menuList.Count - 1;
 				}
 			}
 			_nowTime = 0;
 		}
 		if (_cursor != null)
 		{
-			_cursor.position = _menuList[_menuType].position;
+			_cursor.position = _menuList[_id].position;
 		}
 	}
 
@@ -129,23 +143,24 @@ public class SelectMenu : MonoBehaviour
 			_cursor.GetComponent<TextSlider>().SliderReset();
 			if (_axis.y < 0)
 			{
-				_menuType++;
-				if (_menuType > _menuList.Count - 1)
+				_id++;
+				if (_id > _menuList.Count - 1)
 				{
-					_menuType = 0;
+					_id = 0;
 				}
 			}
 			else if (_axis.y > 0)
 			{
-				_menuType--;
-				if (_menuType < 0)
+				_id--;
+				if (_id < 0)
 				{
-					_menuType = _menuList.Count - 1;
+					_id = _menuList.Count - 1;
 				}
 			}
+			// カーソルが設定されているなら使用する
 			if (_cursor != null)
 			{
-				_cursor.position = _menuList[_menuType].position;
+				_cursor.position = _menuList[_id].position;
 			}
 			_nowTime = 0;
 		}
@@ -161,10 +176,10 @@ public class SelectMenu : MonoBehaviour
 		if (Input.GetButtonDown("Fire2"))
 		{
 			AudioManager.instance.PlaySE(_clip2);
-			if (_menuType < _uiList.Count)
+			if (_id < _uiList.Count)
 			{
 				_startUI.SetActive(false);
-				_uiList[_menuType].SetActive(true);
+				_uiList[_id].SetActive(true);
 			}
 		}
 	}

@@ -54,7 +54,6 @@ public class LockOnSystem : MonoBehaviour
 
 	private void LockCheck()
 	{
-
 		_nowTime += Time.deltaTime;
 
 		bool targetFlag = false;
