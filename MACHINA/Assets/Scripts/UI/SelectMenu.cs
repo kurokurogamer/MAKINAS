@@ -97,7 +97,7 @@ public class SelectMenu : MonoBehaviour
 		{
 			return;
 		}
-		AxisX();
+		//AxisX();
 		AxisY();
 
 		if(_nowTimeDelay > _delay)
@@ -109,7 +109,7 @@ public class SelectMenu : MonoBehaviour
 		if (_nowTime >= _interval)
 		{
 			AudioManager.instance.PlaySE(_clip);
-			_cursor.GetComponent<TextSlider>().SliderReset();
+			//_cursor.GetComponent<TextSlider>().SliderReset();
 			if (_axis.y < 0)
 			{
 				_id++;
@@ -190,6 +190,6 @@ public class SelectMenu : MonoBehaviour
     {
 		SetInput();
 		Seletct();
-		Check();
+		//Check();
     }
 }

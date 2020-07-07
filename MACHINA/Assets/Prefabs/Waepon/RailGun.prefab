@@ -4861,7 +4861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916616e4d64e9624cbbafad7ae6641d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shotSpeed: 5
+  _shotSpeed: 2
   _tagName: Player
   _particle: {fileID: 2991155755898662559}
   _type: 0
@@ -4911,7 +4911,7 @@ TrailRenderer:
   m_Time: 0.1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.25
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:

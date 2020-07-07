@@ -25,13 +25,13 @@ public class ObjRotate : MonoBehaviour
         switch (_type)
         {
             case ROTATE_TYPE.X:
-                transform.Rotate(_speed, 0, 0);
+                transform.Rotate(_speed * Time.deltaTime, 0, 0);
                 break;
             case ROTATE_TYPE.Y:
-                transform.Rotate(0, _speed, 0);
+                transform.Rotate(0, _speed * Time.deltaTime, 0);
                 break;
             case ROTATE_TYPE.Z:
-                transform.Rotate(0, 0, _speed);
+                transform.Rotate(0, 0, _speed * Time.deltaTime);
                 break;
             case ROTATE_TYPE.MAX:
                 break;
