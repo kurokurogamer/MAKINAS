@@ -15,10 +15,10 @@ public class UnitControl : MonoBehaviour
 	private Rigidbody _rigid;
 	private Animator _animator = null;
 
-    // 加わる最終的な力
-    private Vector3 _lastForce;
-    [SerializeField]
-    protected float _power = 1f;
+	// 加わる最終的な力
+	private Vector3 _lastForce;
+	[SerializeField]
+	protected float _power = 1f;
 	[SerializeField]
 	protected float _wait = 100.0f;
 	//[SerializeField, Tooltip("ブーストゲージ")]
@@ -58,8 +58,8 @@ public class UnitControl : MonoBehaviour
 
 	// Use this for initialization
 	protected virtual void Start()
-    {
-        _rigid = GetComponent<Rigidbody>();
+	{
+		_rigid = GetComponent<Rigidbody>();
 		_animator = GetComponent<Animator>();
 		_lastForce = Vector3.zero;
 		_energy = 50000;
@@ -80,10 +80,6 @@ public class UnitControl : MonoBehaviour
 	{
 		_boost.StopEffect();
 
-		if (isAir)
-		{
-			return;
-		}
 		// 入力がない場合は処理をスキップする
 		if (Axis.x == 0 && Axis.y == 0)
 		{
@@ -137,18 +133,15 @@ public class UnitControl : MonoBehaviour
 	// プレイヤー、AIでも対応可能なように値をもらって判断
 	protected void Hover(Vector2 Axis)
 	{
-		_boost.PlayEffect();
-		if (isAir)
-		{
-			return;
-		}
 
 		if (Axis.x == 0 && Axis.y == 0)
 		{
 			return;
 		}
+		_hobaEffect.Emit(1);
+		_boost.PlayEffect();
 
-		Camera.main.GetComponent<Radial>().Strength = Mathf.Lerp(Camera.main.GetComponent<Radial>().Strength, 0.25f, Time.deltaTime * 5);
+		Camera.main.GetComponent<Radial>().Strength = Mathf.Lerp(Camera.main.GetComponent<Radial>().Strength, 0.05f, Time.deltaTime * 5);
 
 		if (_image)
 		{
@@ -171,7 +164,7 @@ public class UnitControl : MonoBehaviour
 		{
 			forceX = transform.right * _power * 10;
 		}
-		else if(Axis.x < 0)
+		else if (Axis.x < 0)
 		{
 			forceX = transform.right * _power * -10;
 		}
@@ -191,7 +184,7 @@ public class UnitControl : MonoBehaviour
 	protected void Jump()
 	{
 		Debug.Log("ジャンプが呼ばれている");
-
+		isAir = true;
 		_rigid.AddForce(Vector3.up * _power * 300, ForceMode.Acceleration);
 	}
 
@@ -203,7 +196,7 @@ public class UnitControl : MonoBehaviour
 			_mode = UNIT_MODE.HOVER;
 			_boost.SetAnimation(true);
 		}
-		else if(_mode == UNIT_MODE.HOVER)
+		else if (_mode == UNIT_MODE.HOVER)
 		{
 			Debug.Log("歩行モード");
 			_mode = UNIT_MODE.BOOST;
@@ -223,7 +216,7 @@ public class UnitControl : MonoBehaviour
 		_boost.PlayEffect();
 
 		float moveSpeed = axis.x;
-		if(axis.x == 0)
+		if (axis.x == 0)
 		{
 			moveSpeed = 0;
 		}
@@ -236,7 +229,7 @@ public class UnitControl : MonoBehaviour
 	protected void Brake()
 	{
 
-		if (Camera.main.GetComponent<Radial>().Strength < 0.1f)
+		if (Camera.main.GetComponent<Radial>().Strength < 0.001f)
 		{
 			Camera.main.GetComponent<Radial>().Strength = 0;
 		}
@@ -254,7 +247,7 @@ public class UnitControl : MonoBehaviour
 	protected void System(Vector2 Axis)
 	{
 		_nowEnergy += 100;
-		if(_nowEnergy > _energy)
+		if (_nowEnergy > _energy)
 		{
 			_nowEnergy = _energy;
 		}
@@ -285,11 +278,11 @@ public class UnitControl : MonoBehaviour
 		_rigid.AddForce(_gravity + _lastForce * 10, ForceMode.Acceleration);
 
 		Vector3 velocitySpeed = _rigid.velocity;
-		if(_rigid.velocity.x > 30)
+		if (_rigid.velocity.x > 30)
 		{
 			velocitySpeed.x = 30;
 		}
-		else if(_rigid.velocity.x < -30)
+		else if (_rigid.velocity.x < -30)
 		{
 			velocitySpeed.x = -30;
 		}
@@ -297,7 +290,7 @@ public class UnitControl : MonoBehaviour
 		{
 			velocitySpeed.z = 30;
 		}
-		else if(_rigid.velocity.z < -30)
+		else if (_rigid.velocity.z < -30)
 		{
 			velocitySpeed.z = -30;
 		}
@@ -314,10 +307,15 @@ public class UnitControl : MonoBehaviour
 			isAir = false;
 		}
 	}
-	private void OnCollisionStay(Collision collision)
+	private void OnCollisionEnter(Collision collision)
 	{
-		if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+		if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
 		{
+			if (isAir)
+			{
+				_boostEffect.Play();
+			}
+
 			isAir = false;
 		}
 	}

@@ -30,16 +30,13 @@ public class MissionUI : SelectMenu
 		_missionText.text = "M i s s i o n C o d e " + (_id.ToString("0 0") + 1) + _explantion[_id].MissionName;
 	}
 
-	private  void Check()
+	protected override void Check()
 	{
 		if (Input.GetButtonDown("Fire1"))
 		{
-			_startUI.SetActive(false);
-			_backUI.SetActive(true);
 		}
 		if (Input.GetButtonDown("Fire2"))
 		{
-			//_scene.Change(3);
 		}
 	}
 
@@ -48,8 +45,9 @@ public class MissionUI : SelectMenu
     {
 		SetInput();
 		Seletct();
+		MissionCode();
+
 		Change();
 		Check();
-		MissionCode();
 	}
 }

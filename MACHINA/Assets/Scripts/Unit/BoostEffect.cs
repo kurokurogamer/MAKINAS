@@ -46,13 +46,13 @@ public class BoostEffect : MonoBehaviour
 
 	private void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.T))
-		{
-			PlayEffect();
-		}
-		else if(Input.GetKeyDown(KeyCode.S))
-		{
-			StopEffect();
-		}
+		//if(Input.GetKeyDown(KeyCode.T))
+		//{
+		//	PlayEffect();
+		//}
+		//else if(Input.GetKeyDown(KeyCode.S))
+		//{
+		//	StopEffect();
+		//}
 	}
 }

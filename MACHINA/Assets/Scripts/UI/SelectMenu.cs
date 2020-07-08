@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class SelectMenu : MonoBehaviour
 {
+	private enum INPUT_TYPE
+	{
+		X,
+		Y,
+		MAX
+	}
+
+	[SerializeField, Tooltip("入力タイプ")]
+	private INPUT_TYPE _type = INPUT_TYPE.Y;
 	[SerializeField, Tooltip("テキストエリア"), TextArea(2, 5)]
 	private string[] _str;
 
@@ -16,7 +25,7 @@ public class SelectMenu : MonoBehaviour
 	protected RectTransform _cursor = null;
 	[SerializeField]
 	protected GameObject _backUI;
-	protected GameObject _startUI = null;
+	protected SelectMenu _startUI = null;
 
 	[SerializeField, Tooltip("有効にするUIのリスト")]
 	private List<GameObject> _uiList = null;
@@ -30,14 +39,21 @@ public class SelectMenu : MonoBehaviour
 	protected float _nowTimeDelay;
 	// 入力情報""
 	protected Vector2 _axis;
-
+	protected float _button;
 	protected int _id;
+	public int ID
+	{
+		get { return _id; }
+	}
 
+
+	[SerializeField, Tooltip("機能だけ消すか、オブジェクトごと消すかのフラグ")]
+	private bool _typeEnabled = false;
 
 	// Start is called before the first frame update
 	protected virtual void Start()
 	{
-		_startUI = this.gameObject;
+		_startUI = this;
 		_menuList = new List<RectTransform>();
 		foreach (RectTransform child in transform)
 		{
@@ -50,34 +66,29 @@ public class SelectMenu : MonoBehaviour
 		_nowTime = 0;
 		_nowTimeDelay = 0;
 		_axis = Vector2.zero;
+		_button = 0;
 	}
 
 	protected void SetInput()
 	{
-		_axis.x = Input.GetAxis("Horizontal");
-		_axis.y = Input.GetAxis("Vertical");
-	}
-
-	protected void AxisX()
-	{
-		if (_axis.x > 0 || _axis.x < 0)
+		switch (_type)
 		{
-			if (_nowTimeDelay <= 0)
-			{
-				_nowTime = _interval;
-			}
-			_nowTimeDelay += Time.unscaledDeltaTime;
-		}
-		else
-		{
-			_nowTimeDelay = 0;
-		}
+			case INPUT_TYPE.X:
+				_button = Input.GetAxis("Horizontal");
+				break;
+			case INPUT_TYPE.Y:
+				_button = Input.GetAxis("Vertical");
+				break;
+			case INPUT_TYPE.MAX:
+			default:
+				break;
+		};
 	}
 
 	protected void AxisY()
 	{
 		// 入力があった場合時間を計測する
-		if (_axis.y > 0 || _axis.y < 0)
+		if (_button > 0 || _button < 0)
 		{
 			if (_nowTimeDelay <= 0)
 			{
@@ -93,14 +104,27 @@ public class SelectMenu : MonoBehaviour
 
 	protected void Seletct()
 	{
+		// 動かすメニューがなければ処理しない
 		if(_menuList.Count < 0)
 		{
 			return;
 		}
-		//AxisX();
-		AxisY();
 
-		if(_nowTimeDelay > _delay)
+		if (_button > 0 || _button < 0)
+		{
+			if (_nowTimeDelay <= 0)
+			{
+				_nowTime = _interval;
+			}
+			_nowTimeDelay += Time.unscaledDeltaTime;
+		}
+		else
+		{
+			_nowTimeDelay = 0;
+		}
+
+		// 反応時間を超えていたら
+		if (_nowTimeDelay > _delay)
 		{
 			_nowTime += Time.unscaledDeltaTime;
 		}
@@ -109,39 +133,12 @@ public class SelectMenu : MonoBehaviour
 		if (_nowTime >= _interval)
 		{
 			AudioManager.instance.PlaySE(_clip);
-			//_cursor.GetComponent<TextSlider>().SliderReset();
-			if (_axis.y < 0)
+			if (_cursor)
 			{
-				_id++;
-				if(_id > _menuList.Count - 1)
-				{
-					_id = 0;
-				}
+				//_cursor.GetComponent<TextSlider>().SliderReset();
 			}
-			else if (_axis.y > 0)
-			{
-				_id--;
-				if (_id < 0)
-				{
-					_id = _menuList.Count - 1;
-				}
-			}
-			_nowTime = 0;
-		}
-		if (_cursor != null)
-		{
-			_cursor.position = _menuList[_id].position;
-		}
-	}
 
-	private void Move()
-	{
-		// インターバル時間を超えていたら処理を行う
-		if (_nowTime >= _interval)
-		{
-			AudioManager.instance.PlaySE(_clip);
-			_cursor.GetComponent<TextSlider>().SliderReset();
-			if (_axis.y < 0)
+			if (_button < 0)
 			{
 				_id++;
 				if (_id > _menuList.Count - 1)
@@ -149,7 +146,7 @@ public class SelectMenu : MonoBehaviour
 					_id = 0;
 				}
 			}
-			else if (_axis.y > 0)
+			else if (_button > 0)
 			{
 				_id--;
 				if (_id < 0)
@@ -164,21 +161,41 @@ public class SelectMenu : MonoBehaviour
 			}
 			_nowTime = 0;
 		}
+		
+		if (_cursor != null)
+		{
+			_cursor.position = _menuList[_id].position;
+		}
 	}
 
-	public void Check()
+	protected virtual void Check()
 	{
 		if(Input.GetButtonDown("Fire1"))
 		{
-			_startUI.SetActive(false);
+			AudioManager.instance.PlaySE(_clip2);
+			if (_typeEnabled)
+			{
+				_startUI.enabled = false;
+			}
+			else
+			{
+				_startUI.gameObject.SetActive(false);
+			}
 			_backUI.SetActive(true);
 		}
-		if (Input.GetButtonDown("Fire2"))
+		else if (Input.GetButtonDown("Fire2"))
 		{
 			AudioManager.instance.PlaySE(_clip2);
 			if (_id < _uiList.Count)
 			{
-				_startUI.SetActive(false);
+				if (_typeEnabled)
+				{
+					_startUI.enabled = false;
+				}
+				else
+				{
+					_startUI.gameObject.SetActive(false);
+				}
 				_uiList[_id].SetActive(true);
 			}
 		}
@@ -190,6 +207,6 @@ public class SelectMenu : MonoBehaviour
     {
 		SetInput();
 		Seletct();
-		//Check();
+		Check();
     }
 }
