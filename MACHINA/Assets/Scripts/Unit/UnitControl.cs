@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitControl : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class UnitControl : MonoBehaviour
 	}
 
 	private Rigidbody _rigid;
-	private Animator _animator = null;
+	private Animator _animator;
+	private Radial _radial;
 
 	// 加わる最終的な力
 	private Vector3 _lastForce;
@@ -29,20 +31,18 @@ public class UnitControl : MonoBehaviour
 	private ParticleSystem _boostEffect = null;
 	[SerializeField, Tooltip("移動エフェクト")]
 	private ParticleSystem _hobaEffect = null;
-	protected UNIT_MODE _mode = UNIT_MODE.WAIK;
-	protected List<Weapon> _weaponList = new List<Weapon>();
-	[SerializeField]
-	private LayerMask _layerMask = 0;
-	private bool isAir;
-	[SerializeField]
-	private AudioClip _clip2 = null;
-	[SerializeField]
-	UnityEngine.UI.Image _image = null;
-
 	[SerializeField]
 	private BoostEffect _boost;
 	[SerializeField]
 	private Vector3 _gravity;
+	[SerializeField]
+	private LayerMask _layerMask = 0;
+	[SerializeField]
+	private Image _image = null;
+
+	protected UNIT_MODE _mode = UNIT_MODE.WAIK;
+	protected List<Weapon> _weaponList = new List<Weapon>();
+	private bool isAir;
 
 	// エネルギー総量
 	private float _energy;
@@ -61,6 +61,8 @@ public class UnitControl : MonoBehaviour
 	{
 		_rigid = GetComponent<Rigidbody>();
 		_animator = GetComponent<Animator>();
+		_radial = Camera.main.GetComponent<Radial>();
+
 		_lastForce = Vector3.zero;
 		_energy = 50000;
 		_nowEnergy = _energy;
@@ -100,7 +102,6 @@ public class UnitControl : MonoBehaviour
 		}
 		if (Axis.y > 0.1f)
 		{
-			_animator.speed = 1;
 			forceY = transform.forward * _power;
 		}
 		else if (Axis.y < -0.1f)
@@ -141,7 +142,7 @@ public class UnitControl : MonoBehaviour
 		_hobaEffect.Emit(1);
 		_boost.PlayEffect();
 
-		Camera.main.GetComponent<Radial>().Strength = Mathf.Lerp(Camera.main.GetComponent<Radial>().Strength, 0.05f, Time.deltaTime * 5);
+		_radial.Strength = Mathf.Lerp(_radial.Strength, 0.05f, Time.deltaTime * 5);
 
 		if (_image)
 		{
@@ -152,7 +153,6 @@ public class UnitControl : MonoBehaviour
 				_mode = UNIT_MODE.WAIK;
 			}
 		}
-		AudioManager.instance.PlayOneSE(_clip2);
 
 		_animator.SetBool("Hover", true);
 		_animator.SetBool("Walk", false);
@@ -229,13 +229,13 @@ public class UnitControl : MonoBehaviour
 	protected void Brake()
 	{
 
-		if (Camera.main.GetComponent<Radial>().Strength < 0.001f)
+		if (_radial.Strength < 0.001f)
 		{
-			Camera.main.GetComponent<Radial>().Strength = 0;
+			_radial.Strength = 0;
 		}
 		else
 		{
-			Camera.main.GetComponent<Radial>().Strength = Mathf.Lerp(Camera.main.GetComponent<Radial>().Strength, 0, Time.deltaTime * 5);
+			_radial.Strength = Mathf.Lerp(_radial.Strength, 0, Time.deltaTime * 5);
 		}
 
 		_boost.StopEffect();

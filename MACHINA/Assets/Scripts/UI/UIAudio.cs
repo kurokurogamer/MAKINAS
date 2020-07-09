@@ -5,19 +5,22 @@ using UnityEngine;
 public class UIAudio : MonoBehaviour
 {
 	[SerializeField, Tooltip("音")]
-	private AudioClip _clip = null;
-	public AudioClip Clip
+	private AudioClip _pushSE = null;
+    [SerializeField, Tooltip("音")]
+    private AudioClip _cancelSE = null;
+    [SerializeField, Tooltip("音")]
+    private AudioClip _moveSE = null;
+
+    public AudioClip PushSE
 	{
-		get { return _clip; }
+		get { return _pushSE; }
 	}
-    // Start is called before the first frame update
-    void Start()
+    public AudioClip CancelSE
     {
-        
+        get { return _cancelSE; }
     }
-	// Update is called once per frame
-	void Update()
+    public AudioClip MoveSE
     {
-        
+        get { return _moveSE; }
     }
 }

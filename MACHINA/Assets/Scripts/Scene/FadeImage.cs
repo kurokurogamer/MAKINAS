@@ -18,6 +18,11 @@ public class FadeImage : FadeUI
     void Update()
     {
 		Fade();
+		if(!_image.enabled)
+		{
+			_alpha = _gage.max;
+		}
 		_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, Alpha);
 	}
+
 }

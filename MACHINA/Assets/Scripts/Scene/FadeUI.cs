@@ -6,7 +6,7 @@ public class FadeUI : MonoBehaviour
 {
 #pragma warning disable 0649
 	[System.Serializable]
-	private struct MinMax
+	protected struct MinMax
 	{
 		public float min;
 		public float max;
@@ -19,7 +19,7 @@ public class FadeUI : MonoBehaviour
 	// フェイド状態切り替えフラグ
 	private bool _fadeSwitch;
 	[SerializeField]
-	private MinMax _gage = new MinMax();
+	protected MinMax _gage = new MinMax();
 
 	protected float Alpha
 	{

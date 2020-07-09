@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectMenu : MonoBehaviour
 {
@@ -13,23 +14,24 @@ public class SelectMenu : MonoBehaviour
 
 	[SerializeField, Tooltip("入力タイプ")]
 	private INPUT_TYPE _type = INPUT_TYPE.Y;
-	[SerializeField, Tooltip("テキストエリア"), TextArea(2, 5)]
-	private string[] _str;
+	[SerializeField, Tooltip("機能だけ消すか、オブジェクトごと消すかのフラグ")]
+	private bool _typeEnabled = false;
 
-	// 操作時音声
-	[SerializeField, Tooltip("操作時SE")]
-	private AudioClip _clip = null;
-	[SerializeField, Tooltip("決定時SE")]
-	private AudioClip _clip2 = null;
+	[SerializeField, Tooltip("テキストエリア"), TextArea(2, 5)]
+	private string[] _str = new string[0];
+	[SerializeField, Tooltip("テキスト")]
+	private Text _text = null;
+
 	[SerializeField, Tooltip("カーソル")]
 	protected RectTransform _cursor = null;
-	[SerializeField]
-	protected GameObject _backUI;
-	protected SelectMenu _startUI = null;
-
 	[SerializeField, Tooltip("有効にするUIのリスト")]
 	private List<GameObject> _uiList = null;
 	private List<RectTransform> _menuList;
+
+	[SerializeField, Tooltip("ひとつ前のUI")]
+	protected GameObject _backUI = null;
+	protected SelectMenu _startUI = null;
+
 
 	[SerializeField, Tooltip("長押しの遅れ")]
 	private float _delay = 1.0f;
@@ -37,9 +39,11 @@ public class SelectMenu : MonoBehaviour
 	private float _interval = 0.2f;
 	protected float _nowTime;
 	protected float _nowTimeDelay;
-	// 入力情報""
-	protected Vector2 _axis;
-	protected float _button;
+	// UI用音声
+	private UIAudio _uiAudio;
+	// 入力情報
+	protected float _axis;
+	// 選択中のメニューID
 	protected int _id;
 	public int ID
 	{
@@ -47,12 +51,12 @@ public class SelectMenu : MonoBehaviour
 	}
 
 
-	[SerializeField, Tooltip("機能だけ消すか、オブジェクトごと消すかのフラグ")]
-	private bool _typeEnabled = false;
 
 	// Start is called before the first frame update
 	protected virtual void Start()
 	{
+		_uiAudio = transform.root.GetComponent<UIAudio>();
+		//_clip = transform.root.GetComponent<UIAudio>().Clip[0];
 		_startUI = this;
 		_menuList = new List<RectTransform>();
 		foreach (RectTransform child in transform)
@@ -62,11 +66,10 @@ public class SelectMenu : MonoBehaviour
 				_menuList.Add(rect);
 			}
 		}
-		_id = 0;
 		_nowTime = 0;
 		_nowTimeDelay = 0;
-		_axis = Vector2.zero;
-		_button = 0;
+		_axis = 0;
+		_id = 0;
 	}
 
 	protected void SetInput()
@@ -74,10 +77,10 @@ public class SelectMenu : MonoBehaviour
 		switch (_type)
 		{
 			case INPUT_TYPE.X:
-				_button = Input.GetAxis("Horizontal");
+				_axis = Input.GetAxis("Horizontal");
 				break;
 			case INPUT_TYPE.Y:
-				_button = Input.GetAxis("Vertical");
+				_axis = Input.GetAxis("Vertical");
 				break;
 			case INPUT_TYPE.MAX:
 			default:
@@ -88,7 +91,7 @@ public class SelectMenu : MonoBehaviour
 	protected void AxisY()
 	{
 		// 入力があった場合時間を計測する
-		if (_button > 0 || _button < 0)
+		if (_axis > 0 || _axis < 0)
 		{
 			if (_nowTimeDelay <= 0)
 			{
@@ -109,8 +112,8 @@ public class SelectMenu : MonoBehaviour
 		{
 			return;
 		}
-
-		if (_button > 0 || _button < 0)
+		// ボタンを押しているか
+		if (_axis > 0 || _axis < 0)
 		{
 			if (_nowTimeDelay <= 0)
 			{
@@ -132,13 +135,13 @@ public class SelectMenu : MonoBehaviour
 		// インターバル時間を超えていたら処理を行う
 		if (_nowTime >= _interval)
 		{
-			AudioManager.instance.PlaySE(_clip);
+			//AudioManager.instance.PlaySE(_uiAudio.MoveSE);
 			if (_cursor)
 			{
 				//_cursor.GetComponent<TextSlider>().SliderReset();
 			}
 
-			if (_button < 0)
+			if (_axis < 0)
 			{
 				_id++;
 				if (_id > _menuList.Count - 1)
@@ -146,7 +149,7 @@ public class SelectMenu : MonoBehaviour
 					_id = 0;
 				}
 			}
-			else if (_button > 0)
+			else if (_axis > 0)
 			{
 				_id--;
 				if (_id < 0)
@@ -157,22 +160,22 @@ public class SelectMenu : MonoBehaviour
 			// カーソルが設定されているなら使用する
 			if (_cursor != null)
 			{
-				_cursor.position = _menuList[_id].position;
+				//_cursor.position = _menuList[_id].position;
+			}
+			if(_text)
+			{
+				_text.text = _str[_id];
 			}
 			_nowTime = 0;
-		}
-		
-		if (_cursor != null)
-		{
-			_cursor.position = _menuList[_id].position;
 		}
 	}
 
 	protected virtual void Check()
 	{
+		// キャンセルボタンを押したときの処理
 		if(Input.GetButtonDown("Fire1"))
 		{
-			AudioManager.instance.PlaySE(_clip2);
+			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
 			if (_typeEnabled)
 			{
 				_startUI.enabled = false;
@@ -183,9 +186,10 @@ public class SelectMenu : MonoBehaviour
 			}
 			_backUI.SetActive(true);
 		}
+		// 決定ボタンを押したときの処理
 		else if (Input.GetButtonDown("Fire2"))
 		{
-			AudioManager.instance.PlaySE(_clip2);
+			AudioManager.instance.PlaySE(_uiAudio.PushSE);
 			if (_id < _uiList.Count)
 			{
 				if (_typeEnabled)

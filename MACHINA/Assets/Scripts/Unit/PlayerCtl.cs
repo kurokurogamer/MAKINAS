@@ -5,9 +5,6 @@ using UnityEngine;
 // プレイヤーの入力系をまとめる場所
 public class PlayerCtl : UnitControl
 {
-	[SerializeField]
-	private AudioClip _clip = null;
-
     private Vector2 _stickLeft;
 	private Vector2 _stickRight;
 	private float _triggerLR;
@@ -34,7 +31,6 @@ public class PlayerCtl : UnitControl
 
 		_rot = transform.eulerAngles;
 		AudioManager.instance.StopBGM();
-		AudioManager.instance.PlayBGM(_clip);
 	}
 
 	// ファイルからボタン情報を取得

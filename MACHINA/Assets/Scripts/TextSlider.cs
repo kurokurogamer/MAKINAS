@@ -12,12 +12,9 @@ public class TextSlider : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+		_image = GetComponent<Image>();
 		foreach(Transform trans in transform)
 		{
-			if (trans.TryGetComponent(out Image image))
-			{
-				_image = image;
-			}
 			if(trans.TryGetComponent(out Text text))
 			{
 				_text = text;
