@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectMenu : MonoBehaviour
+public class MenuSelect : MonoBehaviour
 {
 	private enum INPUT_TYPE
 	{
@@ -12,35 +12,31 @@ public class SelectMenu : MonoBehaviour
 		MAX
 	}
 
-	[SerializeField, Tooltip("入力タイプ")]
-	private INPUT_TYPE _type = INPUT_TYPE.Y;
-	[SerializeField, Tooltip("機能だけ消すか、オブジェクトごと消すかのフラグ")]
-	private bool _typeEnabled = false;
-
-	[SerializeField, Tooltip("テキストエリア"), TextArea(2, 5)]
-	private string[] _str = new string[0];
-	[SerializeField, Tooltip("テキスト")]
-	private Text _text = null;
-
-	[SerializeField, Tooltip("カーソル")]
-	protected RectTransform _cursor = null;
-	[SerializeField, Tooltip("有効にするUIのリスト")]
-	private List<GameObject> _uiList = null;
-	private List<RectTransform> _menuList;
-
-	[SerializeField, Tooltip("ひとつ前のUI")]
-	protected GameObject _backUI = null;
-	protected SelectMenu _startUI = null;
-
-
 	[SerializeField, Tooltip("長押しの遅れ")]
 	private float _delay = 1.0f;
 	[SerializeField, Tooltip("間隔")]
 	private float _interval = 0.2f;
-	protected float _nowTime;
-	protected float _nowTimeDelay;
+	private float _nowTime;
+	private float _nowTimeDelay;
+
+	[SerializeField, Tooltip("入力タイプ")]
+	private INPUT_TYPE _type = INPUT_TYPE.Y;
+	[SerializeField, Tooltip("機能だけ消すか、オブジェクトごと消すかのフラグ")]
+	protected bool _typeEnabled = false;
+
+	[SerializeField, Tooltip("ひとつ前のUI")]
+	protected GameObject _backUI = null;
+	protected MenuSelect _startUI = null;
+
+	private Text _cursorText = null;
+	private List<RectTransform> _menuList;
+	private List<Text> _textList;
+
+	[SerializeField, Tooltip("カーソル")]
+	protected RectTransform _cursor = null;
+
 	// UI用音声
-	private UIAudio _uiAudio;
+	protected UIAudio _uiAudio;
 	// 入力情報
 	protected float _axis;
 	// 選択中のメニューID
@@ -50,24 +46,40 @@ public class SelectMenu : MonoBehaviour
 		get { return _id; }
 	}
 
-
-
 	// Start is called before the first frame update
 	protected virtual void Start()
 	{
-		_uiAudio = transform.root.GetComponent<UIAudio>();
-		//_clip = transform.root.GetComponent<UIAudio>().Clip[0];
-		_startUI = this;
-		_menuList = new List<RectTransform>();
-		foreach (RectTransform child in transform)
-		{
-			if (child.tag == "Button" && child.TryGetComponent(out RectTransform rect))
-			{
-				_menuList.Add(rect);
-			}
-		}
 		_nowTime = 0;
 		_nowTimeDelay = 0;
+
+		_startUI = this;
+		_uiAudio = transform.root.GetComponent<UIAudio>();
+		_menuList = new List<RectTransform>();
+		_textList = new List<Text>();
+		foreach (RectTransform button in transform)
+		{
+			if (button.tag == "Button" && button.TryGetComponent(out RectTransform rect))
+			{
+				_menuList.Add(rect);
+				foreach(Transform child in button)
+				{
+					if(child.TryGetComponent(out Text text))
+					{
+						_textList.Add(text);
+					}
+				}
+			}
+		}
+		if(_cursor)
+		{
+			foreach(RectTransform child in _cursor)
+			{
+				if(child.TryGetComponent(out Text text))
+				{
+					_cursorText = text;
+				}
+			}
+		}
 		_axis = 0;
 		_id = 0;
 	}
@@ -135,10 +147,13 @@ public class SelectMenu : MonoBehaviour
 		// インターバル時間を超えていたら処理を行う
 		if (_nowTime >= _interval)
 		{
-			//AudioManager.instance.PlaySE(_uiAudio.MoveSE);
+			AudioManager.instance.PlaySE(_uiAudio.MoveSE);
 			if (_cursor)
 			{
-				//_cursor.GetComponent<TextSlider>().SliderReset();
+				if (_cursor.TryGetComponent(out TextSlider _slider))
+				{
+					_slider.SliderReset();
+				}
 			}
 
 			if (_axis < 0)
@@ -160,20 +175,18 @@ public class SelectMenu : MonoBehaviour
 			// カーソルが設定されているなら使用する
 			if (_cursor != null)
 			{
-				//_cursor.position = _menuList[_id].position;
-			}
-			if(_text)
-			{
-				_text.text = _str[_id];
+				_cursor.position = _menuList[_id].position;
+				_cursorText.text = _textList[_id].text;
 			}
 			_nowTime = 0;
+			Debug.Log("ムーブ");
 		}
 	}
 
 	protected virtual void Check()
 	{
 		// キャンセルボタンを押したときの処理
-		if(Input.GetButtonDown("Fire1"))
+		if(Input.GetButtonDown("Fire3"))
 		{
 			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
 			if (_typeEnabled)
@@ -189,19 +202,6 @@ public class SelectMenu : MonoBehaviour
 		// 決定ボタンを押したときの処理
 		else if (Input.GetButtonDown("Fire2"))
 		{
-			AudioManager.instance.PlaySE(_uiAudio.PushSE);
-			if (_id < _uiList.Count)
-			{
-				if (_typeEnabled)
-				{
-					_startUI.enabled = false;
-				}
-				else
-				{
-					_startUI.gameObject.SetActive(false);
-				}
-				_uiList[_id].SetActive(true);
-			}
 		}
 	}
 

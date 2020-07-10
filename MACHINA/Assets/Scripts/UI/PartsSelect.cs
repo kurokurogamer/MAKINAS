@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PartsSelect : SelectMenu
+public class PartsSelect : MenuSelect
 {
 	[SerializeField, Tooltip("表示するパーツリスト")]
 	private List<GameObject> _partsList = new List<GameObject>();

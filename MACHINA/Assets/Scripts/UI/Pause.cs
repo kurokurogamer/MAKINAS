@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pause : SelectMenu
+public class Pause : MenuSelect
 {
 	// Start is called before the first frame update
 	protected override void Start()

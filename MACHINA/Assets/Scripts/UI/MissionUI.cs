@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class MissionUI : SelectMenu
+public class MissionUI : MenuSelect
 {
 	[SerializeField, Tooltip("差し替えるイメージ")]
 	private Image _image = null;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VolumeSlider : SelectMenu
+public class VolumeSlider : MenuSelect
 {
     // Start is called before the first frame update
     void Start()
