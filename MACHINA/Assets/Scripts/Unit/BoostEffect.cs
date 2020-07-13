@@ -22,7 +22,12 @@ public class BoostEffect : MonoBehaviour
 		}
 	}
 
-	public void SetAnimation(bool active)
+    public void ChangeAnimation()
+    {
+        _animator.SetBool("Drive", !_animator.GetBool("Drive"));
+    }
+
+    public void SetAnimation(bool active)
     {
         _animator.SetBool("Drive", active);
     }
@@ -44,15 +49,4 @@ public class BoostEffect : MonoBehaviour
         }
     }
 
-	private void Update()
-	{
-		//if(Input.GetKeyDown(KeyCode.T))
-		//{
-		//	PlayEffect();
-		//}
-		//else if(Input.GetKeyDown(KeyCode.S))
-		//{
-		//	StopEffect();
-		//}
-	}
 }

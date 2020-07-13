@@ -13,8 +13,7 @@ public class PlayerCtl : UnitControl
 	private GameObject _lockOnUi = null;
 	[SerializeField, Tooltip("スキャンUI")]
 	private GameObject _scanUi = null;
-	[SerializeField, Tooltip("Pauseメニュー")]
-	private GameObject _pauseUI = null;
+
 	[SerializeField]
 	private RectTransform _circle;
 	private Vector2 _circleForce;
@@ -40,48 +39,27 @@ public class PlayerCtl : UnitControl
 
 	private void InputSet()
 	{
-		if (_pauseUI.activeInHierarchy == true)
-		{
-			return;
-		}
 		// コントローラーの入力を受け取る
 		_stickLeft.x = Input.GetAxis("Horizontal");
 		_stickLeft.y = Input.GetAxis("Vertical");
 		_stickRight.x = Input.GetAxis("Horizontal2");
 		_stickRight.y = Input.GetAxis("Vertical2");
 		_triggerLR = Input.GetAxis("TriggerLR");
+
 		// キー入力を受け取る
-
-		if (Input.GetKey(KeyCode.RightArrow))
+		if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.Alpha6))
 		{
 			_stickLeft.x = 1;
 		}
-		else if (Input.GetKey(KeyCode.LeftArrow))
+		else if (Input.GetKey(KeyCode.LeftArrow)||Input.GetKey(KeyCode.Alpha4))
 		{
 			_stickLeft.x = -1;
 		}
-		if (Input.GetKey(KeyCode.UpArrow))
+		if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Alpha8))
 		{
 			_stickLeft.y = 1;
 		}
-		else if (Input.GetKey(KeyCode.DownArrow))
-		{
-			_stickLeft.y = -1;
-		}
-
-		if (Input.GetKey(KeyCode.Alpha6))
-		{
-			_stickLeft.x = 1;
-		}
-		else if (Input.GetKey(KeyCode.Alpha4))
-		{
-			_stickLeft.x = -1;
-		}
-		if (Input.GetKey(KeyCode.Alpha8))
-		{
-			_stickLeft.y = 1;
-		}
-		else if (Input.GetKey(KeyCode.Alpha2))
+		else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.Alpha2))
 		{
 			_stickLeft.y = -1;
 		}
@@ -89,13 +67,6 @@ public class PlayerCtl : UnitControl
 		if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.Space))
 		{
 			Jump();
-		}
-
-		if(Input.GetButtonDown("Menu"))
-		{
-			_pauseUI.SetActive(true);
-			Time.timeScale = 0;
-			Debug.Log("メニュー");
 		}
 
 		if (Input.GetButtonDown("RStickPush"))

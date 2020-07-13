@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class UIAudio : MonoBehaviour
 {
-	[SerializeField, Tooltip("音")]
+	[SerializeField, Tooltip("決定音")]
 	private AudioClip _pushSE = null;
-    [SerializeField, Tooltip("音")]
+    [SerializeField, Tooltip("キャンセル音")]
     private AudioClip _cancelSE = null;
-    [SerializeField, Tooltip("音")]
+    [SerializeField, Tooltip("操作音")]
     private AudioClip _moveSE = null;
 
     public AudioClip PushSE

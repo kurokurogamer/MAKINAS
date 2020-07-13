@@ -10,6 +10,7 @@ public class PartsSelect : MenuSelect
     protected override void Start()
     {
 		base.Start();
+		BoostChange();
     }
 	
 	// パーツアクティブ処理
@@ -20,6 +21,7 @@ public class PartsSelect : MenuSelect
 			if (i == _id)
 			{
 				_partsList[i].SetActive(true);
+
 			}
 			else
 			{
@@ -28,16 +30,24 @@ public class PartsSelect : MenuSelect
 		}
 	}
 
-	protected override void Check()
+	private void BoostChange()
 	{
-
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
 		SetInput();
-		Seletct();
-		ActiveParts();
+		if (Select())
+		{
+			ActiveParts();
+		}
+		if (Input.GetKeyDown(KeyCode.D))
+		{
+			if (_partsList[_id].TryGetComponent(out BoostEffect boost))
+			{
+				boost.ChangeAnimation();
+			}
+		}
     }
 }

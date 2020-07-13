@@ -12,19 +12,19 @@ public class MenuSelect : MonoBehaviour
 		MAX
 	}
 
+
+	[SerializeField, Tooltip("入力タイプ")]
+	private INPUT_TYPE _type = INPUT_TYPE.Y;
+
 	[SerializeField, Tooltip("長押しの遅れ")]
 	private float _delay = 1.0f;
 	[SerializeField, Tooltip("間隔")]
 	private float _interval = 0.2f;
+	// 経過時間を図る
 	private float _nowTime;
 	private float _nowTimeDelay;
 
-	[SerializeField, Tooltip("入力タイプ")]
-	private INPUT_TYPE _type = INPUT_TYPE.Y;
-	[SerializeField, Tooltip("機能だけ消すか、オブジェクトごと消すかのフラグ")]
-	protected bool _typeEnabled = false;
-
-	[SerializeField, Tooltip("ひとつ前のUI")]
+	[SerializeField, Tooltip("一つ前のメニュー項目")]
 	protected GameObject _backUI = null;
 	protected MenuSelect _startUI = null;
 
@@ -56,12 +56,14 @@ public class MenuSelect : MonoBehaviour
 		_uiAudio = transform.root.GetComponent<UIAudio>();
 		_menuList = new List<RectTransform>();
 		_textList = new List<Text>();
-		foreach (RectTransform button in transform)
+		foreach (RectTransform menu in transform)
 		{
-			if (button.tag == "Button" && button.TryGetComponent(out RectTransform rect))
+			// TagがButtonの子オブジェクトをすべて取得する
+			if (menu.tag == "Button" && menu.TryGetComponent(out RectTransform rect))
 			{
 				_menuList.Add(rect);
-				foreach(Transform child in button)
+				// メニュー項目のテキストを取得
+				foreach(Transform child in menu)
 				{
 					if(child.TryGetComponent(out Text text))
 					{
@@ -80,12 +82,14 @@ public class MenuSelect : MonoBehaviour
 				}
 			}
 		}
+		// 入力情報の初期化
 		_axis = 0;
 		_id = 0;
 	}
 
 	protected void SetInput()
 	{
+		// 入力タイプによって
 		switch (_type)
 		{
 			case INPUT_TYPE.X:
@@ -100,29 +104,12 @@ public class MenuSelect : MonoBehaviour
 		};
 	}
 
-	protected void AxisY()
-	{
-		// 入力があった場合時間を計測する
-		if (_axis > 0 || _axis < 0)
-		{
-			if (_nowTimeDelay <= 0)
-			{
-				_nowTime = _interval;
-			}
-			_nowTimeDelay += Time.unscaledDeltaTime;
-		}
-		else
-		{
-			_nowTimeDelay = 0;
-		}
-	}
-
-	protected void Seletct()
+	protected bool Select()
 	{
 		// 動かすメニューがなければ処理しない
 		if(_menuList.Count < 0)
 		{
-			return;
+			return false;
 		}
 		// ボタンを押しているか
 		if (_axis > 0 || _axis < 0)
@@ -136,6 +123,7 @@ public class MenuSelect : MonoBehaviour
 		else
 		{
 			_nowTimeDelay = 0;
+			return false;
 		}
 
 		// 反応時間を超えていたら
@@ -147,6 +135,7 @@ public class MenuSelect : MonoBehaviour
 		// インターバル時間を超えていたら処理を行う
 		if (_nowTime >= _interval)
 		{
+			// 操作音を鳴らす
 			AudioManager.instance.PlaySE(_uiAudio.MoveSE);
 			if (_cursor)
 			{
@@ -155,7 +144,7 @@ public class MenuSelect : MonoBehaviour
 					_slider.SliderReset();
 				}
 			}
-
+			// メニューIDの変更
 			if (_axis < 0)
 			{
 				_id++;
@@ -172,36 +161,42 @@ public class MenuSelect : MonoBehaviour
 					_id = _menuList.Count - 1;
 				}
 			}
+
 			// カーソルが設定されているなら使用する
 			if (_cursor != null)
 			{
 				_cursor.position = _menuList[_id].position;
 				_cursorText.text = _textList[_id].text;
 			}
-			_nowTime = 0;
-			Debug.Log("ムーブ");
+			// インターバル分戻す
+			_nowTime -= _interval;
+			return true;
 		}
+		return false;
 	}
 
 	protected virtual void Check()
 	{
 		// キャンセルボタンを押したときの処理
-		if(Input.GetButtonDown("Fire3"))
+		if(Input.GetButtonDown("Fire1"))
 		{
+			// キャンセルサウンドを鳴らす
 			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
-			if (_typeEnabled)
+			// 戻った際のUIを表示しておく。
+			if (_backUI != null)
 			{
-				_startUI.enabled = false;
+				_backUI.SetActive(true);
 			}
-			else
-			{
-				_startUI.gameObject.SetActive(false);
-			}
-			_backUI.SetActive(true);
+
+			// 自身のUIに対して処理を行う。
+			_startUI.gameObject.SetActive(false);
+
 		}
+
 		// 決定ボタンを押したときの処理
 		else if (Input.GetButtonDown("Fire2"))
 		{
+
 		}
 	}
 
@@ -210,7 +205,7 @@ public class MenuSelect : MonoBehaviour
 	void Update()
     {
 		SetInput();
-		Seletct();
+		Select();
 		Check();
     }
 }

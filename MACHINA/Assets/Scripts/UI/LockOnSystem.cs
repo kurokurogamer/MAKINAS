@@ -28,6 +28,8 @@ public class LockOnSystem : MonoBehaviour
 	[SerializeField, Tooltip("距離のテキスト")]
 	private Text _text = null;
 	Vector2 screenPoint;
+    [SerializeField, Tooltip("カメラの範囲")]
+    private Vector3 _scale = Vector3.one;
 
 	private List<GameObject> _targetList = new List<GameObject>();
 	public List<GameObject> TargetList
@@ -103,5 +105,23 @@ public class LockOnSystem : MonoBehaviour
         {
             _isLockOn = false;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        RaycastHit hit;
+        if (Physics.BoxCast(_player.transform.position, _scale * 0.5f, _player.transform.forward, out hit, _player.transform.rotation, 100, _layer, QueryTriggerInteraction.Ignore))
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(_player.transform.position, _player.transform.forward * hit.distance);
+            Gizmos.DrawWireCube(_player.transform.position + _player.transform.forward * hit.distance, _scale);
+        }
+        else
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(_player.transform.position, _player.transform.forward * 100);
+            Gizmos.DrawWireCube(_player.transform.position + _player.transform.forward * 100, _scale);
+        }
+
     }
 }

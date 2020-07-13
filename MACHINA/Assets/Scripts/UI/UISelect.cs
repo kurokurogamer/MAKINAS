@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class UISelect : MenuSelect
 {
 	[SerializeField, Tooltip("テキストエリア"), TextArea(2, 5)]
-	private string[] _str = new string[0];
-	[SerializeField, Tooltip("テキスト")]
-	private Text _text = null;
+	private string[] _exText = new string[0];
+	[SerializeField, Tooltip("メニュー項目のテキスト")]
+	private Text _menuText = null;
 
 	[SerializeField, Tooltip("有効にするUIのリスト")]
 	private List<GameObject> _uiList = null;
@@ -21,9 +21,9 @@ public class UISelect : MenuSelect
 
 	private void SetUI()
 	{
-		if (_text)
+		if (_menuText)
 		{
-			_text.text = _str[_id];
+			_menuText.text = _exText[_id];
 		}
 	}
 
@@ -34,14 +34,7 @@ public class UISelect : MenuSelect
 		if (Input.GetButtonDown("Fire3"))
 		{
 			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
-			if (_typeEnabled)
-			{
-				_startUI.enabled = false;
-			}
-			else
-			{
-				_startUI.gameObject.SetActive(false);
-			}
+			_startUI.gameObject.SetActive(false);
 			_backUI.SetActive(true);
 		}
 		// 決定ボタンを押したときの処理
@@ -50,14 +43,7 @@ public class UISelect : MenuSelect
 			AudioManager.instance.PlaySE(_uiAudio.PushSE);
 			if (_id < _uiList.Count)
 			{
-				if (_typeEnabled)
-				{
-					_startUI.enabled = false;
-				}
-				else
-				{
-					_startUI.gameObject.SetActive(false);
-				}
+				_startUI.gameObject.SetActive(false);
 				_uiList[_id].SetActive(true);
 			}
 		}

@@ -2,25 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pause : MenuSelect
+public class Pause : MonoBehaviour
 {
+	[SerializeField, Tooltip("PauseUI")]
+	private GameObject _pauseUI = null;
+
 	// Start is called before the first frame update
-	protected override void Start()
+	void Start()
 	{
-		base.Start();
 	}
 
-	private void Point()
+	private void PauseChange()
 	{
-		if (_id == 0)
+		if (Input.GetButtonDown("Menu") || Input.GetKeyDown(KeyCode.M))
 		{
-			Time.timeScale = 1.0f;
-			gameObject.SetActive(false);
-		}
-		else if (_id == 1)
-		{
-			Time.timeScale = 1.0f;
-			SceneCtl.instance.SceneChange(SceneCtl.SceneList.MENU);
+			if(Time.timeScale == 1)
+			{
+				Time.timeScale = 0;
+				_pauseUI.SetActive(true);
+			}
+			else
+			{
+				Time.timeScale = 1;
+				_pauseUI.SetActive(false);
+			}
 		}
 	}
 
@@ -28,10 +33,6 @@ public class Pause : MenuSelect
 	// Update is called once per frame
 	void Update()
 	{
-		Seletct();
-		if (Input.GetButtonDown("Fire2"))
-		{
-			Point();
-		}
+		PauseChange();
 	}
 }

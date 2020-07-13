@@ -69,10 +69,10 @@ public class Weapon : MonoBehaviour
 	{
 		if (_ammo > 0)
 		{
-			if (_nowWaitTime > _waitTime)
+			if (_nowWaitTime >= _waitTime)
 			{
 				_ammo--;
-				_nowWaitTime = 0;
+				_nowWaitTime -= _waitTime;
 				StartCoroutine(RapidFire(_multiple));
 			}
 		}
@@ -92,7 +92,7 @@ public class Weapon : MonoBehaviour
 		while(i < count)
 		{
 			_rapidTime += Time.deltaTime;
-			if (_rapidTime > _rapidSpeed)
+			if (_rapidTime >= _rapidSpeed)
 			{
 				GameObject obj;
 				for(int j = 0; j < _shotPoint.Count; j++)
@@ -116,7 +116,7 @@ public class Weapon : MonoBehaviour
 					AudioManager.instance.PlaySE(_clip);
 				}
 				i++;
-				_rapidTime = 0;
+				_rapidTime -= _rapidSpeed;
 			}
 			yield return null;
 		}
