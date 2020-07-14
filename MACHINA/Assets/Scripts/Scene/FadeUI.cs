@@ -20,6 +20,12 @@ public class FadeUI : MonoBehaviour
 	private bool _fadeSwitch;
 	[SerializeField]
 	protected MinMax _gage = new MinMax();
+	[SerializeField, Tooltip("開始時フラグ")]
+	private bool _onAwake = true;
+	[SerializeField, Tooltip("ループフラグ")]
+	private bool _loop = true;
+	[SerializeField, Tooltip("スキップフラグ")]
+	private bool _skip = false;
 
 	protected float Alpha
 	{
@@ -30,7 +36,7 @@ public class FadeUI : MonoBehaviour
     protected virtual void Start()
     {
 		_alpha = _gage.max;
-		_fadeSwitch = true;
+		_fadeSwitch = false;
     }
 
 	private void FadeIn()
@@ -40,6 +46,10 @@ public class FadeUI : MonoBehaviour
 		{
 			_fadeSwitch = false;
 			_alpha = _gage.max;
+			if(!_loop)
+			{
+				_onAwake = false;
+			}
 		}
 	}
 
@@ -50,18 +60,35 @@ public class FadeUI : MonoBehaviour
 		{
 			_fadeSwitch = true;
 			_alpha = _gage.min;
+			if (!_loop)
+			{
+				_onAwake = false;
+			}
 		}
 	}
 
 	protected void Fade()
 	{
-		if(_fadeSwitch)
+		if(_fadeSwitch && _onAwake)
 		{
 			FadeIn();
 		}
 		else
 		{
 			FadeOut();
+		}
+	}
+
+	protected void FadeSkip()
+	{
+		if (_skip)
+		{
+			_alpha = _gage.min;
+			_fadeSwitch = true;
+			if (!_loop)
+			{
+				_onAwake = false;
+			}
 		}
 	}
 

@@ -5,10 +5,15 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
+	public enum AUDIO_TYPE
+	{
+		SE,
+		BGM,
+		VOICE,
+		MAX
+	}
 	public static AudioManager instance = null;
 
-	private AudioSource _source;
-	private Coroutine _coroutine = null;
 	[Header("MixerGroup")]
 	[SerializeField]
 	private List<AudioSource> _audioSourceList = new List<AudioSource>();
@@ -24,13 +29,11 @@ public class AudioManager : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
-		_source = GetComponent<AudioSource>();
 	}
 
 	// Start is called before the first frame update
 	void Start()
     {
-		_coroutine = null;
     }
 
 	public void PlaySE()
@@ -45,7 +48,7 @@ public class AudioManager : MonoBehaviour
 
 	public void PlayOneSE(AudioClip clip)
 	{
-		if (!_source.isPlaying)
+		if (!_audioSourceList[0].isPlaying)
 		{
 			_audioSourceList[0].PlayOneShot(clip);
 		}
@@ -53,17 +56,33 @@ public class AudioManager : MonoBehaviour
 
 	public void PlayBGM(AudioClip clip)
 	{
-		StartCoroutine(BGMLoop(clip));
+		_audioSourceList[1].PlayOneShot(clip);
 	}
 
-	public void PlayVoice(AudioClip clip)
+	public void PlayVoice()
 	{
 		_audioSourceList[2].Play();
 	}
 
-	public void PlayOneVoice(AudioClip clip)
+	public void PlayVoice(AudioClip clip)
 	{
 		_audioSourceList[2].PlayOneShot(clip);
+	}
+
+	public void PlayOneVoice(AudioClip clip)
+	{
+		if (!_audioSourceList[2].isPlaying)
+		{
+			_audioSourceList[2].PlayOneShot(clip);
+		}
+	}
+
+	public void Stop(AUDIO_TYPE type)
+	{
+		if (type != AUDIO_TYPE.MAX)
+		{
+			_audioSourceList[(int)type].Stop();
+		}
 	}
 
 	public void StopSE()
@@ -73,29 +92,15 @@ public class AudioManager : MonoBehaviour
 
 	public void StopBGM()
 	{
-
-		//_source.Stop();
+		StopAllCoroutines();
 		_audioSourceList[1].Stop();
 
-		StopAllCoroutines();
 	}
 
 	public void StopVoice()
 	{
 		_audioSourceList[2].Stop();
 
-	}
-
-	private IEnumerator BGMLoop(AudioClip clip)
-	{
-		while(true)
-		{
-			if(!_audioSourceList[1].isPlaying)
-			{
-				_audioSourceList[1].PlayOneShot(clip);
-			}
-			yield return null;
-		}
 	}
 
     // Update is called once per frame

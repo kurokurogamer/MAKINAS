@@ -53,6 +53,6 @@ public class UISelect : MenuSelect
 	// Update is called once per frame
 	void Update()
     {
-        
+		SetUI();
     }
 }

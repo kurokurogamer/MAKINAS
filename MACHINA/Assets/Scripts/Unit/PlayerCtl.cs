@@ -111,7 +111,6 @@ public class PlayerCtl : UnitControl
     {
 		transform.eulerAngles = new Vector3(_rot.x, Camera.main.transform.eulerAngles.y, _rot.z);
         InputSet();
-
 	}
 
     private void LateUpdate()

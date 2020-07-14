@@ -7,6 +7,7 @@ public class FadeImage : FadeUI
 {
 	// フェイドするイメージ
 	private Image _image;
+	
 	// Start is called before the first frame update
 	protected override void Start()
     {
@@ -17,10 +18,14 @@ public class FadeImage : FadeUI
     // Update is called once per frame
     void Update()
     {
-		Fade();
 		if(!_image.enabled)
 		{
 			_alpha = _gage.max;
+		}
+		Fade();
+		if(Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Fire3"))
+		{
+			FadeSkip();
 		}
 		_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, Alpha);
 	}

@@ -28,14 +28,14 @@ public class MenuSelect : MonoBehaviour
 	protected GameObject _backUI = null;
 	protected MenuSelect _startUI = null;
 
-	private Text _cursorText = null;
-	private List<RectTransform> _menuList;
-	private List<Text> _textList;
+	protected List<RectTransform> _menuList;
+	protected List<Text> _textList;
 
 	[SerializeField, Tooltip("カーソル")]
 	protected RectTransform _cursor = null;
+	private Text _cursorText = null;
 
-	// UI用音声
+	// UI用サウンド
 	protected UIAudio _uiAudio;
 	// 入力情報
 	protected float _axis;
@@ -182,20 +182,18 @@ public class MenuSelect : MonoBehaviour
 		{
 			// キャンセルサウンドを鳴らす
 			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
-			// 戻った際のUIを表示しておく。
+			// 戻った際のUIを表示しておく
 			if (_backUI != null)
 			{
 				_backUI.SetActive(true);
 			}
-
-			// 自身のUIに対して処理を行う。
+			// 自身のUIに対して非表示処理を行う
 			_startUI.gameObject.SetActive(false);
 
 		}
-
-		// 決定ボタンを押したときの処理
 		else if (Input.GetButtonDown("Fire2"))
 		{
+			// 決定ボタンを押したときの処理
 
 		}
 	}

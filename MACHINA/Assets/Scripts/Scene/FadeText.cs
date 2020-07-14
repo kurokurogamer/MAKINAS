@@ -16,7 +16,16 @@ public class FadeText : FadeUI
 	// Update is called once per frame
 	void Update()
     {
+		if (!_text.enabled)
+		{
+			_alpha = _gage.max;
+		}
+
 		Fade();
+		if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Fire3"))
+		{
+			FadeSkip();
+		}
 		_text.color = new Color(_text.color.r, _text.color.g, _text.color.b, Alpha);
 	}
 }

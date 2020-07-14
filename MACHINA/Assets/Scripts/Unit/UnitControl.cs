@@ -70,7 +70,8 @@ public class UnitControl : MonoBehaviour
 		_radial = Camera.main.GetComponent<Radial>();
 
 		_lastForce = Vector3.zero;
-
+		_energy = 500000;
+		_nowEnergy = _energy;
 		foreach (Transform child in transform)
 		{
 			if (child.TryGetComponent(out Weapon weapon))
@@ -127,7 +128,7 @@ public class UnitControl : MonoBehaviour
 		}
 		else
 		{
-			//_lastForce.y = _rigid.velocity.y;
+			_lastForce.y = _rigid.velocity.y;
 		}
 	}
 
@@ -147,7 +148,7 @@ public class UnitControl : MonoBehaviour
 		}
 		_hobaEffect.Emit(1);
 		_boost.PlayEffect();
-
+		//GroundCheck();
 		_radial.Strength = Mathf.Lerp(_radial.Strength, 0.05f, Time.deltaTime * 5);
 
 		_nowEnergy -= 200;
@@ -279,7 +280,6 @@ public class UnitControl : MonoBehaviour
 		}
 
 		_rigid.AddForce(_gravity + _lastForce * 10, ForceMode.Acceleration);
-
 		Vector3 velocitySpeed = _rigid.velocity;
 		if (_rigid.velocity.x > 30)
 		{
