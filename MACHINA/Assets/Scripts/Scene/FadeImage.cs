@@ -23,11 +23,7 @@ public class FadeImage : FadeUI
 			_alpha = _gage.max;
 		}
 		Fade();
-		if(Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Fire3"))
-		{
-			FadeSkip();
-		}
-		_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, Alpha);
+		_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, _alpha);
 	}
 
 }

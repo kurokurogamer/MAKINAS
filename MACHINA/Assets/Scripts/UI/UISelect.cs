@@ -8,7 +8,7 @@ public class UISelect : MenuSelect
 	[SerializeField, Tooltip("テキストエリア"), TextArea(2, 5)]
 	private string[] _exText = new string[0];
 	[SerializeField, Tooltip("メニュー項目のテキスト")]
-	private Text _menuText = null;
+	private Text _m = null;
 
 	[SerializeField, Tooltip("有効にするUIのリスト")]
 	private List<GameObject> _uiList = null;
@@ -21,9 +21,9 @@ public class UISelect : MenuSelect
 
 	private void SetUI()
 	{
-		if (_menuText)
+		if (_m)
 		{
-			_menuText.text = _exText[_id];
+			_m.text = _exText[_id];
 		}
 	}
 

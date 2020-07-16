@@ -12,22 +12,30 @@ public class FadeUI : MonoBehaviour
 		public float max;
 	}
 
+	private enum FADE_MODE
+	{
+		IN,		// フェイドイン
+		OUT,	// フェイドアウト
+		NON
+	}
+
 	[SerializeField]
 	private float _fadeSpeed = 1.0f;
-	// 現在の透明度
-	protected float _alpha;
 	// フェイド状態切り替えフラグ
-	private bool _fadeSwitch;
 	[SerializeField]
-	protected MinMax _gage = new MinMax();
-	[SerializeField, Tooltip("開始時フラグ")]
-	private bool _onAwake = true;
+	private FADE_MODE _mode = FADE_MODE.IN;
+	[SerializeField, Tooltip("有効化フラグ")]
+	private bool _active = true;
+
 	[SerializeField, Tooltip("ループフラグ")]
 	private bool _loop = true;
-	[SerializeField, Tooltip("スキップフラグ")]
-	private bool _skip = false;
 
-	protected float Alpha
+	[SerializeField]
+	protected MinMax _gage = new MinMax();
+	// 現在の透明度
+	protected float _alpha;
+
+	public float Alpha
 	{
 		get { return _alpha; }
 	}
@@ -35,20 +43,30 @@ public class FadeUI : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-		_alpha = _gage.max;
-		_fadeSwitch = false;
-    }
+		switch (_mode)
+		{
+			case FADE_MODE.IN:
+				_alpha = _gage.min;
+				break;
+			case FADE_MODE.OUT:
+				_alpha = _gage.max;
+				break;
+			case FADE_MODE.NON:
+			default:
+				break;
+		}
+	}
 
 	private void FadeIn()
 	{
 		_alpha += _fadeSpeed * Time.deltaTime;
 		if(_alpha > _gage.max)
 		{
-			_fadeSwitch = false;
+			_mode = FADE_MODE.OUT;
 			_alpha = _gage.max;
 			if(!_loop)
 			{
-				_onAwake = false;
+				_active = false;
 			}
 		}
 	}
@@ -58,37 +76,60 @@ public class FadeUI : MonoBehaviour
 		_alpha -= _fadeSpeed * Time.deltaTime;
 		if (_alpha < _gage.min)
 		{
-			_fadeSwitch = true;
+			_mode = FADE_MODE.IN;
 			_alpha = _gage.min;
 			if (!_loop)
 			{
-				_onAwake = false;
+				_active = false;
 			}
 		}
 	}
 
 	protected void Fade()
 	{
-		if(_fadeSwitch && _onAwake)
+		if(!_active)
 		{
-			FadeIn();
+			return;
 		}
-		else
+		switch (_mode)
 		{
-			FadeOut();
+			case FADE_MODE.IN:
+				FadeIn();
+				break;
+			case FADE_MODE.OUT:
+				FadeOut();
+				break;
+			case FADE_MODE.NON:
+			default:
+				break;
 		}
 	}
 
-	protected void FadeSkip()
+	public void FadeSkip()
 	{
-		if (_skip)
+		if(!_active)
 		{
-			_alpha = _gage.min;
-			_fadeSwitch = true;
-			if (!_loop)
-			{
-				_onAwake = false;
-			}
+			return;
+		}
+
+		switch (_mode)
+		{
+			case FADE_MODE.IN:
+				_alpha = _gage.max;
+				_mode = FADE_MODE.OUT;
+				break;
+			case FADE_MODE.OUT:
+				_alpha = _gage.min;
+				_mode = FADE_MODE.IN;
+				break;
+			case FADE_MODE.NON:
+				break;
+			default:
+				break;
+		}
+		if (!_loop)
+		{
+			_active = false;
 		}
 	}
 

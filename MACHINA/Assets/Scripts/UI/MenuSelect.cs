@@ -12,6 +12,8 @@ public class MenuSelect : MonoBehaviour
 		MAX
 	}
 
+	[SerializeField, Tooltip("自動UI作成")]
+	private bool _autoCreate = false;
 
 	[SerializeField, Tooltip("入力タイプ")]
 	private INPUT_TYPE _type = INPUT_TYPE.Y;
@@ -28,8 +30,10 @@ public class MenuSelect : MonoBehaviour
 	protected GameObject _backUI = null;
 	protected MenuSelect _startUI = null;
 
+	[SerializeField, Tooltip("メニューのテキストリスト")]
+	protected List<string> _textList = new List<string>();
 	protected List<RectTransform> _menuList;
-	protected List<Text> _textList;
+	protected List<Text> _menuText;
 
 	[SerializeField, Tooltip("カーソル")]
 	protected RectTransform _cursor = null;
@@ -55,7 +59,7 @@ public class MenuSelect : MonoBehaviour
 		_startUI = this;
 		_uiAudio = transform.root.GetComponent<UIAudio>();
 		_menuList = new List<RectTransform>();
-		_textList = new List<Text>();
+		_menuText = new List<Text>();
 		foreach (RectTransform menu in transform)
 		{
 			// TagがButtonの子オブジェクトをすべて取得する
@@ -67,7 +71,7 @@ public class MenuSelect : MonoBehaviour
 				{
 					if(child.TryGetComponent(out Text text))
 					{
-						_textList.Add(text);
+						_menuText.Add(text);
 					}
 				}
 			}
@@ -80,6 +84,14 @@ public class MenuSelect : MonoBehaviour
 				{
 					_cursorText = text;
 				}
+			}
+		}
+
+		if (_autoCreate)
+		{
+			for (int i = 0; i < _menuText.Count; i++)
+			{
+				_menuText[i].text = _textList[i];
 			}
 		}
 		// 入力情報の初期化
@@ -166,7 +178,7 @@ public class MenuSelect : MonoBehaviour
 			if (_cursor != null)
 			{
 				_cursor.position = _menuList[_id].position;
-				_cursorText.text = _textList[_id].text;
+				_cursorText.text = _menuText[_id].text;
 			}
 			// インターバル分戻す
 			_nowTime -= _interval;
@@ -178,24 +190,22 @@ public class MenuSelect : MonoBehaviour
 	protected virtual void Check()
 	{
 		// キャンセルボタンを押したときの処理
-		if(Input.GetButtonDown("Fire1"))
-		{
-			// キャンセルサウンドを鳴らす
-			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
-			// 戻った際のUIを表示しておく
-			if (_backUI != null)
-			{
-				_backUI.SetActive(true);
-			}
-			// 自身のUIに対して非表示処理を行う
-			_startUI.gameObject.SetActive(false);
-
-		}
-		else if (Input.GetButtonDown("Fire2"))
-		{
-			// 決定ボタンを押したときの処理
-
-		}
+		//if(Input.GetButtonDown("Fire1"))
+		//{
+		//	// キャンセルサウンドを鳴らす
+		//	AudioManager.instance.PlaySE(_uiAudio.CancelSE);
+		//	// 戻った際のUIを表示しておく
+		//	if (_backUI != null)
+		//	{
+		//		_backUI.SetActive(true);
+		//	}
+		//	// 自身のUIに対して非表示処理を行う
+		//	_startUI.gameObject.SetActive(false);
+		//}
+		//else if (Input.GetButtonDown("Fire2"))
+		//{
+		//	// 決定ボタンを押したときの処理
+		//}
 	}
 
 

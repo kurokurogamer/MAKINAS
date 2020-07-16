@@ -22,10 +22,6 @@ public class FadeText : FadeUI
 		}
 
 		Fade();
-		if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Fire3"))
-		{
-			FadeSkip();
-		}
-		_text.color = new Color(_text.color.r, _text.color.g, _text.color.b, Alpha);
+		_text.color = new Color(_text.color.r, _text.color.g, _text.color.b, _alpha);
 	}
 }

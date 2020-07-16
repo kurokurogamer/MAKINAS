@@ -27,7 +27,7 @@ public class MissionSelect : MenuSelect
 
 	private void MissionCode()
 	{
-		_missionUI.text = "M i s s i o n C o d e " + (_id + 1).ToString("0 0 : ") + _textList[_id].text;
+		_missionUI.text = "M i s s i o n C o d e " + (_id + 1).ToString("0 0 : ") + _menuText[_id].text;
 	}
 
 	protected override void Check()

@@ -387,7 +387,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 450}
-  m_SizeDelta: {x: 1600, y: 100}
+  m_SizeDelta: {x: 1600, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &431604232
 MonoBehaviour:
@@ -964,25 +964,27 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 952214704}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a63c781f2336b2d4eb8b2f8988e8feb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _autoCreate: 1
   _type: 0
   _delay: 1
   _interval: 0.2
   _backUI: {fileID: 0}
+  _menuText: []
   _cursor: {fileID: 0}
   _image: {fileID: 871314556}
   _missionText: {fileID: 1205707212}
   _explantion:
   - _missionName: "\u521D \u9663"
-    _explantion: 
+    _explantion: "\u521D\u4EFB\u52D9"
     _sprite: {fileID: 21300000, guid: 2429864833cde0c4b8a686bbbe81d9ad, type: 3}
     _voice: {fileID: 8300000, guid: f0a8df60b29498b42ac34a61d6444c1b, type: 3}
-  - _missionName: "\u62E0\u70B9\u5236\u5727\u4F5C\u6226"
-    _explantion: "\u7802\u6F20\u5730\u5E2F\u306B\u51FA\u73FE\u3057\u305F\u6575\u306E\u5236\u5727\u4F5C\u6226\n"
+  - _missionName: "\u6BB2\u6EC5\u4F5C\u6226"
+    _explantion: "\u7802\u6F20\u5730\u5E2F\u306B\u51FA\u73FE\u3057\u305F\u6575\u306E\u6BB2\u6EC5\n"
     _sprite: {fileID: 21300000, guid: f33892022cad7ff4daf5fca029d9b31d, type: 3}
     _voice: {fileID: 8300000, guid: 1c370f919c9fb2647b2d9f5625e6c135, type: 3}
   _missionUI: {fileID: 2132045067}
@@ -1309,10 +1311,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83e53879177eba040ae9601ec23c14e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _autoCreate: 1
   _type: 1
   _delay: 1
   _interval: 0.2
   _backUI: {fileID: 0}
+  _menuText: []
   _cursor: {fileID: 1798209495}
 --- !u!114 &1208042434
 MonoBehaviour:
@@ -2336,7 +2340,7 @@ Camera:
   m_GameObject: {fileID: 2136531071}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
