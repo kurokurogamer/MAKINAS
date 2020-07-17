@@ -21,17 +21,15 @@ public class FadeUI : MonoBehaviour
 
 	[SerializeField]
 	private float _fadeSpeed = 1.0f;
-	// フェイド状態切り替えフラグ
-	[SerializeField]
+	// フェイド状態
+	[SerializeField, Tooltip("フェイド状態:IN=不透明に,OUT:透過に")]
 	private FADE_MODE _mode = FADE_MODE.IN;
-	[SerializeField, Tooltip("有効化フラグ")]
-	private bool _active = true;
-
 	[SerializeField, Tooltip("ループフラグ")]
 	private bool _loop = true;
 
-	[SerializeField]
+	[SerializeField, Tooltip("透過値の最小値と最大値")]
 	protected MinMax _gage = new MinMax();
+
 	// 現在の透明度
 	protected float _alpha;
 
@@ -39,10 +37,26 @@ public class FadeUI : MonoBehaviour
 	{
 		get { return _alpha; }
 	}
-	
-    // Start is called before the first frame update
-    protected virtual void Start()
-    {
+
+	// Start is called before the first frame update
+	protected virtual void Start()
+	{
+		switch (_mode)
+		{
+			case FADE_MODE.IN:
+				_alpha = _gage.min;
+				break;
+			case FADE_MODE.OUT:
+				_alpha = _gage.max;
+				break;
+			case FADE_MODE.NON:
+			default:
+				break;
+		}
+	}
+
+	protected virtual void OnEnable()
+	{
 		switch (_mode)
 		{
 			case FADE_MODE.IN:
@@ -62,11 +76,10 @@ public class FadeUI : MonoBehaviour
 		_alpha += _fadeSpeed * Time.deltaTime;
 		if(_alpha > _gage.max)
 		{
-			_mode = FADE_MODE.OUT;
 			_alpha = _gage.max;
-			if(!_loop)
+			if (_loop)
 			{
-				_active = false;
+				_mode = FADE_MODE.OUT;
 			}
 		}
 	}
@@ -76,21 +89,16 @@ public class FadeUI : MonoBehaviour
 		_alpha -= _fadeSpeed * Time.deltaTime;
 		if (_alpha < _gage.min)
 		{
-			_mode = FADE_MODE.IN;
 			_alpha = _gage.min;
-			if (!_loop)
+			if (_loop)
 			{
-				_active = false;
+				_mode = FADE_MODE.IN;
 			}
 		}
 	}
 
 	protected void Fade()
 	{
-		if(!_active)
-		{
-			return;
-		}
 		switch (_mode)
 		{
 			case FADE_MODE.IN:
@@ -107,29 +115,18 @@ public class FadeUI : MonoBehaviour
 
 	public void FadeSkip()
 	{
-		if(!_active)
-		{
-			return;
-		}
-
 		switch (_mode)
 		{
 			case FADE_MODE.IN:
 				_alpha = _gage.max;
-				_mode = FADE_MODE.OUT;
 				break;
 			case FADE_MODE.OUT:
 				_alpha = _gage.min;
-				_mode = FADE_MODE.IN;
 				break;
 			case FADE_MODE.NON:
 				break;
 			default:
 				break;
-		}
-		if (!_loop)
-		{
-			_active = false;
 		}
 	}
 

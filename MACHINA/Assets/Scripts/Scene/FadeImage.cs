@@ -15,8 +15,16 @@ public class FadeImage : FadeUI
 		_image = GetComponent<Image>();
     }
 
-    // Update is called once per frame
-    void Update()
+	protected override void OnEnable()
+	{
+		if (_image)
+		{
+			_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, _alpha);
+		}
+	}
+
+	// Update is called once per frame
+	void Update()
     {
 		if(!_image.enabled)
 		{

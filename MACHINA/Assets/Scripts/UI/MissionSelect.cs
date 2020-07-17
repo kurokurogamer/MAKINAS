@@ -21,13 +21,20 @@ public class MissionSelect : MenuSelect
 
 	private void Change()
 	{
+		if(!_image)
+		{
+			return;
+		}
 		_image.sprite = _explantion[_id].SpriteImage;
 		_missionText.text = _explantion[_id].Explantion;
 	}
 
 	private void MissionCode()
 	{
-		_missionUI.text = "M i s s i o n C o d e " + (_id + 1).ToString("0 0 : ") + _menuText[_id].text;
+		if (_missionUI)
+		{
+			_missionUI.text = "M i s s i o n C o d e " + (_id + 1).ToString("0 0 : ") + _menuTextList[_id].text;
+		}
 	}
 
 	protected override void Check()

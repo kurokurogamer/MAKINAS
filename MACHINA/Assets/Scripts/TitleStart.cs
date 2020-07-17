@@ -22,7 +22,6 @@ public class TitleStart : MonoBehaviour
         {
             ui.FadeSkip();
         }
-        this.enabled = false;
     }
 
     // Update is called once per frame
@@ -37,6 +36,7 @@ public class TitleStart : MonoBehaviour
         if(_fadeUIList[0].Alpha == 0)
         {
             SceneManager.LoadScene("Title", LoadSceneMode.Additive);
+            this.enabled = false;
         }
     }
 }
