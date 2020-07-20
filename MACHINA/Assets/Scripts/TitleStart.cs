@@ -5,23 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class TitleStart : MonoBehaviour
 {
-    [SerializeField]
-    private List<FadeUI> _fadeUIList = new List<FadeUI>();
+    private FadeUI _ui;
     // Start is called before the first frame update
     void Start()
     {
-        if(TryGetComponent(out FadeUI ui))
-        {
-            _fadeUIList.Add(ui);
-        }
+        _ui = GetComponent<FadeUI>();
     }
 
     private void Skip()
     {
-        foreach(FadeUI ui in _fadeUIList)
-        {
-            ui.FadeSkip();
-        }
+        _ui.FadeSkip();
     }
 
     // Update is called once per frame
@@ -33,7 +26,7 @@ public class TitleStart : MonoBehaviour
             Skip();
         }
 
-        if(_fadeUIList[0].Alpha == 0)
+        if(_ui.Alpha == 0)
         {
             SceneManager.LoadScene("Title", LoadSceneMode.Additive);
             this.enabled = false;

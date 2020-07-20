@@ -14,6 +14,10 @@ public class MenuSelect : MonoBehaviour
 
 	[SerializeField, Tooltip("入力タイプ")]
 	private INPUT_TYPE _type = INPUT_TYPE.Y;
+	[SerializeField]
+	private bool _sizeType = false;
+	[SerializeField]
+	private Vector3 offset = Vector3.zero;
 
 	[SerializeField, Tooltip("長押しの遅れ")]
 	private float _delay = 1.0f;
@@ -168,10 +172,17 @@ public class MenuSelect : MonoBehaviour
 			// カーソルが設定されているなら使用する
 			if (_cursor != null)
 			{
-				_cursor.position = _menuList[_id].position;
-				_cursorText.text = _menuTextList[_id].text;
-				_cursor.sizeDelta = _menuList[_id].sizeDelta;
+				_cursor.position = _menuList[_id].position + offset;
+				if (_sizeType)
+				{
+					_cursor.sizeDelta = _menuList[_id].sizeDelta;
+				}
 			}
+			if (_cursorText)
+			{
+				_cursorText.text = _menuTextList[_id].text;
+			}
+
 			// インターバル分戻す
 			_nowTime -= _interval;
 			_nowTime = 0;

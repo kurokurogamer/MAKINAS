@@ -622,6 +622,7 @@ GameObject:
   m_Component:
   - component: {fileID: 236474366}
   - component: {fileID: 236474367}
+  - component: {fileID: 236474368}
   m_Layer: 5
   m_Name: Volume
   m_TagString: Untagged
@@ -677,6 +678,23 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &236474368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236474365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83e53879177eba040ae9601ec23c14e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _type: 1
+  _delay: 1
+  _interval: 0.2
+  _backUI: {fileID: 0}
+  _cursor: {fileID: 828011339}
 --- !u!1 &372403920
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,7 +1212,7 @@ MonoBehaviour:
   _loop: 1
   _gage:
     min: 0
-    max: 0.5
+    max: 1
 --- !u!114 &841251710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2574,7 +2592,7 @@ MonoBehaviour:
   _loop: 1
   _gage:
     min: 0
-    max: 0.5
+    max: 1
 --- !u!114 &1464373774
 MonoBehaviour:
   m_ObjectHideFlags: 0

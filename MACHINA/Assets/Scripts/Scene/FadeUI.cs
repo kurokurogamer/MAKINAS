@@ -21,6 +21,7 @@ public class FadeUI : MonoBehaviour
 
 	[SerializeField]
 	private float _fadeSpeed = 1.0f;
+	private float _nowTime;
 	// フェイド状態
 	[SerializeField, Tooltip("フェイド状態:IN=不透明に,OUT:透過に")]
 	private FADE_MODE _mode = FADE_MODE.IN;
@@ -41,6 +42,7 @@ public class FadeUI : MonoBehaviour
 	// Start is called before the first frame update
 	protected virtual void Start()
 	{
+		_nowTime = 0;
 		switch (_mode)
 		{
 			case FADE_MODE.IN:
@@ -95,6 +97,31 @@ public class FadeUI : MonoBehaviour
 				_mode = FADE_MODE.IN;
 			}
 		}
+	}
+
+	private void Flash()
+	{
+		_nowTime += Time.deltaTime;
+		if(_nowTime < _fadeSpeed)
+		{
+			return;
+		}
+		switch (_mode)
+		{
+			case FADE_MODE.IN:
+				_alpha = _gage.max;
+				_mode = FADE_MODE.OUT;
+				break;
+			case FADE_MODE.OUT:
+				_alpha = _gage.min;
+				_mode = FADE_MODE.OUT;
+				break;
+			case FADE_MODE.NON:
+				break;
+			default:
+				break;
+		}
+		_nowTime = 0;
 	}
 
 	protected void Fade()

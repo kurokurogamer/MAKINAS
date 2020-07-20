@@ -56,7 +56,7 @@ public class SceneCtl : MonoBehaviour
 				_sceneName = "GameScene2";
 				break;
 			case SceneList.GAME3:
-				_sceneName = "Stage3";
+				_sceneName = "GameScene3";
 				break;
 			case SceneList.RESULT:
 				_sceneName = "ResultScene";
