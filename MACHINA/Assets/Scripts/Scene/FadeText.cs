@@ -13,14 +13,18 @@ public class FadeText : FadeUI
 		_text = GetComponent<Text>();
 	}
 
-	protected override void OnEnable()
+	protected override void OnDisable()
 	{
+		base.OnDisable();
+		if (!_text)
+		{
+			_text = GetComponent<Text>();
+		}
 		if (_text)
 		{
 			_text.color = new Color(_text.color.r, _text.color.g, _text.color.b, _alpha);
 		}
 	}
-
 
 	// Update is called once per frame
 	void Update()

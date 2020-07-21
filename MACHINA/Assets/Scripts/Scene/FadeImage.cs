@@ -15,8 +15,13 @@ public class FadeImage : FadeUI
 		_image = GetComponent<Image>();
     }
 
-	protected override void OnEnable()
+	protected override void OnDisable()
 	{
+		base.OnDisable();
+		if (!_image)
+		{
+			_image = GetComponent<Image>();
+		}
 		if (_image)
 		{
 			_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, _alpha);

@@ -22,13 +22,8 @@ public class CreateMapDate : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		//var _ = TaskAsync();
 		StartCoroutine(SetMapDate());
 	}
-
-	//private async Task TaskAsync()
-	//{
-	//}
 
 	private IEnumerator SetMapDate()
 	{

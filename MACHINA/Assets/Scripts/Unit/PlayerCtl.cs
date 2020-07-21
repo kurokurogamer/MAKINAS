@@ -104,6 +104,15 @@ public class PlayerCtl : UnitControl
 		{
 			_weaponList[2].Attack();
 		}
+
+		if(Input.GetKeyDown(KeyCode.Q))
+		{
+			if (Time.timeScale != 0)
+			{
+				Time.timeScale = 0;
+				UnityEngine.SceneManagement.SceneManager.LoadScene("GameOption", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+			}
+		}
 	}
 
     // 入力系はUpdateで処理してください

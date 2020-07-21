@@ -18,7 +18,8 @@ public class FadeUI : MonoBehaviour
 		OUT,	// フェイドアウト
 		NON
 	}
-
+	[SerializeField]
+	private bool _onAwake = true;
 	[SerializeField]
 	private float _fadeSpeed = 1.0f;
 	private float _nowTime;
@@ -39,6 +40,14 @@ public class FadeUI : MonoBehaviour
 		get { return _alpha; }
 	}
 
+	private void Awake()
+	{
+		if(!_onAwake)
+		{
+			gameObject.SetActive(false);
+		}
+	}
+
 	// Start is called before the first frame update
 	protected virtual void Start()
 	{
@@ -57,7 +66,7 @@ public class FadeUI : MonoBehaviour
 		}
 	}
 
-	protected virtual void OnEnable()
+	protected virtual void OnDisable()
 	{
 		switch (_mode)
 		{
@@ -114,7 +123,7 @@ public class FadeUI : MonoBehaviour
 				break;
 			case FADE_MODE.OUT:
 				_alpha = _gage.min;
-				_mode = FADE_MODE.OUT;
+				_mode = FADE_MODE.IN;
 				break;
 			case FADE_MODE.NON:
 				break;

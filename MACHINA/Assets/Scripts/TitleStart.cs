@@ -28,7 +28,7 @@ public class TitleStart : MonoBehaviour
 
         if(_ui.Alpha == 0)
         {
-            SceneManager.LoadScene("Title", LoadSceneMode.Additive);
+            SceneManager.LoadScene("StartTitle", LoadSceneMode.Additive);
             this.enabled = false;
         }
     }

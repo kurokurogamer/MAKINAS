@@ -184,7 +184,7 @@ public class MenuSelect : MonoBehaviour
 			}
 
 			// インターバル分戻す
-			_nowTime -= _interval;
+			//_nowTime -= _interval;
 			_nowTime = 0;
 			return true;
 		}
