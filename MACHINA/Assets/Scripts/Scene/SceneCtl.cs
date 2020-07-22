@@ -19,6 +19,8 @@ public class SceneCtl : MonoBehaviour
 	public static SceneCtl instance = null;
 
 	private string _sceneName;
+	[SerializeField, Tooltip("追加するシーン")]
+	private List<string> _sceneNameList = new List<string>();
 
 	private void Awake()
 	{
@@ -74,6 +76,16 @@ public class SceneCtl : MonoBehaviour
 		{
 			SceneManager.LoadScene(name);
 		}
+	}
+
+	public void SceneLoad()
+	{
+		SceneManager.LoadSceneAsync("Stage1");
+	}
+
+	public void AddScene(string name)
+	{
+		SceneManager.LoadScene(name, LoadSceneMode.Additive);
 	}
 
 	// Update is called once per frame

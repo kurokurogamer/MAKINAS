@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LoadDestroy : MonoBehaviour
 {
-    void Start()
+    private void Awake()
     {
         Destroy(this.gameObject);
     }
