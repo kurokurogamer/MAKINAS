@@ -9,15 +9,18 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScene.unity
     guid: 08922ce7f64ad9e4c811d9661551847e
   - enabled: 1
-    path: Assets/Scenes/Stage/Stage1.unity
-    guid: 70fdb75240d6e20429c5be41995af599
-  - enabled: 1
-    path: Assets/Scenes/CharacterScene.unity
-    guid: 705c9575efa61144898e24ca8450963b
-  - enabled: 1
     path: Assets/Scenes/UI/StartTitle.unity
     guid: 3d60ef8bc22e62c4295ce96a9facbfb2
   - enabled: 1
     path: Assets/Scenes/UI/TitleButton.unity
     guid: 05bdfc9b4d0292848be240b95267c8df
+  - enabled: 1
+    path: Assets/Scenes/CharacterScene.unity
+    guid: 705c9575efa61144898e24ca8450963b
+  - enabled: 1
+    path: Assets/Scenes/Stage/Stage1.unity
+    guid: 70fdb75240d6e20429c5be41995af599
+  - enabled: 1
+    path: Assets/Scenes/Stage/Stage3.unity
+    guid: 9dd77276523577a408c6c6f5c24ca987
   m_configObjects: {}
