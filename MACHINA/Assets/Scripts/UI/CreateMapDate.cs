@@ -17,6 +17,8 @@ public class CreateMapDate : MonoBehaviour
 	[SerializeField]
 	private float _sum = 100f;
 	RaycastHit hit;
+	[SerializeField]
+	private Material _mat;
 	
 
 	// Start is called before the first frame update
@@ -27,10 +29,11 @@ public class CreateMapDate : MonoBehaviour
 
 	private IEnumerator SetMapDate()
 	{
+		Time.timeScale = 0;
+
 		Debug.Log("開始");
 		_drawTexture = new Texture2D(_texture.width, _texture.height, TextureFormat.RGBA32, false);
 		_drawTexture.filterMode = FilterMode.Point;
-		var mat = GetComponent<Image>().material;
 		Color[] colors = _drawTexture.GetPixels();
 		for(int i = 0; i< colors.Length; i++)
 		{
@@ -38,15 +41,15 @@ public class CreateMapDate : MonoBehaviour
 		}
 		_drawTexture.SetPixels(colors);
 		_drawTexture.Apply();
-		mat.mainTexture = _drawTexture;
+		_mat.mainTexture = _drawTexture;
 
 		for (int y = 0; y < _areaSize.y; y++)
 		{
 			if (y % 5 == 0)
 			{
 				_drawTexture.Apply();
-				mat.mainTexture = _drawTexture;
-				yield return new WaitForSecondsRealtime(0.001f);
+				_mat.mainTexture = _drawTexture;
+				yield return new WaitForSecondsRealtime(0.01f);
 			}
 			for (int x = 0; x < _areaSize.x; x++)
 			{
@@ -61,8 +64,10 @@ public class CreateMapDate : MonoBehaviour
 			}
 		}
 		_drawTexture.Apply();
-		mat.mainTexture = _drawTexture;
+		_mat.mainTexture = _drawTexture;
 		Debug.Log("終了");
+		Time.timeScale = 1;
+		SceneCtl.instance.AddScene("GameUI");
 		yield return null;
 	}
 

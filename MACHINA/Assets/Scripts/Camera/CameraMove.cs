@@ -17,14 +17,14 @@ public class CameraMove : MonoBehaviour
 	private GameObject _rotTarget = null;
 	[SerializeField]
 	private GameObject _posTarget = null;
-	[SerializeField]
-	private RectTransform _cursor = null;
+	//[SerializeField]
+	//private RectTransform _cursor = null;
 	private Vector3 _firstPos = Vector3.zero;
 	[SerializeField]
 	private Vector3 _point = Vector3.zero;
 	private void Awake()
 	{
-		_firstPos = _cursor.position;
+		//_firstPos = _cursor.position;
 	}
 	// Use this for initialization
 	void Start()
@@ -55,7 +55,7 @@ public class CameraMove : MonoBehaviour
 			pos += new Vector3(0, -50, 0);
 		}
 
-		_cursor.position = Vector3.Lerp(_cursor.position, _firstPos + pos, Time.deltaTime * 10);
+		//_cursor.position = Vector3.Lerp(_cursor.position, _firstPos + pos, Time.deltaTime * 10);
 	}
 
     private void Move()

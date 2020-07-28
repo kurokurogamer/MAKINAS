@@ -149,7 +149,7 @@ public class UnitControl : MonoBehaviour
 		_hobaEffect.Emit(1);
 		_boost.PlayEffect();
 		//GroundCheck();
-		_radial.Strength = Mathf.Lerp(_radial.Strength, 0.05f, Time.deltaTime * 5);
+		_radial.Strength = Mathf.Lerp(_radial.Strength, 0.1f, Time.deltaTime * 5);
 
 		_nowEnergy -= 200;
 		if (_nowEnergy < 0)
@@ -272,11 +272,11 @@ public class UnitControl : MonoBehaviour
 		}
 		if (_nowEnergy != 0)
 		{
-			_image.fillAmount = _nowEnergy / _energy / 4;
+			//_image.fillAmount = _nowEnergy / _energy / 4;
 		}
 		else
 		{
-			_image.fillAmount = 0;
+			//_image.fillAmount = 0;
 		}
 
 		_rigid.AddForce(_gravity + _lastForce * 10, ForceMode.Acceleration);

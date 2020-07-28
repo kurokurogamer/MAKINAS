@@ -14,7 +14,7 @@ public class DestroyScene : MonoBehaviour
 
 	private void ChangeScene()
 	{
-		SceneCtl.instance.SceneChange(SceneCtl.SceneList.RESULT);
+		SceneCtl.instance.LoadScene("ResultScene");
 	}
 
 	// Update is called once per frame

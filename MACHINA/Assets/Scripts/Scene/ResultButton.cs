@@ -14,11 +14,11 @@ public class ResultButton : MonoBehaviour
 	{
 		if(Input.GetButtonDown("Fire2"))
 		{
-			SceneCtl.instance.SceneChange(SceneCtl.SceneList.MENU);
+			//SceneCtl.instance.SceneChange(SceneCtl.SceneList.MENU);
 		}
 		if (Input.GetButtonDown("Fire3"))
 		{
-			SceneCtl.instance.SceneChange(SceneCtl.SceneList.MENU);
+			//SceneCtl.instance.SceneChange(SceneCtl.SceneList.MENU);
 		}
 	}
 

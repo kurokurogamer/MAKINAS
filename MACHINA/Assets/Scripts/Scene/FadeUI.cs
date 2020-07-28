@@ -12,7 +12,7 @@ public class FadeUI : MonoBehaviour
 		public float max;
 	}
 
-	private enum FADE_MODE
+	public enum FADE_MODE
 	{
 		IN,		// フェイドイン
 		OUT,	// フェイドアウト
@@ -26,6 +26,11 @@ public class FadeUI : MonoBehaviour
 	// フェイド状態
 	[SerializeField, Tooltip("フェイド状態:IN=不透明に,OUT:透過に")]
 	private FADE_MODE _mode = FADE_MODE.IN;
+	public FADE_MODE Mode
+	{
+		get { return _mode; }
+		set { _mode = value; }
+	}
 	[SerializeField, Tooltip("ループフラグ")]
 	private bool _loop = true;
 
@@ -40,18 +45,13 @@ public class FadeUI : MonoBehaviour
 		get { return _alpha; }
 	}
 
-	private void Awake()
+	protected virtual void Awake()
 	{
 		if(!_onAwake)
 		{
 			gameObject.SetActive(false);
 		}
-	}
-
-	// Start is called before the first frame update
-	protected virtual void Start()
-	{
-		_nowTime = 0;
+		_nowTime =1;
 		switch (_mode)
 		{
 			case FADE_MODE.IN:
@@ -93,6 +93,7 @@ public class FadeUI : MonoBehaviour
 				_mode = FADE_MODE.OUT;
 			}
 		}
+		AudioManager.instance.PlaySE();
 	}
 
 	private void FadeOut()

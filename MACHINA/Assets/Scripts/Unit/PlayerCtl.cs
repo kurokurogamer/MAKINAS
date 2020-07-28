@@ -9,16 +9,16 @@ public class PlayerCtl : UnitControl
 	private Vector2 _stickRight;
 	private float _triggerLR;
 	private Vector3 _rot;
-	[SerializeField, Tooltip("ロックオンUI")]
-	private GameObject _lockOnUi = null;
-	[SerializeField, Tooltip("スキャンUI")]
-	private GameObject _scanUi = null;
+	//[SerializeField, Tooltip("ロックオンUI")]
+	//private GameObject _lockOnUi = null;
+	//[SerializeField, Tooltip("スキャンUI")]
+	////private GameObject _scanUi = null;
 
-	[SerializeField]
-	private RectTransform _circle;
+	//[SerializeField]
+	//private RectTransform _circle;
 	private Vector2 _circleForce;
-	[SerializeField, Tooltip("システムメッセージ")]
-	private RectTransform _message;
+	//[SerializeField, Tooltip("システムメッセージ")]
+	//private RectTransform _message;
 
     protected override void Start()
     {
@@ -26,7 +26,7 @@ public class PlayerCtl : UnitControl
 		_stickLeft = Vector2.zero;
 		_stickRight = Vector2.zero;
 		_triggerLR = 0;
-		_circleForce = _circle.sizeDelta;
+		//_circleForce = _circle.sizeDelta;
 
 		_rot = transform.eulerAngles;
 		AudioManager.instance.StopBGM();
@@ -71,24 +71,19 @@ public class PlayerCtl : UnitControl
 
 		if (Input.GetButtonDown("RStickPush"))
 		{
-			_lockOnUi.SetActive(_scanUi.activeInHierarchy);
-			_scanUi.SetActive(!_scanUi.activeInHierarchy);
+			//_lockOnUi.SetActive(_scanUi.activeInHierarchy);
+			//_scanUi.SetActive(!_scanUi.activeInHierarchy);
 		}
 
-		if(Input.GetButtonDown("LStickPush"))
+		if (Input.GetButtonDown("LStickPush") || Input.GetButtonDown("LB") || Input.GetKeyDown(KeyCode.B))
 		{
 			ChangeMode();
 		}
 
-		if (Input.GetButtonDown("LB") || Input.GetKeyDown(KeyCode.B))
-		{
-			ChangeMode();
-		}
-
-		if(!_lockOnUi.activeInHierarchy)
-		{
-			return;
-		}
+		//if(!_lockOnUi.activeInHierarchy)
+		//{
+		//	return;
+		//}
 
 		if (_triggerLR <= -0.1f || Input.GetKey(KeyCode.X))
 		{
@@ -138,6 +133,6 @@ public class PlayerCtl : UnitControl
 			Brake();
 		}
 		// 最終的なカーソルの大きさを反映させる
-		_circle.sizeDelta = _circleForce;
+		//_circle.sizeDelta = _circleForce;
 	}
 }

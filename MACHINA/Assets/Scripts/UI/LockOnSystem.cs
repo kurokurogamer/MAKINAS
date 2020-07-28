@@ -76,7 +76,7 @@ public class LockOnSystem : MonoBehaviour
                     centerPoint = screenPoint.magnitude;
                     targetFlag = true;
                     distance = Vector3.Distance(target.transform.position, _player.transform.position);
-                    _text.text = distance.ToString("000.00");
+                    //_text.text = distance.ToString("000.00");
                     if (_target == null)
                     {
                         _target = target;

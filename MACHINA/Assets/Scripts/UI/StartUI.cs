@@ -10,7 +10,6 @@ public class StartUI : MonoBehaviour
 	private float _nowTime;
 	[SerializeField, Tooltip("ロックオンシステム")]
 	private LockOnUI _lockOnUI = null;
-	[SerializeField, Tooltip("カメラシステム")]
 	private CameraMove _cameraMove = null;
 	[SerializeField]
 	private GameObject _circle = null;
@@ -30,6 +29,7 @@ public class StartUI : MonoBehaviour
 			_script = _conpas.GetComponent<Compass>();
 			StartCoroutine(Rotate());
 		}
+		_cameraMove = Camera.main.GetComponent<CameraMove>();
     }
 
     // Update is called once per frame
@@ -37,13 +37,7 @@ public class StartUI : MonoBehaviour
     {
 		_nowTime += Time.deltaTime;
 		transform.position = Vector3.MoveTowards(transform.position, _firstPos, 3);
-		if(_nowTime > 5)
-		{
-			_cameraMove.enabled = true;
-			_lockOnUI.enabled = true;
-			this.enabled = false;
-		}
-    }
+	}
 
 	private IEnumerator Rotate()
 	{
@@ -54,6 +48,9 @@ public class StartUI : MonoBehaviour
 			yield return null;
 		}
 		_script.enabled = true;
+		_cameraMove.enabled = true;
+		_lockOnUI.enabled = true;
+		this.enabled = false;
 		yield return null;
 	}
 }

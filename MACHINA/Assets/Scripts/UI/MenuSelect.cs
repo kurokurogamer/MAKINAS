@@ -30,6 +30,8 @@ public class MenuSelect : MonoBehaviour
 	[SerializeField, Tooltip("一つ前のメニュー項目")]
 	protected GameObject _backUI = null;
 	protected MenuSelect _startUI = null;
+	[SerializeField, Tooltip("シーンの名前")]
+	protected List<string> _addScene = new List<string>();
 
 	protected List<RectTransform> _menuList;
 	protected List<Text> _menuTextList;
@@ -193,23 +195,16 @@ public class MenuSelect : MonoBehaviour
 
 	protected virtual void Check()
 	{
-		// キャンセルボタンを押したときの処理
-		if (Input.GetButtonDown("Fire1"))
+		if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.N))
 		{
 			// キャンセルサウンドを鳴らす
 			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
-			// 戻った際のUIを表示しておく
-			if (_backUI != null)
-			{
-				_backUI.SetActive(true);
-			}
-			// 自身のUIに対して非表示処理を行う
-			_startUI.gameObject.SetActive(false);
 		}
-		else if (Input.GetButtonDown("Fire2"))
+		else if (Input.GetButtonDown("Fire2") || Input.GetKeyDown(KeyCode.O))
 		{
 			// 決定ボタンを押したときの処理
-			this.enabled = false;
+			AudioManager.instance.PlaySE(_uiAudio.PushSE);
+			SceneCtl.instance.LoadScene("GameScene2");
 		}
 	}
 

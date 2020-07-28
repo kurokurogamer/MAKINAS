@@ -1,14 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TitleStart : MonoBehaviour
 {
     private FadeUI _ui;
+    [SerializeField, Tooltip("UI")]
+    private List<GameObject> _titleUI = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
+        for(int i = 0; i < _titleUI.Count; i++)
+        {
+            _titleUI[i].SetActive(false);
+        }
         _ui = GetComponent<FadeUI>();
     }
 
@@ -28,7 +33,10 @@ public class TitleStart : MonoBehaviour
 
         if(_ui.Alpha == 0)
         {
-            SceneManager.LoadScene("StartTitle", LoadSceneMode.Additive);
+            for (int i = 0; i < _titleUI.Count; i++)
+            {
+                _titleUI[i].SetActive(true);
+            }
             this.enabled = false;
         }
     }

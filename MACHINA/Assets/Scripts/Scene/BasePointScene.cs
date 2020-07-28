@@ -25,7 +25,7 @@ public class BasePointScene : MonoBehaviour
 				return;
 			}
 		}
-		SceneCtl.instance.SceneChange(SceneCtl.SceneList.RESULT);
+		//SceneCtl.instance.SceneChange(SceneCtl.SceneList.RESULT);
 	}
 
     // Update is called once per frame

@@ -824,6 +824,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 1
+  _sizeType: 0
+  offset: {x: 0, y: 0, z: 0}
   _delay: 1
   _interval: 0.2
   _backUI: {fileID: 0}

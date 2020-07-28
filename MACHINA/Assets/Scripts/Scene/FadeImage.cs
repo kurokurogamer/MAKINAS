@@ -8,12 +8,16 @@ public class FadeImage : FadeUI
 	// フェイドするイメージ
 	private Image _image;
 	
-	// Start is called before the first frame update
-	protected override void Start()
-    {
-		base.Start();
+	protected override void Awake()
+	{
+		base.Awake();
 		_image = GetComponent<Image>();
-    }
+		if (_image)
+		{
+			_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, _alpha);
+		}
+	}
+
 
 	protected override void OnDisable()
 	{
@@ -22,6 +26,7 @@ public class FadeImage : FadeUI
 		{
 			_image = GetComponent<Image>();
 		}
+		Debug.Log("処理");
 		if (_image)
 		{
 			_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, _alpha);

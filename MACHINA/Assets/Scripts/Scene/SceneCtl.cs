@@ -5,22 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class SceneCtl : MonoBehaviour
 {
-	public enum SceneList
-	{
-		TITLE,
-		MENU,
-		GAME1,
-		GAME2,
-		GAME3,
-		RESULT,
-		MAX
-	}
-
 	public static SceneCtl instance = null;
 
-	private string _sceneName;
-	[SerializeField, Tooltip("追加するシーン")]
 	private List<string> _sceneNameList = new List<string>();
+
+	[SerializeField, Tooltip("黒背景")]
+	private GameObject _fadeUI = null;
+	[SerializeField, Tooltip("回転イメージ")]
+	private GameObject _image = null;
+	private FadeUI _back;
+	private Coroutine _coroutine;
 
 	private void Awake()
 	{
@@ -38,54 +32,55 @@ public class SceneCtl : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		_sceneName = "";
+		_coroutine = null;
+		_image.SetActive(false);
+		_back = _fadeUI.GetComponent<FadeUI>();
     }
 
-	public void SceneChange(SceneList sceneList)
+	public void LoadScene(string name)
 	{
-		switch (sceneList)
+		if (name == "")
 		{
-			case SceneList.TITLE:
-				_sceneName = "TitleScene";
-				break;
-			case SceneList.MENU:
-				_sceneName = "MenuScene";
-				break;
-			case SceneList.GAME1:
-				_sceneName = "GameScene1";
-				break;
-			case SceneList.GAME2:
-				_sceneName = "GameScene2";
-				break;
-			case SceneList.GAME3:
-				_sceneName = "GameScene3";
-				break;
-			case SceneList.RESULT:
-				_sceneName = "ResultScene";
-				break;
-			case SceneList.MAX:
-			default:
-				break;
+			return;
 		}
-		SceneChange(_sceneName);
-	}
-
-	public void SceneChange(string name)
-	{
-		if (name != "")
+		if (_coroutine == null)
 		{
-			SceneManager.LoadScene(name);
+			_coroutine = StartCoroutine(Load(name));
 		}
 	}
 
-	public void SceneLoad()
+	private IEnumerator Load(string name)
 	{
-		SceneManager.LoadSceneAsync("Stage1");
+		_back.Mode = FadeUI.FADE_MODE.IN;	
+		yield return new WaitForSeconds(1.0f);
+		_image.SetActive(true);
+		yield return new WaitForSeconds(1.0f);
+		SceneManager.LoadScene(name, LoadSceneMode.Single);
+		yield return new WaitForSeconds(2.0f);
+		_image.SetActive(false);
+		_back.Mode = FadeUI.FADE_MODE.OUT;
+		_coroutine = null;
+		yield return null;
+	}
+
+	public void LoadSceneAsync(string name)
+	{
+		SceneManager.LoadSceneAsync(name);
 	}
 
 	public void AddScene(string name)
 	{
 		SceneManager.LoadScene(name, LoadSceneMode.Additive);
+	}
+
+	public void AddSceeAsync()
+	{
+		SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+	}
+
+	public void UnLoadScene(Scene scene)
+	{
+		SceneManager.UnloadSceneAsync(scene);
 	}
 
 	// Update is called once per frame

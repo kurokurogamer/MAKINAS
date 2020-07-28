@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class SceneChangeButton : MonoBehaviour
 {
-	[SerializeField]
-	private SceneCtl.SceneList _nextScene = SceneCtl.SceneList.TITLE;
+	//private SceneCtl.SceneList _nextScene = SceneCtl.SceneList.TITLE;
 	[SerializeField, Tooltip("SE")]
 	private AudioClip _clip = null;
     // Start is called before the first frame update
@@ -18,13 +17,13 @@ public class SceneChangeButton : MonoBehaviour
 		if(Input.GetButtonDown("Fire2"))
 		{
 			AudioManager.instance.PlaySE(_clip);
-			SceneCtl.instance.SceneChange(_nextScene);
+			//SceneCtl.instance.SceneChange(_nextScene);
 		}
 	}
 
 	public void Change(int i)
 	{
-		SceneCtl.instance.SceneChange((SceneCtl.SceneList)i);
+		//SceneCtl.instance.SceneChange((SceneCtl.SceneList)i);
 	}
 
 	// Update is called once per frame
