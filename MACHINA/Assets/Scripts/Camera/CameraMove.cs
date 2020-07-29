@@ -21,7 +21,9 @@ public class CameraMove : MonoBehaviour
 	//private RectTransform _cursor = null;
 	private Vector3 _firstPos = Vector3.zero;
 	[SerializeField]
-	private Vector3 _point = Vector3.zero;
+	private bool _LeftRightMode;
+	[SerializeField]
+	private Vector3 _offset;
 	private void Awake()
 	{
 		//_firstPos = _cursor.position;
@@ -61,7 +63,15 @@ public class CameraMove : MonoBehaviour
     private void Move()
     {
 		//transform.position = _posTarget.transform.position + _point;
-		transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
+		if (_LeftRightMode)
+		{
+			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position + _offset, Time.deltaTime * _moveSpeed);
+		}
+		else
+		{
+			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position + new Vector3(-_offset.x,_offset.y,_offset.z), Time.deltaTime * _moveSpeed);
+
+		}
 		//transform.position = Vector3.MoveTowards(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
 	}
 
@@ -81,13 +91,11 @@ public class CameraMove : MonoBehaviour
 
     private void LateUpdate()
     {
-        //Move();
         LockOn();
     }
 	private void FixedUpdate()
 	{
 		Rotate();
-
 		Move();
 	}
 }

@@ -5,29 +5,31 @@ using UnityEngine.UI;
 
 public class LockOnSystem : MonoBehaviour
 {
-    [SerializeField, Tooltip("システムの有効化")]
-    private bool systemActive = false;
-    [SerializeField]
+    [SerializeField, Tooltip("レイヤーマスク")]
     private LayerMask _layer = 0;
     // 現在のターゲット名
     private GameObject _target = null;
 	[SerializeField, Tooltip("プレイヤー")]
 	private GameObject _player = null;
-    [SerializeField, Tooltip("")]
+    public GameObject Player
+    {
+        get { return _player; }
+    }
+
+    [SerializeField, Tooltip("ロックオンに要する時間")]
     private float LOCK_ON_TIME = 1.0f;
-    [SerializeField]
-    public GameObject _centerPoint;
+
     // 現在の時間
     private float _nowTime;
     // ロックオン検知変数
-    private bool _isLockOn = false;
+    private bool _isLockOn;
     [SerializeField, Tooltip("サークルの大きさ")]
     private float _circleScale = 250;
     [SerializeField, Tooltip("ロックオン可能距離")]
     private float _distance = 100f;
-	[SerializeField, Tooltip("距離のテキスト")]
-	private Text _text = null;
-	Vector2 screenPoint;
+    public float Distance { set { _distance = value; } }
+    // ターゲットのスクリーン座標
+	private Vector2 _screenPoint;
     [SerializeField, Tooltip("カメラの範囲")]
     private Vector3 _scale = Vector3.one;
 
@@ -36,7 +38,6 @@ public class LockOnSystem : MonoBehaviour
 	{
 		get { return _targetList; }
 	}
-
     public float GetNowTime
     {
         get { return _nowTime; }
@@ -52,7 +53,10 @@ public class LockOnSystem : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-	}
+        _nowTime = 0;
+        _isLockOn = false;
+        _screenPoint = Vector2.zero;
+    }
 
 	private void LockCheck()
 	{
@@ -68,12 +72,12 @@ public class LockOnSystem : MonoBehaviour
             if (Physics.Linecast(_player.transform.position, target.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
             {
 
-                screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
-                screenPoint.x = screenPoint.x - (Screen.width / 2);
-                screenPoint.y = screenPoint.y - (Screen.height / 2);
-                if (screenPoint.magnitude <= centerPoint)
+                _screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
+                _screenPoint.x = _screenPoint.x - (Screen.width / 2);
+                _screenPoint.y = _screenPoint.y - (Screen.height / 2);
+                if (_screenPoint.magnitude <= centerPoint)
                 {
-                    centerPoint = screenPoint.magnitude;
+                    centerPoint = _screenPoint.magnitude;
                     targetFlag = true;
                     distance = Vector3.Distance(target.transform.position, _player.transform.position);
                     //_text.text = distance.ToString("000.00");

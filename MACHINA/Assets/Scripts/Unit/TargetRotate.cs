@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class TargetRotate : MonoBehaviour
 {
+	private enum XYZ
+	{
+		X,
+		Y,
+		Z,
+		MAX
+	}
 	[SerializeField, Tooltip("ポイント")]
 	private GameObject _point = null;
 	[SerializeField, Tooltip("補正する角度")]
@@ -11,11 +18,13 @@ public class TargetRotate : MonoBehaviour
 	private GameObject _center;
 
 	private Vector3 _firstRotate = Vector3.zero;
+	[SerializeField]
+	private XYZ _mode = XYZ.X;
     // Start is called before the first frame update
     void Start()
     {
 		_firstRotate = _point.transform.eulerAngles;
-		_center = Camera.main.GetComponent<LockOnSystem>()._centerPoint;
+		_center = Camera.main.GetComponent<LockOnSystem>().Player;
     }
 
 	private void RotateX()
@@ -43,7 +52,7 @@ public class TargetRotate : MonoBehaviour
 
 		float rad = Mathf.Atan2(dt.y, dt.z);
 		_point.transform.LookAt(_center.transform);
-		_point.transform.localRotation = Quaternion.Euler(new Vector3(0, -_point.transform.localEulerAngles.y, 0));
+		_point.transform.localRotation = Quaternion.Euler(new Vector3(0, _point.transform.localEulerAngles.y + _subRotate.y, 0));
 
 	}
 	private void RotateZ()
@@ -65,6 +74,20 @@ public class TargetRotate : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-		RotateX();
-    }
+		switch (_mode)
+		{
+			case XYZ.X:
+				RotateX();
+				break;
+			case XYZ.Y:
+				RotateY();
+				break;
+			case XYZ.Z:
+				RotateZ();
+				break;
+			case XYZ.MAX:
+			default:
+				break;
+		}
+	}
 }

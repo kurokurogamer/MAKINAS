@@ -44,10 +44,9 @@ public class Turret : Weapon
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        _nowWaitTime += Time.deltaTime;
-        ReLoad();
+        base.Update();
         Atan2();
     }
 }

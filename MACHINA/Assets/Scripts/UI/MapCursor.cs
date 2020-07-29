@@ -13,7 +13,7 @@ public class MapCursor : MonoBehaviour
     {
 		_rectTrans = GetComponent<RectTransform>();
 		_parentRect = transform.parent.GetComponent<RectTransform>();
-		_player = Camera.main.GetComponent<LockOnSystem>()._centerPoint;
+		_player = Camera.main.GetComponent<LockOnSystem>().Player;
     }
 
 	private void MapMove()

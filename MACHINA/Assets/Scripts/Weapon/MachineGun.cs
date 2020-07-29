@@ -12,10 +12,10 @@ public class MachineGun : Weapon
 		base.Start();
     }
 
-	// Update is called once per frame
-	void Update()
+    // Update is called once per frame
+    protected override void Update()
     {
-		_nowWaitTime += Time.deltaTime;
-		ReLoad();
+        base.Update();
+        ReLoad();
     }
 }

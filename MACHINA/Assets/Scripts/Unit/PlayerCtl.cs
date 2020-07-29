@@ -17,8 +17,6 @@ public class PlayerCtl : UnitControl
 	//[SerializeField]
 	//private RectTransform _circle;
 	private Vector2 _circleForce;
-	//[SerializeField, Tooltip("システムメッセージ")]
-	//private RectTransform _message;
 
     protected override void Start()
     {

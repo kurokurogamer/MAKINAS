@@ -141,7 +141,6 @@ public class UnitControl : MonoBehaviour
 	// プレイヤー、AIでも対応可能なように値をもらって判断
 	protected void Hover(Vector2 Axis)
 	{
-
 		if (Axis.x == 0 && Axis.y == 0)
 		{
 			return;

@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        _player = Camera.main.GetComponent<LockOnSystem>()._centerPoint;
+        _player = Camera.main.GetComponent<LockOnSystem>().Player;
         _firstPos = transform.position;
     }
 

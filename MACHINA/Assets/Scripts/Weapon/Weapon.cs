@@ -31,7 +31,7 @@ public class Weapon : MonoBehaviour
 	protected float _rapidTime = 0.1f;
 	[SerializeField, Tooltip("発射音")]
 	protected AudioClip _clip = null;
-	[SerializeField]
+	[SerializeField, Tooltip("発射砲数")]
 	private List<GameObject> _shotPoint = new List<GameObject>();
 
 	protected virtual void Start()
@@ -39,7 +39,7 @@ public class Weapon : MonoBehaviour
 		_animator = GetComponent<Animator>();
 		_ammo = _maxAmmo;
 		_nowReloadTime = 0.0f;
-		_nowWaitTime = _waitTime;
+		_nowWaitTime = 0.0f;
 		if (_shotPoint.Count == 0)
 		{
 			foreach (Transform child in transform)
@@ -72,24 +72,17 @@ public class Weapon : MonoBehaviour
 			if (_nowWaitTime >= _waitTime)
 			{
 				_ammo--;
-				_nowWaitTime -= _waitTime;
-				StartCoroutine(RapidFire(_multiple));
+				_nowWaitTime = 0;
+				StartCoroutine(RapidFire());
 			}
 		}
 	}
-	public void Attack(int count)
-	{
-		if (_ammo > 0)
-		{
-			_ammo--;
-			StartCoroutine(RapidFire(_multiple));
-		}
-	}
 
-	public IEnumerator RapidFire(int count)
+	public IEnumerator RapidFire()
 	{
-		int i = 0;
-		while(i < count)
+		int _rapidCount = 0;
+		// 連射数分ループする
+		while(_rapidCount < _multiple)
 		{
 			_rapidTime += Time.deltaTime;
 			if (_rapidTime >= _rapidSpeed)
@@ -115,10 +108,16 @@ public class Weapon : MonoBehaviour
 				{
 					AudioManager.instance.PlaySE(_clip);
 				}
-				i++;
+				_rapidCount++;
 				_rapidTime -= _rapidSpeed;
 			}
 			yield return null;
 		}
+	}
+
+	protected virtual void Update()
+	{
+		_nowWaitTime += Time.deltaTime;
+		ReLoad();
 	}
 }

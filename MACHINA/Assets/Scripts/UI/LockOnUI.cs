@@ -13,8 +13,8 @@ public class LockOnUI : MonoBehaviour
 	private Color _color2 = Color.green;
 	[SerializeField, Tooltip("カーソルのプレハブ")]
 	private Image _cursor = null;
-	[SerializeField, Tooltip("追従")]
-	private GameObject _cursorSet = null;
+    private List<GameObject> _cursorList = new List<GameObject>();
+
     // Use this for initialization
     void Start()
     {
@@ -24,36 +24,51 @@ public class LockOnUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (0 < _lockOnSystem.GetNowTime)
+        if(_lockOnSystem)
         {
-			_cursor.gameObject.SetActive(true);
-            if (_lockOnSystem.GetIsLockOn)
+            // ターゲットの数よりカーソルの数が少なければ
+            while (_cursorList.Count < _lockOnSystem.TargetList.Count)
             {
-				// ロックオン完了
-				_cursor.color = _color1;
+                Debug.Log("Cursorの生成");
+                Debug.Log(_cursorList.Count + "カーソル");
+                Debug.Log(_lockOnSystem.TargetList.Count + "画面内の敵数");
+
+                GameObject cursor = Instantiate(_cursor.gameObject);
+                cursor.transform.parent = transform;
+                _cursorList.Add(cursor);
             }
-            else
-            {
-                // ロックオン中
-				_cursor.color = _color2;
-			}
-		}
-        else
-        {
-			_cursor.gameObject.SetActive(false);
         }
-
+  //      if (0 < _lockOnSystem.GetNowTime)
+  //      {
+		//	_cursor.gameObject.SetActive(true);
+  //          if (_lockOnSystem.GetIsLockOn)
+  //          {
+		//		// ロックオン完了
+		//		_cursor.color = _color1;
+  //          }
+  //          else
+  //          {
+  //              // ロックオン中
+		//		_cursor.color = _color2;
+		//	}
+		//}
+  //      else
+  //      {
+		//	_cursor.gameObject.SetActive(false);
+  //      }
+        if (_lockOnSystem != null)
+        {
+            for (int i = 0; i < _lockOnSystem.TargetList.Count; i++)
+            {
+                Vector2 postion = RectTransformUtility.WorldToScreenPoint(Camera.main, _lockOnSystem.TargetList[i].transform.position);
+                // カーソルの移動
+                _cursorList[i].transform.position = new Vector3(postion.x, postion.y, 0f);
+            }
+        }
     }
 
     private void LateUpdate()
     {
-		if (_lockOnSystem.GetTarget != null)
-        {
-            Vector2 postion = RectTransformUtility.WorldToScreenPoint(Camera.main, _lockOnSystem.GetTarget.transform.position);
-			// ロックオンカーソルの移動
-			_cursor.transform.position = new Vector3(postion.x, postion.y, 0f);
-			_cursorSet.transform.position = _cursor.transform.position;
-        }
+
     }
 }

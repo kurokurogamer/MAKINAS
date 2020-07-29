@@ -36,10 +36,6 @@ public class FadeImage : FadeUI
 	// Update is called once per frame
 	void Update()
     {
-		if(!_image.enabled)
-		{
-			_alpha = _gage.max;
-		}
 		Fade();
 		_image.color = new Color(_image.color.r, _image.color.g, _image.color.b, _alpha);
 	}
