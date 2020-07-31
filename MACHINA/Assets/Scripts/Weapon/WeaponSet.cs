@@ -9,11 +9,10 @@ public class WeaponSet : MonoBehaviour
 	void Start()
 	{
 		_weaponList = new List<Weapon>();
-		Weapon weapon;
 
 		foreach (Transform child in transform)
 		{
-			if (child.TryGetComponent(out weapon))
+			if (child.TryGetComponent(out Weapon weapon))
 			{
 				_weaponList.Add(weapon);
 			}

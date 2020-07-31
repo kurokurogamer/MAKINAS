@@ -10,6 +10,7 @@ public class AddScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // リスト内に記述されているシーンを追加する
         foreach(string sceneName in _sceneNameList)
         {
             SceneCtl.instance.AddScene(sceneName);

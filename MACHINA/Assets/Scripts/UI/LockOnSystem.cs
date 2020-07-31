@@ -67,11 +67,11 @@ public class LockOnSystem : MonoBehaviour
 		RaycastHit hit;
 		float distance = 0;
 		float centerPoint = _circleScale;
+
         foreach (GameObject target in _targetList)
         {
             if (Physics.Linecast(_player.transform.position, target.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
             {
-
                 _screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
                 _screenPoint.x = _screenPoint.x - (Screen.width / 2);
                 _screenPoint.y = _screenPoint.y - (Screen.height / 2);
@@ -126,6 +126,5 @@ public class LockOnSystem : MonoBehaviour
             Gizmos.DrawRay(_player.transform.position, _player.transform.forward * 100);
             Gizmos.DrawWireCube(_player.transform.position + _player.transform.forward * 100, _scale);
         }
-
     }
 }

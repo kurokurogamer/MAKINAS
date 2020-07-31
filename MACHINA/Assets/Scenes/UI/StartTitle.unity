@@ -734,7 +734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _onAwake: 0
-  _fadeSpeed: 0.25
+  _fadeSpeed: 0.5
   _mode: 0
   _loop: 0
   _gage:

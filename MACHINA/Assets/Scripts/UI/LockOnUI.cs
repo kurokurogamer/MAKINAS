@@ -34,28 +34,28 @@ public class LockOnUI : MonoBehaviour
                 Debug.Log(_lockOnSystem.TargetList.Count + "画面内の敵数");
 
                 GameObject cursor = Instantiate(_cursor.gameObject);
-                cursor.transform.parent = transform;
+                cursor.transform.SetParent(transform);
                 _cursorList.Add(cursor);
             }
         }
-  //      if (0 < _lockOnSystem.GetNowTime)
-  //      {
-		//	_cursor.gameObject.SetActive(true);
-  //          if (_lockOnSystem.GetIsLockOn)
-  //          {
-		//		// ロックオン完了
-		//		_cursor.color = _color1;
-  //          }
-  //          else
-  //          {
-  //              // ロックオン中
-		//		_cursor.color = _color2;
-		//	}
-		//}
-  //      else
-  //      {
-		//	_cursor.gameObject.SetActive(false);
-  //      }
+        if (0 < _lockOnSystem.GetNowTime)
+        {
+            _cursor.gameObject.SetActive(true);
+            if (_lockOnSystem.GetIsLockOn)
+            {
+                // ロックオン完了
+                _cursor.color = _color1;
+            }
+            else
+            {
+                // ロックオン中
+                _cursor.color = _color2;
+            }
+        }
+        else
+        {
+            _cursor.gameObject.SetActive(false);
+        }
         if (_lockOnSystem != null)
         {
             for (int i = 0; i < _lockOnSystem.TargetList.Count; i++)

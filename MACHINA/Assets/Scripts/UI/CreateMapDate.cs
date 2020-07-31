@@ -19,7 +19,8 @@ public class CreateMapDate : MonoBehaviour
 	RaycastHit hit;
 	[SerializeField]
 	private Material _mat;
-	
+	[SerializeField]
+	private bool _debug = false;
 
 	// Start is called before the first frame update
 	void Start()
@@ -67,7 +68,10 @@ public class CreateMapDate : MonoBehaviour
 		_mat.mainTexture = _drawTexture;
 		Debug.Log("終了");
 		Time.timeScale = 1;
-		SceneCtl.instance.AddScene("GameUI");
+		if (!_debug)
+		{
+			SceneCtl.instance.AddScene("GameUI");
+		}
 		yield return null;
 	}
 

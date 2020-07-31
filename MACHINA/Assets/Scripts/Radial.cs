@@ -6,10 +6,10 @@ using UnityEngine;
 public class Radial : MonoBehaviour
 {
     [SerializeField]
-    private Shader _shader;
+    private Shader _shader = null;
     [SerializeField, Range(4, 16)]
     private int _sampleCount = 8;
-    [SerializeField, Range(0.0f, 1.0f)]
+    [SerializeField, Range(0.0f, 1.0f), Tooltip("ブラーの度合い")]
     private float _strength = 0.5f;
     public float Strength
     {

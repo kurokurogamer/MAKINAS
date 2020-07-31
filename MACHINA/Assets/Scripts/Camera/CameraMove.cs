@@ -6,7 +6,8 @@ public class CameraMove : MonoBehaviour
 {
 	[SerializeField]
 	private float _speed = 1;
-	private Vector2 Axis;
+	private Vector2 _rightAxis;
+	private Vector2 _leftAxis;
 
 	[SerializeField]
 	private float _moveSpeed = 1.0f;
@@ -21,9 +22,9 @@ public class CameraMove : MonoBehaviour
 	//private RectTransform _cursor = null;
 	private Vector3 _firstPos = Vector3.zero;
 	[SerializeField]
-	private bool _LeftRightMode;
+	private bool _LeftRightMode = false;
 	[SerializeField]
-	private Vector3 _offset;
+	private Vector3 _offset = Vector3.zero;
 	private void Awake()
 	{
 		//_firstPos = _cursor.position;
@@ -31,28 +32,35 @@ public class CameraMove : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		Axis = Vector2.zero;
+		_rightAxis = Vector2.zero;
+		_leftAxis = Vector2.zero;
 	}
 
 	private void Rotate()
 	{
-		Axis.x = Input.GetAxis("Horizontal2");
-		Axis.y = Input.GetAxis("Vertical2");
-		transform.RotateAround(_posTarget.transform.position, Vector3.up, Axis.x * _rotSpeed);
+		transform.RotateAround(_posTarget.transform.position, Vector3.up, _rightAxis.x * _rotSpeed);
+		if(_rightAxis.x >= 0.1f && _leftAxis.x == 0&& _leftAxis.y == 0)
+		{
+			_LeftRightMode = false;
+		}
+		if (_rightAxis.x <= -0.1f && _leftAxis.x == 0 && _leftAxis.y == 0)
+		{
+			_LeftRightMode = true;
+		}
 		Vector3 pos = Vector3.zero;
-		if(Axis.x > 0.1f)
+		if(_rightAxis.x > 0.1f)
 		{
 			pos += new Vector3(50, 0, 0);
 		}
-		else if (Axis.x < -0.1f)
+		else if (_rightAxis.x < -0.1f)
 		{
 			pos += new Vector3(-50, 0, 0);
 		}
-		if (Axis.y > 0.5f)
+		if (_rightAxis.y > 0.5f)
 		{
 			pos += new Vector3(0, 50, 0);
 		}
-		else if (Axis.y < -0.5f)
+		else if (_rightAxis.y < -0.5f)
 		{
 			pos += new Vector3(0, -50, 0);
 		}
@@ -65,12 +73,13 @@ public class CameraMove : MonoBehaviour
 		//transform.position = _posTarget.transform.position + _point;
 		if (_LeftRightMode)
 		{
-			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position + _offset, Time.deltaTime * _moveSpeed);
+			_posTarget.transform.localPosition = new Vector3(-_offset.x, _offset.y, _offset.z);
+			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
 		}
 		else
 		{
-			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position + new Vector3(-_offset.x,_offset.y,_offset.z), Time.deltaTime * _moveSpeed);
-
+			_posTarget.transform.localPosition = _offset;
+			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
 		}
 		//transform.position = Vector3.MoveTowards(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
 	}
@@ -86,10 +95,31 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		Debug.Log("処理中");
+		_leftAxis.x = Input.GetAxis("Horizontal");
+		_leftAxis.y = Input.GetAxis("Vertical");
+		if (Input.GetKey(KeyCode.Alpha4))
+		{
+			_leftAxis.x = 1;
+		}
+		if (Input.GetKey(KeyCode.Alpha6))
+		{
+			_leftAxis.x = -1;
+		}
 
-    }
+		_rightAxis.x = Input.GetAxis("Horizontal2");
+		_rightAxis.y = Input.GetAxis("Vertical2");
+		if (Input.GetKey(KeyCode.Alpha3))
+		{
+			_rightAxis.x = 1;
+		}
+		if (Input.GetKey(KeyCode.Alpha1))
+		{
+			_rightAxis.x = -1;
+		}
+	}
 
-    private void LateUpdate()
+	private void LateUpdate()
     {
         LockOn();
     }

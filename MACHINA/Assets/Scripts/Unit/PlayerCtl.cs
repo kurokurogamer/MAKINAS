@@ -9,13 +9,7 @@ public class PlayerCtl : UnitControl
 	private Vector2 _stickRight;
 	private float _triggerLR;
 	private Vector3 _rot;
-	//[SerializeField, Tooltip("ロックオンUI")]
-	//private GameObject _lockOnUi = null;
-	//[SerializeField, Tooltip("スキャンUI")]
-	////private GameObject _scanUi = null;
 
-	//[SerializeField]
-	//private RectTransform _circle;
 	private Vector2 _circleForce;
 
     protected override void Start()
@@ -33,6 +27,7 @@ public class PlayerCtl : UnitControl
 	// ファイルからボタン情報を取得
 	private void SetButton()
 	{
+		//
 	}
 
 	private void InputSet()
@@ -67,7 +62,7 @@ public class PlayerCtl : UnitControl
 			Jump();
 		}
 
-		if (Input.GetButtonDown("RStickPush"))
+		if (Input.GetButtonDown("RStickPush") || Input.GetKeyDown(KeyCode.M))
 		{
 			//_lockOnUi.SetActive(_scanUi.activeInHierarchy);
 			//_scanUi.SetActive(!_scanUi.activeInHierarchy);
@@ -78,22 +73,19 @@ public class PlayerCtl : UnitControl
 			ChangeMode();
 		}
 
-		//if(!_lockOnUi.activeInHierarchy)
-		//{
-		//	return;
-		//}
 
-		if (_triggerLR <= -0.1f || Input.GetKey(KeyCode.X))
+
+		if (_triggerLR <= -0.1f || Input.GetKey(KeyCode.Z))
 		{
 			_weaponList[0].Attack();
 		}
 
-		if (_triggerLR >= 0.1f || Input.GetKey(KeyCode.Z))
+		if (_triggerLR >= 0.1f || Input.GetKey(KeyCode.X))
 		{
 			_weaponList[1].Attack();
 		}
 
-		if (Input.GetButton("RB") || Input.GetKey(KeyCode.A))
+		if (Input.GetButton("RB") || Input.GetKey(KeyCode.C))
 		{
 			_weaponList[2].Attack();
 		}

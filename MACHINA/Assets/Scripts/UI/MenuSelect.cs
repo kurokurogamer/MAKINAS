@@ -185,8 +185,6 @@ public class MenuSelect : MonoBehaviour
 				_cursorText.text = _menuTextList[_id].text;
 			}
 
-			// インターバル分戻す
-			//_nowTime -= _interval;
 			_nowTime = 0;
 			return true;
 		}
