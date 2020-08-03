@@ -12,7 +12,7 @@ public class SceneCtl : MonoBehaviour
 	[SerializeField, Tooltip("黒背景")]
 	private GameObject _fadeUI = null;
 	[SerializeField, Tooltip("回転イメージ")]
-	private GameObject _image = null;
+	private List<GameObject> _ui = null;
 	private FadeUI _back;
 	private Coroutine _coroutine;
 
@@ -33,7 +33,10 @@ public class SceneCtl : MonoBehaviour
 	void Start()
     {
 		_coroutine = null;
-		_image.SetActive(false);
+		for(int i =0; i < _ui.Count; i++)
+		{
+			_ui[i].SetActive(false);
+		}
 		_back = _fadeUI.GetComponent<FadeUI>();
     }
 
@@ -53,11 +56,17 @@ public class SceneCtl : MonoBehaviour
 	{
 		_back.Mode = FadeUI.FADE_MODE.IN;	
 		yield return new WaitForSeconds(1.0f);
-		_image.SetActive(true);
+		for (int i = 0; i < _ui.Count; i++)
+		{
+			_ui[i].SetActive(true);
+		}
 		yield return new WaitForSeconds(1.0f);
 		SceneManager.LoadScene(name, LoadSceneMode.Single);
 		yield return new WaitForSeconds(2.0f);
-		_image.SetActive(false);
+		for (int i = 0; i < _ui.Count; i++)
+		{
+			_ui[i].SetActive(false);
+		}
 		_back.Mode = FadeUI.FADE_MODE.OUT;
 		_coroutine = null;
 		yield return null;

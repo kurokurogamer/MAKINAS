@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneChangeButton : MonoBehaviour
+public class SceneButton : MonoBehaviour
 {
 	//private SceneCtl.SceneList _nextScene = SceneCtl.SceneList.TITLE;
 	[SerializeField, Tooltip("SE")]
@@ -11,6 +11,11 @@ public class SceneChangeButton : MonoBehaviour
     void Start()
     {
     }
+
+	public void Active()
+	{
+
+	}
 
 	private void Change()
 	{

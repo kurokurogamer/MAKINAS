@@ -39,6 +39,7 @@ public class MenuSelect : MonoBehaviour
 	[SerializeField, Tooltip("カーソル")]
 	protected RectTransform _cursor = null;
 	private Text _cursorText = null;
+	private SceneButton _button;
 
 	// UI用サウンド
 	protected UIAudio _uiAudio;
@@ -202,7 +203,10 @@ public class MenuSelect : MonoBehaviour
 		{
 			// 決定ボタンを押したときの処理
 			AudioManager.instance.PlaySE(_uiAudio.PushSE);
-			SceneCtl.instance.LoadScene("GameScene2");
+			if (_button)
+			{
+				_button.Change(0);
+			}
 		}
 	}
 
