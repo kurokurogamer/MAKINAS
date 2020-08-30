@@ -15,10 +15,13 @@ public class UnitControl : MonoBehaviour
 	}
 
 	// 物理挙動操作変数
+	[SerializeField]
 	private Rigidbody _rigid;
 	// アニメーション操作変数
+	[SerializeField]
 	private Animator _animator;
 	// 放射状ブラー操作用変数
+	[SerializeField]
 	private Radial _radial;
 
 	// 加わる最終的な力
@@ -35,8 +38,6 @@ public class UnitControl : MonoBehaviour
 	[SerializeField]
 	private LayerMask _layerMask = 0;
 
-	[SerializeField, Tooltip("移動エフェクト")]
-	private ParticleSystem _walkEffect = null;
 	[SerializeField, Tooltip("ホバーエフェクト")]
 	private ParticleSystem _boostEffect = null;
 	[SerializeField, Tooltip("移動エフェクト")]
@@ -65,8 +66,10 @@ public class UnitControl : MonoBehaviour
 	// Use this for initialization
 	protected virtual void Start()
 	{
-		_rigid = GetComponent<Rigidbody>();
-		_animator = GetComponent<Animator>();
+		_mode = UNIT_MODE.WAIK;
+		_boost.SetAnimation(true);
+		//_rigid = GetComponent<Rigidbody>();
+		//_animator = GetComponent<Animator>();
 		_radial = Camera.main.GetComponent<Radial>();
 
 		_lastForce = Vector3.zero;
@@ -215,8 +218,10 @@ public class UnitControl : MonoBehaviour
 		}
 		else if (_mode == UNIT_MODE.HOVER)
 		{
-			Debug.Log("歩行モード");
-			_mode = UNIT_MODE.BOOST;
+			//Debug.Log("歩行モード");
+			//_mode = UNIT_MODE.BOOST;
+			_mode = UNIT_MODE.WAIK;
+			_boost.SetAnimation(false);
 		}
 		else
 		{

@@ -6,6 +6,7 @@ public class BoostEffect : MonoBehaviour
 {
     [SerializeField]
     private ParticleSystem[] _particles;
+	[SerializeField]
     private Animator _animator;
 
     // Start is called before the first frame update

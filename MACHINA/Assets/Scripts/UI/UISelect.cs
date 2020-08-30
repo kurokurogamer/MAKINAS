@@ -35,7 +35,6 @@ public class UISelect : MenuSelect
 		{
 			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
 			_startUI.gameObject.SetActive(false);
-			_backUI.SetActive(true);
 		}
 		// 決定ボタンを押したときの処理
 		else if (Input.GetButtonDown("Fire2"))

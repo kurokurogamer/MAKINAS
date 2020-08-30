@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 2935761}
   - component: {fileID: 2935760}
   - component: {fileID: 2935762}
+  - component: {fileID: 2935763}
   m_Layer: 5
   m_Name: Button1
   m_TagString: Button
@@ -216,6 +217,19 @@ MonoBehaviour:
   _gage:
     min: 0
     max: 1
+--- !u!114 &2935763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad74ddf6cb8433946bfae6d424adc388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scnenName: MenuScene2
 --- !u!1 &766523316
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,7 +300,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Option
+  m_Text: '???
+
+'
 --- !u!222 &766523319
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -421,6 +437,7 @@ GameObject:
   - component: {fileID: 1480916573}
   - component: {fileID: 1480916572}
   - component: {fileID: 1480916574}
+  - component: {fileID: 1480916575}
   m_Layer: 5
   m_Name: Button2
   m_TagString: Button
@@ -504,6 +521,19 @@ MonoBehaviour:
   _gage:
     min: 0
     max: 1
+--- !u!114 &1480916575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1480916570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad74ddf6cb8433946bfae6d424adc388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scnenName: 
 --- !u!1 &1673976714
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,8 +830,7 @@ MonoBehaviour:
   offset: {x: 0, y: -25, z: 0}
   _delay: 1
   _interval: 0.2
-  _backUI: {fileID: 0}
-  _addScene: 
+  _addScene: []
   _cursor: {fileID: 770767211}
 --- !u!1 &1713934119
 GameObject:
@@ -815,6 +844,7 @@ GameObject:
   - component: {fileID: 1713934122}
   - component: {fileID: 1713934121}
   - component: {fileID: 1713934123}
+  - component: {fileID: 1713934124}
   m_Layer: 5
   m_Name: Button3
   m_TagString: Button
@@ -898,6 +928,19 @@ MonoBehaviour:
   _gage:
     min: 0
     max: 1
+--- !u!114 &1713934124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713934119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad74ddf6cb8433946bfae6d424adc388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scnenName: 
 --- !u!1 &1821543918
 GameObject:
   m_ObjectHideFlags: 0

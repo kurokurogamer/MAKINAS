@@ -27,19 +27,15 @@ public class MenuSelect : MonoBehaviour
 	private float _nowTime;
 	private float _nowTimeDelay;
 
-	[SerializeField, Tooltip("一つ前のメニュー項目")]
-	protected GameObject _backUI = null;
 	protected MenuSelect _startUI = null;
-	[SerializeField, Tooltip("シーンの名前")]
-	protected List<string> _addScene = new List<string>();
 
 	protected List<RectTransform> _menuList;
+	protected List<ButtonAction> _buttonList;
 	protected List<Text> _menuTextList;
 
 	[SerializeField, Tooltip("カーソル")]
 	protected RectTransform _cursor = null;
 	private Text _cursorText = null;
-	private SceneButton _button;
 
 	// UI用サウンド
 	protected UIAudio _uiAudio;
@@ -62,11 +58,13 @@ public class MenuSelect : MonoBehaviour
 		_uiAudio = transform.root.GetComponent<UIAudio>();
 		_menuList = new List<RectTransform>();
 		_menuTextList = new List<Text>();
+		_buttonList = new List<ButtonAction>();
 		foreach (RectTransform menu in transform)
 		{
 			// TagがButtonの子オブジェクトをすべて取得する
 			if (menu.tag == "Button" && menu.TryGetComponent(out RectTransform rect))
 			{
+				_buttonList.Add(rect.GetComponent<ButtonAction>());
 				_menuList.Add(rect);
 				// メニュー項目のテキストを取得
 				foreach(Transform child in menu)
@@ -203,10 +201,7 @@ public class MenuSelect : MonoBehaviour
 		{
 			// 決定ボタンを押したときの処理
 			AudioManager.instance.PlaySE(_uiAudio.PushSE);
-			if (_button)
-			{
-				_button.Change(0);
-			}
+			_buttonList[_id].Active();
 		}
 	}
 

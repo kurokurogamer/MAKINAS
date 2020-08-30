@@ -25,12 +25,18 @@ public class CreateMapDate : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		StartCoroutine(SetMapDate());
+		SceneCtl.instance.AddScene("GameUI");
+
+		//StartCoroutine(SetMapDate());
 	}
 
 	private IEnumerator SetMapDate()
 	{
 		Time.timeScale = 0;
+		SceneCtl.instance.AddScene("GameUI");
+		if (_debug)
+		{
+		}
 
 		Debug.Log("開始");
 		_drawTexture = new Texture2D(_texture.width, _texture.height, TextureFormat.RGBA32, false);

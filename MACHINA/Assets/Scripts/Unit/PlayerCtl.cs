@@ -68,7 +68,7 @@ public class PlayerCtl : UnitControl
 			//_scanUi.SetActive(!_scanUi.activeInHierarchy);
 		}
 
-		if (Input.GetButtonDown("LStickPush") || Input.GetButtonDown("LB") || Input.GetKeyDown(KeyCode.B))
+		if (/*Input.GetButtonDown("LStickPush") || */Input.GetButtonDown("LB") || Input.GetKeyDown(KeyCode.B))
 		{
 			ChangeMode();
 		}
@@ -80,14 +80,14 @@ public class PlayerCtl : UnitControl
 			_weaponList[0].Attack();
 		}
 
-		if (_triggerLR >= 0.1f || Input.GetKey(KeyCode.X))
-		{
-			_weaponList[1].Attack();
-		}
+		//if (_triggerLR >= 0.1f || Input.GetKey(KeyCode.X))
+		//{
+		//}
 
 		if (Input.GetButton("RB") || Input.GetKey(KeyCode.C))
 		{
-			_weaponList[2].Attack();
+						_weaponList[1].Attack();
+//_weaponList[2].Attack();
 		}
 
 		if(Input.GetKeyDown(KeyCode.Q))

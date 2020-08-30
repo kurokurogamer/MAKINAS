@@ -12,7 +12,7 @@ public class LockOnUI : MonoBehaviour
 	[SerializeField, Tooltip("非ターゲット時カラー")]
 	private Color _color2 = Color.green;
 	[SerializeField, Tooltip("カーソルのプレハブ")]
-	private Image _cursor = null;
+	private GameObject _cursor = null;
     private List<GameObject> _cursorList = new List<GameObject>();
 
     // Use this for initialization
@@ -29,40 +29,41 @@ public class LockOnUI : MonoBehaviour
             // ターゲットの数よりカーソルの数が少なければ
             while (_cursorList.Count < _lockOnSystem.TargetList.Count)
             {
-                Debug.Log("Cursorの生成");
-                Debug.Log(_cursorList.Count + "カーソル");
-                Debug.Log(_lockOnSystem.TargetList.Count + "画面内の敵数");
-
+				Debug.Log(_lockOnSystem.TargetList.Count + "画面内の敵数");
                 GameObject cursor = Instantiate(_cursor.gameObject);
                 cursor.transform.SetParent(transform);
                 _cursorList.Add(cursor);
+				_cursorList[0].GetComponent<Image>().color = _color1;
             }
         }
-        if (0 < _lockOnSystem.GetNowTime)
-        {
-            _cursor.gameObject.SetActive(true);
-            if (_lockOnSystem.GetIsLockOn)
-            {
-                // ロックオン完了
-                _cursor.color = _color1;
-            }
-            else
-            {
-                // ロックオン中
-                _cursor.color = _color2;
-            }
-        }
-        else
-        {
-            _cursor.gameObject.SetActive(false);
-        }
+
         if (_lockOnSystem != null)
         {
+			for(int i = 0; i < _cursorList.Count; i++)
+			{
+				_cursorList[i].SetActive(false);
+			}
             for (int i = 0; i < _lockOnSystem.TargetList.Count; i++)
             {
-                Vector2 postion = RectTransformUtility.WorldToScreenPoint(Camera.main, _lockOnSystem.TargetList[i].transform.position);
-                // カーソルの移動
-                _cursorList[i].transform.position = new Vector3(postion.x, postion.y, 0f);
+				// 敵のワールド座標をスクリーン座標に変換し代入
+				Vector2 postion = RectTransformUtility.WorldToScreenPoint(Camera.main, _lockOnSystem.TargetList[i].transform.position);
+
+				_cursorList[i].SetActive(true);
+
+				if (_lockOnSystem.GetTarget == _lockOnSystem.TargetList[i])
+				{
+					// カーソルの位置に座標を代入する
+					_cursorList[0].transform.position = new Vector3(postion.x, postion.y, 0f);
+					if (_lockOnSystem.TargetList.Count <= _cursorList.Count)
+					{
+						_cursorList[_lockOnSystem.TargetList.Count-1].transform.position = new Vector3(postion.x, postion.y, 0f);
+					}
+				}
+				else
+				{
+					// カーソルの位置に座標を代入する
+					_cursorList[i].transform.position = new Vector3(postion.x, postion.y, 0f);
+				}
             }
         }
     }

@@ -72,19 +72,22 @@ public class LockOnSystem : MonoBehaviour
         {
             if (Physics.Linecast(_player.transform.position, target.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
             {
+				Debug.Log("確認中");
                 _screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
                 _screenPoint.x = _screenPoint.x - (Screen.width / 2);
                 _screenPoint.y = _screenPoint.y - (Screen.height / 2);
                 if (_screenPoint.magnitude <= centerPoint)
                 {
-                    centerPoint = _screenPoint.magnitude;
+					Debug.Log("Circle内");
+
+					centerPoint = _screenPoint.magnitude;
                     targetFlag = true;
                     distance = Vector3.Distance(target.transform.position, _player.transform.position);
                     //_text.text = distance.ToString("000.00");
-                    if (_target == null)
-                    {
+                    //if (_target == null)
+                    //{
                         _target = target;
-                    }
+                    //}
                 }
             }
         }

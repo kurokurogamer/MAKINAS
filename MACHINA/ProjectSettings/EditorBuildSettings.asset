@@ -18,6 +18,24 @@ EditorBuildSettings:
     path: Assets/Scenes/CharacterScene.unity
     guid: 705c9575efa61144898e24ca8450963b
   - enabled: 1
+    path: Assets/Scenes/UI/Clear.unity
+    guid: eaf71b2ed7e345a48a76f0ec9dd44214
+  - enabled: 1
+    path: Assets/Scenes/UI/Config.unity
+    guid: a07f8c2bb4cf839469706b9a20cffae5
+  - enabled: 1
+    path: Assets/Scenes/UI/Hangar.unity
+    guid: b451475104307e24dab9c4f3429f3673
+  - enabled: 1
+    path: Assets/Scenes/UI/Mission.unity
+    guid: 3b3de6f67ec5f824384f9dc664271e9f
+  - enabled: 1
+    path: Assets/Scenes/UI/Sound.unity
+    guid: 91c56cfe81479134894b5e187d6b0b01
+  - enabled: 1
+    path: Assets/Scenes/UI/SystemOption.unity
+    guid: d2c81252456d1b04b818d0f67c031891
+  - enabled: 1
     path: Assets/Scenes/Stage/Stage1.unity
     guid: 70fdb75240d6e20429c5be41995af599
   - enabled: 1
@@ -29,6 +47,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene2.unity
     guid: 317cce99d4b05924b85832a5c8fa97a3
+  - enabled: 1
+    path: Assets/Scenes/MenuScene2.unity
+    guid: d0df70d7f3b126d4a9ec1de8c67c36b3
   - enabled: 1
     path: Assets/Scenes/UI/GameUI.unity
     guid: b04eaa828d7cfae499bc1c77e338884d

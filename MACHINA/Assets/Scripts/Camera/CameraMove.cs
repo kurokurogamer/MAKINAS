@@ -47,41 +47,20 @@ public class CameraMove : MonoBehaviour
 		{
 			_LeftRightMode = true;
 		}
-		Vector3 pos = Vector3.zero;
-		if(_rightAxis.x > 0.1f)
-		{
-			pos += new Vector3(50, 0, 0);
-		}
-		else if (_rightAxis.x < -0.1f)
-		{
-			pos += new Vector3(-50, 0, 0);
-		}
-		if (_rightAxis.y > 0.5f)
-		{
-			pos += new Vector3(0, 50, 0);
-		}
-		else if (_rightAxis.y < -0.5f)
-		{
-			pos += new Vector3(0, -50, 0);
-		}
-
-		//_cursor.position = Vector3.Lerp(_cursor.position, _firstPos + pos, Time.deltaTime * 10);
 	}
 
     private void Move()
     {
-		//transform.position = _posTarget.transform.position + _point;
 		if (_LeftRightMode)
 		{
 			_posTarget.transform.localPosition = new Vector3(-_offset.x, _offset.y, _offset.z);
-			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
+			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _speed);
 		}
 		else
 		{
 			_posTarget.transform.localPosition = _offset;
-			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
+			transform.position = Vector3.Lerp(transform.position, _posTarget.transform.position, Time.deltaTime * _speed);
 		}
-		//transform.position = Vector3.MoveTowards(transform.position, _posTarget.transform.position, Time.deltaTime * _moveSpeed);
 	}
 
 	private void LockOn()

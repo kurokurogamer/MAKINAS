@@ -129,7 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _point: {fileID: 6954308136011337655}
-  _secondPoint: {fileID: 8529133173120845476}
+  _subRotate: {x: 0, y: 0, z: 0}
+  _mode: 0
 --- !u!1 &2640162199887377308
 GameObject:
   m_ObjectHideFlags: 0
