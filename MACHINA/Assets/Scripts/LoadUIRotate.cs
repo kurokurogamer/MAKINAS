@@ -22,6 +22,7 @@ public class LoadUIRotate : MonoBehaviour
     private void OnEnable()
     {
         _nowTime = 0;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     // Update is called once per frame

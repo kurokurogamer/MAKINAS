@@ -25,13 +25,13 @@ public class ObjRotate : MonoBehaviour
         switch (_type)
         {
             case ROTATE_TYPE.X:
-                transform.Rotate(_speed * Time.unscaledDeltaTime, 0, 0);
+                transform.rotation = Quaternion.Euler(_speed * Time.time, transform.eulerAngles.y, transform.eulerAngles.z);
                 break;
             case ROTATE_TYPE.Y:
-                transform.Rotate(0, _speed * Time.unscaledDeltaTime, 0);
+                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, _speed * Time.time, transform.eulerAngles.z);
                 break;
             case ROTATE_TYPE.Z:
-                transform.Rotate(0, 0, _speed * Time.unscaledDeltaTime);
+                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, _speed * Time.time);
                 break;
             case ROTATE_TYPE.MAX:
                 break;
