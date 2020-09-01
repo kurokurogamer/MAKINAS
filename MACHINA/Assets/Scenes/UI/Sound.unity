@@ -695,7 +695,6 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0}
   _delay: 1
   _interval: 0.2
-  _backUI: {fileID: 0}
   _cursor: {fileID: 828011339}
 --- !u!1 &372403920
 GameObject:
@@ -2398,6 +2397,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1354400927}
   - component: {fileID: 1354400926}
+  - component: {fileID: 1354400925}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2405,6 +2405,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1354400925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354400924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb5138cb374013e45b5cbdd5aeafc9fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &1354400926
 Camera:
   m_ObjectHideFlags: 0

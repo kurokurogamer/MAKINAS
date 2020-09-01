@@ -22,16 +22,17 @@ public class ObjRotate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 rot = transform.eulerAngles;
         switch (_type)
         {
             case ROTATE_TYPE.X:
-                transform.rotation = Quaternion.Euler(_speed * Time.time, transform.eulerAngles.y, transform.eulerAngles.z);
+                transform.rotation = Quaternion.Euler(_speed * Time.time, rot.y, rot.z);
                 break;
             case ROTATE_TYPE.Y:
-                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, _speed * Time.time, transform.eulerAngles.z);
+                transform.rotation = Quaternion.Euler(rot.x, _speed * Time.time, rot.z);
                 break;
             case ROTATE_TYPE.Z:
-                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, _speed * Time.time);
+                transform.rotation = Quaternion.Euler(rot.x, rot.y, _speed * Time.time);
                 break;
             case ROTATE_TYPE.MAX:
                 break;

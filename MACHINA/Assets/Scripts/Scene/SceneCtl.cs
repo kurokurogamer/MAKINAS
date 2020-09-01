@@ -87,9 +87,15 @@ public class SceneCtl : MonoBehaviour
 		SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
 	}
 
-	public void UnLoadScene(Scene scene)
+	public void UnLoadScene(string name)
 	{
-		SceneManager.UnloadSceneAsync(scene);
+		for (int i = 0; i < SceneManager.sceneCount; i++)
+		{
+			if (name == SceneManager.GetSceneAt(i).name)
+			{
+				SceneManager.UnloadSceneAsync(name);
+			}
+		}
 	}
 
 	// Update is called once per frame

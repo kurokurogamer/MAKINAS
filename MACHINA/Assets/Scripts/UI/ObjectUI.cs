@@ -13,6 +13,14 @@ public class ObjectUI : MonoBehaviour
     private string _objectName = "未定";
     [SerializeField, Tooltip("オフセット")]
     private Vector3[] _offset = new Vector3[2];
+    [SerializeField, Tooltip("追加シーン名")]
+    private string _sceneName = "";
+    [SerializeField]
+    private GameObject _blurObj = null;
+    [SerializeField]
+    private FadeUI _fadeUi = null;
+
+
     // UI表示の有効判定
     private bool _active = true;
     public bool Active
@@ -35,6 +43,22 @@ public class ObjectUI : MonoBehaviour
         }
     }
 
+    private void CheckButton()
+    {
+        if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.X))
+        {
+            //SceneCtl.instance.UnLoadScene(_sceneName);
+            _blurObj.SetActive(true);
+            _fadeUi.Mode = FadeUI.FADE_MODE.IN;
+            //Time.timeScale = 0;
+            if (_sceneName != "")
+            {
+                //SceneCtl.instance.AddScene(_sceneName);
+            }
+        }
+    }
+
+
     private void OnTriggerStay(Collider other)
     {
         if(other.tag != "Player")
@@ -55,6 +79,7 @@ public class ObjectUI : MonoBehaviour
         _text.transform.position = new Vector3(postion2.x, postion2.y, 0f);
         // オブジェクト名を反映
         _text.text = _objectName;
+        CheckButton();
     }
 
     private void OnTriggerExit(Collider other)
