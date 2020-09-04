@@ -600,6 +600,7 @@ MonoBehaviour:
   _type: 0
   _color: {r: 1, g: 0.5019608, b: 0, a: 1}
   _collider: {fileID: 0}
+  _sphere: {fileID: 0}
 --- !u!4 &114047249
 Transform:
   m_ObjectHideFlags: 0
@@ -829,6 +830,7 @@ MonoBehaviour:
   _type: 0
   _color: {r: 1, g: 0, b: 0, a: 1}
   _collider: {fileID: 0}
+  _sphere: {fileID: 0}
 --- !u!1 &139164962
 GameObject:
   m_ObjectHideFlags: 0
@@ -11030,6 +11032,7 @@ MonoBehaviour:
   _type: 0
   _color: {r: 0.5019608, g: 1, b: 0.5019608, a: 0.5019608}
   _collider: {fileID: 617485204}
+  _sphere: {fileID: 0}
 --- !u!1 &618201634
 GameObject:
   m_ObjectHideFlags: 0
@@ -37924,6 +37927,7 @@ MonoBehaviour:
   _type: 1
   _color: {r: 0.07539296, g: 1, b: 0, a: 1}
   _collider: {fileID: 0}
+  _sphere: {fileID: 0}
 --- !u!1 &1244213363
 GameObject:
   m_ObjectHideFlags: 0
@@ -57874,6 +57878,7 @@ MonoBehaviour:
   _type: 0
   _color: {r: 0, g: 1, b: 1, a: 1}
   _collider: {fileID: 0}
+  _sphere: {fileID: 0}
 --- !u!1 &1606657174 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1221449496419812, guid: 26b1a3466d0b8f341bcc73e6ab2937eb,

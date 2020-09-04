@@ -42,6 +42,7 @@ public class SceneCtl : MonoBehaviour
 
 	public void LoadScene(string name)
 	{
+		Debug.Log("シーンをロードします");
 		if (name == "")
 		{
 			return;
