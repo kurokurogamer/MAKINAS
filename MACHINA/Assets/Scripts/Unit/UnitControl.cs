@@ -67,7 +67,7 @@ public class UnitControl : MonoBehaviour
 	protected virtual void Start()
 	{
 		_mode = UNIT_MODE.WAIK;
-		_boost.SetAnimation(true);
+		_boost.SetAnimation(false);
 		//_rigid = GetComponent<Rigidbody>();
 		//_animator = GetComponent<Animator>();
 		_radial = Camera.main.GetComponent<Radial>();

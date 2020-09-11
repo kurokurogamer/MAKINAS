@@ -36,6 +36,8 @@ public class MenuSelect : MonoBehaviour
 	[SerializeField, Tooltip("カーソル")]
 	protected RectTransform _cursor = null;
 	private Text _cursorText = null;
+	[SerializeField]
+	private string _sceneName;
 
 	// UI用サウンド
 	protected UIAudio _uiAudio;
@@ -197,6 +199,10 @@ public class MenuSelect : MonoBehaviour
 		{
 			// キャンセルサウンドを鳴らす
 			AudioManager.instance.PlaySE(_uiAudio.CancelSE);
+			if (_sceneName != "")
+			{
+				SceneCtl.instance.UnLoadScene(_sceneName);
+			}
 		}
 		else if (Input.GetButtonDown("Fire2") || Input.GetKeyDown(KeyCode.O))
 		{

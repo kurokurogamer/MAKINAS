@@ -14,7 +14,6 @@ public class ButtonAction : MonoBehaviour
 	public void Active()
 	{
 		SceneCtl.instance.LoadScene(_scnenName);
-
 	}
 
 }

@@ -19,7 +19,10 @@ public class ObjectUI : MonoBehaviour
     private GameObject _blurObj = null;
     [SerializeField]
     private FadeUI _fadeUi = null;
-
+	private bool _check = false;
+	private bool _drive = false;
+	[SerializeField]
+	private CharCtr _chraCtr = null;
 
     // UI表示の有効判定
     private bool _active = true;
@@ -41,25 +44,33 @@ public class ObjectUI : MonoBehaviour
             _ui.SetActive(false);
             _text.gameObject.SetActive(false);
         }
-    }
+		CheckButton();
+	}
 
-    private void CheckButton()
-    {
-        if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.X))
-        {
-            //SceneCtl.instance.UnLoadScene(_sceneName);
-            _blurObj.SetActive(true);
-            _fadeUi.Mode = FadeUI.FADE_MODE.IN;
-            //Time.timeScale = 0;
-            if (_sceneName != "")
-            {
-                //SceneCtl.instance.AddScene(_sceneName);
-            }
-        }
-    }
+	private void CheckButton()
+	{
+		if (Input.GetButtonDown("Fire2") || Input.GetKeyDown(KeyCode.X))
+		{
+			if (_sceneName != "" && !_drive && _check)
+			{
+				//SceneCtl.instance.UnLoadScene(_sceneName);
+				_blurObj.SetActive(true);
+				_fadeUi.Mode = FadeUI.FADE_MODE.IN;
+				//Time.timeScale = 0;
+				_drive = true;
+				SceneCtl.instance.AddScene(_sceneName);
+			}
+		}
 
+		if(Input.GetButtonDown("Fire1"))
+		{
+			_drive = false;
+			_blurObj.SetActive(false);
+			_fadeUi.Mode = FadeUI.FADE_MODE.OUT;
+		}
+	}
 
-    private void OnTriggerStay(Collider other)
+	private void OnTriggerStay(Collider other)
     {
         if(other.tag != "Player")
         {
@@ -69,7 +80,9 @@ public class ObjectUI : MonoBehaviour
         {
             return;
         }
-        _ui.SetActive(true);
+
+		_check = true;
+		_ui.SetActive(true);
         _text.gameObject.SetActive(true);
         // 敵のワールド座標をスクリーン座標に変換し代入
         Vector2 postion1 = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position + _offset[0]);
@@ -79,12 +92,18 @@ public class ObjectUI : MonoBehaviour
         _text.transform.position = new Vector3(postion2.x, postion2.y, 0f);
         // オブジェクト名を反映
         _text.text = _objectName;
-        CheckButton();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _ui.SetActive(false);
+		if (other.tag != "Player")
+		{
+			return;
+		}
+
+		_check = false;
+
+		_ui.SetActive(false);
         _text.gameObject.SetActive(false);
     }
 }

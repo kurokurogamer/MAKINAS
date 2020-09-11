@@ -49,9 +49,23 @@ public class ShotObj : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		Debug.Log("衝突");
+		Debug.Log(other.tag);
 		if (other.transform.root.tag == _tagName)
 		{
-			var hp = other.transform.root.GetComponent<HitPoint>();
+			Debug.Log(_tagName);
+
+			HitPoint hp = null;
+			if (_tagName == "Enemy")
+			{
+				hp = other.transform.GetComponent<HitPoint>();
+
+			}
+			else if(_tagName == "Player")
+			{
+				hp = other.transform.root.GetComponent<HitPoint>();
+			}
+			Debug.Log(hp.gameObject);
 			hp.Damage(_damage, _type);
 			if (_particle)
 			{

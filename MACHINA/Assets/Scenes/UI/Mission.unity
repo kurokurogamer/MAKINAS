@@ -1155,7 +1155,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u5360\u62E0\u4F5C\u62261"
+  m_Text: "\u6226\u8266\u7834\u58CA\u4F5C\u6226"
 --- !u!222 &324947294
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1924,6 +1924,7 @@ MonoBehaviour:
   _delay: 1
   _interval: 0.2
   _cursor: {fileID: 1102795513}
+  _sceneName: Mission
 --- !u!114 &764350279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4187,7 +4188,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u62E0\u70B9\u5236\u5727\u6226"
+  m_Text: "\u62E0\u70B9\u5236\u57271"
 --- !u!222 &1755996642
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4265,7 +4266,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u7269\u8CC7\u56DE\u53CE\u4EFB\u52D9"
+  m_Text: "\u62E0\u70B9\u5236\u5727"
 --- !u!222 &1780656116
 CanvasRenderer:
   m_ObjectHideFlags: 0
