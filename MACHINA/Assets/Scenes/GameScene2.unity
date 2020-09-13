@@ -354,6 +354,7 @@ MonoBehaviour:
   _bullet: {fileID: 8530395159668624655, guid: 8e534d72bfa88644583b8dbc009bee06, type: 3}
   _maxAmmo: 100
   _multiple: 3
+  _ammo: 0
   _clip: {fileID: 8300000, guid: b695449e5d9d3a44baf690998aa8a289, type: 3}
   _shotPoint: []
 --- !u!1 &101467571
@@ -6373,6 +6374,7 @@ GameObject:
   - component: {fileID: 963194230}
   - component: {fileID: 963194234}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194233}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -6514,6 +6516,21 @@ MonoBehaviour:
   _shader: {fileID: 4800000, guid: a8ae05627ad55604595111a1af7e03aa, type: 3}
   _sampleCount: 16
   _strength: 0
+--- !u!114 &963194233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c05ff3497608f4782a79533539fc96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hitPoint: {fileID: 0}
+  _weaponList: []
+  _unit: {fileID: 0}
 --- !u!114 &963194234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16711,6 +16728,7 @@ MonoBehaviour:
   _bullet: {fileID: 640881530485266583, guid: 937416dff45be0441b3aa6a5cf1c9393, type: 3}
   _maxAmmo: 60
   _multiple: 1
+  _ammo: 0
   _clip: {fileID: 8300000, guid: 14e949a230a796842815204aab352fc4, type: 3}
   _shotPoint:
   - {fileID: 585738365}
@@ -37404,6 +37422,7 @@ MonoBehaviour:
   _bullet: {fileID: 640881530485266583, guid: 937416dff45be0441b3aa6a5cf1c9393, type: 3}
   _maxAmmo: 60
   _multiple: 1
+  _ammo: 0
   _clip: {fileID: 8300000, guid: 14e949a230a796842815204aab352fc4, type: 3}
   _shotPoint:
   - {fileID: 814843700}

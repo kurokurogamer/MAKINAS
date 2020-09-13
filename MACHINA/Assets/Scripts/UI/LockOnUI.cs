@@ -53,7 +53,7 @@ public class LockOnUI : MonoBehaviour
 
 			float _distance = Vector3.Distance(_lockOnSystem.TargetList[i].transform.position, _lockOnSystem.Player.transform.position);
 
-			if (_distance < 100.0f)
+			if (_distance < 150.0f)
 			{
 				_cursorList[i].SetActive(true);
 

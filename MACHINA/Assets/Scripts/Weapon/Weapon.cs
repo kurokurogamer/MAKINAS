@@ -22,7 +22,7 @@ public class Weapon : MonoBehaviour
 	// 武器のアニメーション
 	protected Animator _animator;
 	// 現在弾数
-	protected int _ammo = 0;
+	public int _ammo = 0;
 	// 現在のリロード時間
 	protected float _nowReloadTime = 0.0f;
 	// 現在の発射感覚時間

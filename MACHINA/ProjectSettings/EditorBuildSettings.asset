@@ -24,6 +24,12 @@ EditorBuildSettings:
     path: Assets/Scenes/UI/Clear.unity
     guid: eaf71b2ed7e345a48a76f0ec9dd44214
   - enabled: 1
+    path: Assets/Scenes/PointMap1.unity
+    guid: 6e2c9a5f81c0c7b44a59bdfd54221532
+  - enabled: 1
+    path: Assets/Scenes/PointMap2.unity
+    guid: 327f65120dfb3934badec06b791b5c28
+  - enabled: 1
     path: Assets/Scenes/UI/Config.unity
     guid: a07f8c2bb4cf839469706b9a20cffae5
   - enabled: 1
@@ -32,6 +38,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/UI/Mission.unity
     guid: 3b3de6f67ec5f824384f9dc664271e9f
+  - enabled: 1
+    path: Assets/Scenes/Enemy1.unity
+    guid: ca4ee973d6c659541b30c1956ad8cca0
+  - enabled: 1
+    path: Assets/Scenes/Enemy2.unity
+    guid: d3b6c50e4a5cf5147978ba6c87f4c17d
+  - enabled: 1
+    path: Assets/Scenes/Enemy3.unity
+    guid: 1824208e1946ab24eb55ebe398005885
+  - enabled: 1
+    path: Assets/Scenes/Enemy4.unity
+    guid: a33d1835ff9da994eba98b7c8b9fdcd5
   - enabled: 1
     path: Assets/Scenes/UI/Sound.unity
     guid: 91c56cfe81479134894b5e187d6b0b01

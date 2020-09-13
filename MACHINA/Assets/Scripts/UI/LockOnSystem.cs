@@ -30,7 +30,7 @@ public class LockOnSystem : MonoBehaviour
 	// 現在の敵との距離
 	private float _distance = 0;
     [SerializeField, Tooltip("ロックオン可能距離")]
-    private float _Maxdistance = 100f;
+    private float _Maxdistance = 150f;
     public float Distance
 	{
 		get { return _distance; }

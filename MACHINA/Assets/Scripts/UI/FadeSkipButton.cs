@@ -12,6 +12,9 @@ public class FadeSkipButton : MonoBehaviour
     private bool _active = true;
     [SerializeField]
     private string _addSceneName = "";
+	[SerializeField]
+	private ButtonAction _buttonAction = null;
+	
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +39,15 @@ public class FadeSkipButton : MonoBehaviour
                 _active = true;
                 if (_addSceneName != "")
                 {
-                    SceneManager.LoadScene(_addSceneName, LoadSceneMode.Additive);
+					if (_buttonAction)
+					{
+						_buttonAction.Active();
+					}
+					else
+					{
+						SceneManager.LoadScene(_addSceneName, LoadSceneMode.Additive);
+
+					}
                 }
                 this.gameObject.SetActive(false);
             }
