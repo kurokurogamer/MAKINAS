@@ -37,15 +37,6 @@ public class MissionSelect : MenuSelect
 		}
 	}
 
-	protected override void Check()
-	{
-		if (Input.GetButtonDown("Fire1"))
-		{
-		}
-		if (Input.GetButtonDown("Fire2"))
-		{
-		}
-	}
 
 	// Update is called once per frame
 	void Update()
@@ -55,6 +46,6 @@ public class MissionSelect : MenuSelect
 		MissionCode();
 
 		Change();
-		Check();
+		base.Check();
 	}
 }

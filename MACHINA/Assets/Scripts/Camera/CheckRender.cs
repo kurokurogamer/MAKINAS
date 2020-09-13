@@ -16,6 +16,7 @@ public class CheckRender : MonoBehaviour
 		_lockOnSystem = Camera.main.GetComponent<LockOnSystem>();
 	}
 
+	// カーソル内のターゲット追加処理
 	private void AddTarget()
 	{
 		if(_lockOnSystem.TargetList.Count > 0 && _isRendFlag)

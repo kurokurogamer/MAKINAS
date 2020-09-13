@@ -69,7 +69,9 @@ public class ShotObj : MonoBehaviour
 			hp.Damage(_damage, _type);
 			if (_particle)
 			{
-				Instantiate(_particle, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();
+				GameObject effect = Instantiate(_particle, transform.position, transform.rotation);
+				effect.GetComponent<ParticleSystem>().Play();
+				Destroy(effect, 2);
 			}
 			AudioManager.instance.PlayOneSE(_clip);
 			if (_stopFlag)

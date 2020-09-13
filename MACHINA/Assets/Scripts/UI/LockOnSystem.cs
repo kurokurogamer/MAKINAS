@@ -11,7 +11,8 @@ public class LockOnSystem : MonoBehaviour
     private GameObject _target = null;
 	[SerializeField, Tooltip("プレイヤー")]
 	private GameObject _player = null;
-    public GameObject Player
+
+	public GameObject Player
     {
         get { return _player; }
     }
@@ -25,9 +26,15 @@ public class LockOnSystem : MonoBehaviour
     private bool _isLockOn;
     [SerializeField, Tooltip("サークルの大きさ")]
     private float _circleScale = 250;
+
+	// 現在の敵との距離
+	private float _distance = 0;
     [SerializeField, Tooltip("ロックオン可能距離")]
-    private float _distance = 100f;
-    public float Distance { set { _distance = value; } }
+    private float _Maxdistance = 100f;
+    public float Distance
+	{
+		get { return _distance; }
+	}
     // ターゲットのスクリーン座標
 	private Vector2 _screenPoint;
     [SerializeField, Tooltip("カメラの範囲")]
@@ -65,30 +72,28 @@ public class LockOnSystem : MonoBehaviour
 		bool targetFlag = false;
 
 		RaycastHit hit;
-		float distance = 0;
+		_distance = 0;
 		float centerPoint = _circleScale;
 
         foreach (GameObject target in _targetList)
         {
             if (Physics.Linecast(_player.transform.position, target.transform.position, out hit, _layer, QueryTriggerInteraction.Ignore))
             {
-				Debug.Log("確認中");
-                _screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
-                _screenPoint.x = _screenPoint.x - (Screen.width / 2);
-                _screenPoint.y = _screenPoint.y - (Screen.height / 2);
-                if (_screenPoint.magnitude <= centerPoint)
-                {
-					Debug.Log("Circle内");
+				_distance = Vector3.Distance(target.transform.position, _player.transform.position);
+				if (_distance <= _Maxdistance)
+				{
+					_screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, target.transform.position);
+					_screenPoint.x = _screenPoint.x - (Screen.width / 2);
+					_screenPoint.y = _screenPoint.y - (Screen.height / 2);
 
-					centerPoint = _screenPoint.magnitude;
-                    targetFlag = true;
-                    distance = Vector3.Distance(target.transform.position, _player.transform.position);
-                    //_text.text = distance.ToString("000.00");
-                    //if (_target == null)
-                    //{
-                        _target = target;
-                    //}
-                }
+					if (_screenPoint.magnitude <= centerPoint)
+					{
+						centerPoint = _screenPoint.magnitude;
+
+						targetFlag = true;
+						_target = target;
+					}
+				}
             }
         }
 
@@ -96,6 +101,20 @@ public class LockOnSystem : MonoBehaviour
 		{
 			_nowTime = 0;
 			_target = null;
+		}
+	}
+
+	// 撃破した敵のリスト削除処理
+	private void NoTarget()
+	{
+		// 現在のターゲット分回す
+		for (int i = TargetList.Count; i > 0; i--)
+		{
+			// アクティブでなくなったら
+			if (TargetList[i - 1].activeInHierarchy == false)
+			{
+				TargetList.Remove(TargetList[i - 1]);
+			}
 		}
 	}
 
@@ -112,6 +131,7 @@ public class LockOnSystem : MonoBehaviour
         {
             _isLockOn = false;
         }
+		NoTarget();
     }
 
     private void OnDrawGizmos()

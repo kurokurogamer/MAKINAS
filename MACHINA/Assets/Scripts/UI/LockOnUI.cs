@@ -14,6 +14,8 @@ public class LockOnUI : MonoBehaviour
 	[SerializeField, Tooltip("カーソルのプレハブ")]
 	private GameObject _cursor = null;
     private List<GameObject> _cursorList = new List<GameObject>();
+	[SerializeField]
+	private RectTransform _ui = null;
 
     // Use this for initialization
     void Start()
@@ -21,52 +23,58 @@ public class LockOnUI : MonoBehaviour
 		_lockOnSystem = Camera.main.GetComponent<LockOnSystem>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(_lockOnSystem)
-        {
-            // ターゲットの数よりカーソルの数が少なければ
-            while (_cursorList.Count < _lockOnSystem.TargetList.Count)
-            {
-				Debug.Log(_lockOnSystem.TargetList.Count + "画面内の敵数");
-                GameObject cursor = Instantiate(_cursor.gameObject);
-                cursor.transform.SetParent(transform);
-                _cursorList.Add(cursor);
-				_cursorList[0].GetComponent<Image>().color = _color1;
-            }
-        }
+	// Update is called once per frame
+	void Update()
+	{
+		if (_lockOnSystem == null)
+		{
+			return;
+		}
 
-        if (_lockOnSystem != null)
-        {
-			for(int i = 0; i < _cursorList.Count; i++)
+
+
+		// ターゲットの数よりカーソルの数が少なければ
+		while (_cursorList.Count < _lockOnSystem.TargetList.Count)
+		{
+			GameObject cursor = Instantiate(_cursor.gameObject);
+			cursor.transform.SetParent(transform);
+			_cursorList.Add(cursor);
+		}
+		Debug.Log(_lockOnSystem.TargetList.Count + "画面内の敵数");
+
+		for (int i = 0; i < _cursorList.Count; i++)
+		{
+			_cursorList[i].SetActive(false);
+		}
+		_ui.gameObject.SetActive(false);
+		// ロックオン座標の更新
+		for (int i = 0; i < _lockOnSystem.TargetList.Count; i++)
+		{
+
+			float _distance = Vector3.Distance(_lockOnSystem.TargetList[i].transform.position, _lockOnSystem.Player.transform.position);
+
+			if (_distance < 100.0f)
 			{
-				_cursorList[i].SetActive(false);
-			}
-            for (int i = 0; i < _lockOnSystem.TargetList.Count; i++)
-            {
-				// 敵のワールド座標をスクリーン座標に変換し代入
-				Vector2 postion = RectTransformUtility.WorldToScreenPoint(Camera.main, _lockOnSystem.TargetList[i].transform.position);
-
 				_cursorList[i].SetActive(true);
 
+				// 敵のワールド座標をスクリーン座標に変換し代入
+				Vector2 postion = RectTransformUtility.WorldToScreenPoint(Camera.main, _lockOnSystem.TargetList[i].transform.position);
+				_cursorList[i].transform.position = new Vector3(postion.x, postion.y, 0f);
+
+				// メインターゲットのカラー変更
 				if (_lockOnSystem.GetTarget == _lockOnSystem.TargetList[i])
 				{
-					// カーソルの位置に座標を代入する
-					_cursorList[0].transform.position = new Vector3(postion.x, postion.y, 0f);
-					if (_lockOnSystem.TargetList.Count <= _cursorList.Count)
-					{
-						_cursorList[_lockOnSystem.TargetList.Count-1].transform.position = new Vector3(postion.x, postion.y, 0f);
-					}
+					_ui.gameObject.SetActive(true);
+					_ui.transform.position = new Vector3(postion.x, postion.y, 0f);
+					_cursorList[i].GetComponent<Image>().color = _color1;
 				}
 				else
 				{
-					// カーソルの位置に座標を代入する
-					_cursorList[i].transform.position = new Vector3(postion.x, postion.y, 0f);
+					_cursorList[i].GetComponent<Image>().color = Color.white;
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 
     private void LateUpdate()
     {

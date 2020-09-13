@@ -8,6 +8,10 @@ public class SceneCtl : MonoBehaviour
 	public static SceneCtl instance = null;
 
 	private List<string> _sceneNameList = new List<string>();
+	public List<string> SceneNameList
+	{
+		get { return _sceneNameList; }
+	}
 
 	[SerializeField, Tooltip("黒背景")]
 	private GameObject _fadeUI = null;
@@ -63,11 +67,17 @@ public class SceneCtl : MonoBehaviour
 		}
 		yield return new WaitForSeconds(1.0f);
 		SceneManager.LoadScene(name, LoadSceneMode.Single);
+		for (int i = 0; i < _sceneNameList.Count; i++)
+		{
+			Debug.Log(_sceneNameList[i]);
+			AddScene(_sceneNameList[i]);
+		}
 		yield return new WaitForSeconds(2.0f);
 		for (int i = 0; i < _ui.Count; i++)
 		{
 			_ui[i].SetActive(false);
 		}
+		_sceneNameList.Clear();
 		_back.Mode = FadeUI.FADE_MODE.OUT;
 		_coroutine = null;
 		yield return null;

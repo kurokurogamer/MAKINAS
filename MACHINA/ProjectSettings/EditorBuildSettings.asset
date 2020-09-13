@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CharacterScene.unity
     guid: 705c9575efa61144898e24ca8450963b
   - enabled: 1
+    path: Assets/Scenes/Enemy5.unity
+    guid: 6479c16b6d4d0f34e901a34eff1a63ca
+  - enabled: 1
     path: Assets/Scenes/UI/Clear.unity
     guid: eaf71b2ed7e345a48a76f0ec9dd44214
   - enabled: 1

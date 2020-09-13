@@ -25,27 +25,27 @@ public class CharCtr : MonoBehaviour
 		Vector3 velocity = Vector3.zero;
 
 		// コントローラーの入力を受け取る
-		_stickRight.x = Input.GetAxis("Horizontal2");
-		_stickRight.y = Input.GetAxis("Vertical2");
+		_stickLeft.x = Input.GetAxis("Horizontal");
+		_stickLeft.y = Input.GetAxis("Vertical");
 
-		if (_stickRight.x > 0)
+		if (_stickLeft.x > 0)
 		{
 			velocity += Vector3.right * _speed;
 		}
-		else if (_stickRight.x < 0)
+		else if (_stickLeft.x < 0)
 		{
 			velocity -= Vector3.right * _speed;
 		}
-		if (_stickRight.y > 0)
+		if (_stickLeft.y > 0)
 		{
 			velocity += Vector3.forward * _speed;
 		}
-		else if (_stickRight.y < 0)
+		else if (_stickLeft.y < 0)
 		{
 			velocity -= Vector3.forward * _speed;
 		}
 
-		if (_stickRight.x != 0 || _stickRight.y != 0)
+		if (_stickLeft.x != 0 || _stickLeft.y != 0)
 		{
 			_animator.SetFloat("Speed", 1.0f);
 

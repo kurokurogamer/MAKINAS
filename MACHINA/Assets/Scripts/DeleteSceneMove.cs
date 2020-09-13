@@ -9,7 +9,10 @@ public class DeleteSceneMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+		foreach(Transform trans in transform)
+		{
+			_enemyList.Add(trans.gameObject);
+		}
     }
 
     // Update is called once per frame
