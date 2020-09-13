@@ -2319,6 +2319,7 @@ MonoBehaviour:
   _sceneName: 
   _blurObj: {fileID: 440354721}
   _fadeUi: {fileID: 826189746}
+  _chraCtr: {fileID: 0}
 --- !u!1001 &607574563
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10362,6 +10363,7 @@ MonoBehaviour:
   _sceneName: Mission
   _blurObj: {fileID: 440354721}
   _fadeUi: {fileID: 826189746}
+  _chraCtr: {fileID: 0}
 --- !u!4 &1490611868 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4108821220098478, guid: 303158c65c711fc42a9a72ce0c80135a,
@@ -10871,6 +10873,7 @@ MonoBehaviour:
   _sceneName: 
   _blurObj: {fileID: 440354721}
   _fadeUi: {fileID: 826189746}
+  _chraCtr: {fileID: 0}
 --- !u!1 &1585752660
 GameObject:
   m_ObjectHideFlags: 0
@@ -21224,7 +21227,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &1852008141
 CapsuleCollider:
   m_ObjectHideFlags: 0

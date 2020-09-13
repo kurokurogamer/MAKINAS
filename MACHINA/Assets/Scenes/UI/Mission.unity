@@ -1771,6 +1771,7 @@ MonoBehaviour:
   _sceneList:
   - Stage1
   - Enemy4
+  - PointMap2
 --- !u!114 &649905102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2137,6 +2138,7 @@ MonoBehaviour:
   _sceneList:
   - Stage1
   - Enemy5
+  - Enemy4
 --- !u!114 &773385152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4181,7 +4183,7 @@ MonoBehaviour:
   _sceneName: GameScene2
   _sceneList:
   - Stage1
-  - Stage3
+  - PointMap1
   - Enemy3
 --- !u!114 &1623180856
 MonoBehaviour:

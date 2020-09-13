@@ -78,16 +78,17 @@ public class PlayerCtl : UnitControl
 		if (_triggerLR <= -0.1f || Input.GetKey(KeyCode.Z))
 		{
 			_weaponList[0].Attack();
+
 		}
 
-		//if (_triggerLR >= 0.1f || Input.GetKey(KeyCode.X))
-		//{
-		//}
-
-		if (Input.GetButton("RB") || Input.GetKey(KeyCode.C))
+		if (_triggerLR >= 0.1f || Input.GetKey(KeyCode.X))
 		{
-						_weaponList[1].Attack();
-//_weaponList[2].Attack();
+			_weaponList[1].Attack();
+		}
+
+		if (Input.GetButton("Fire2") || Input.GetKey(KeyCode.C))
+		{
+			_weaponList[2].Attack();
 		}
 
 		if(Input.GetKeyDown(KeyCode.Q))

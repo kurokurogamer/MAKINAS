@@ -18,16 +18,15 @@ public class BasePointScene : MonoBehaviour
 
 	private void Check()
 	{
-		foreach(BasePoint point in _childList)
+		foreach (BasePoint point in _childList)
 		{
-			if(point.Check == false)
+			if (point.Check == false)
 			{
 				return;
 			}
 		}
-		//SceneCtl.instance.SceneChange(SceneCtl.SceneList.RESULT);
+		SceneCtl.instance.LoadScene("MenuScene2");
 	}
-
     // Update is called once per frame
     void Update()
     {
