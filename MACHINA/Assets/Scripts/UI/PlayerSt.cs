@@ -51,6 +51,6 @@ public class PlayerSt : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-        
+		GetStates();
     }
 }
